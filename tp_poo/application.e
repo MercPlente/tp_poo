@@ -5,7 +5,7 @@ note
 				]"
 	author		: "Marc Plante, Insipire by Louis Marchand"
 	date        : " "
-	revision    : "2.0"
+	revision    : " "
 
 class
 	APPLICATION
@@ -13,6 +13,7 @@ class
 inherit
 	GAME_LIBRARY_SHARED		-- To use `game_library'
 	AUDIO_LIBRARY_SHARED	-- To use `audio_library'
+	IMG_LIBRARY_SHARED		-- To use `image_file_library'
 	EXCEPTIONS
 
 create
@@ -24,9 +25,11 @@ feature {NONE} -- Initialization
 			-- Run application.
 		do
 			game_library.enable_video -- Enable the video functionalities
+			image_file_library.enable_image (true, false, false)
 			audio_library.enable_sound
 			run_game	  -- Run the core creator of the game.
 			audio_library.quit_library
+			image_file_library.quit_library
 			game_library.quit_library  -- Clear the library before quitting
 		end
 
@@ -48,13 +51,19 @@ feature {NONE} -- Initialization
 			l_icon_image:GAME_IMAGE_BMP_FILE
 			l_icon:GAME_SURFACE
 			l_window_builder:GAME_WINDOW_SURFACED_BUILDER
+			l_image:IMAGE
+			l_window:GAME_WINDOW_SURFACED
 		do
-			create l_icon_image.make ("Diablo-icon.bmp")
+			create l_image
 			create l_window_builder
-			l_window_builder.set_title ("Diablo IV")
+			if not l_image.has_error then
+				l_window_builder.set_dimension (l_image.width, l_image.height)
+			end
 			Result := l_window_builder.generate_window
+			l_window_builder.set_title ("Diablo IV")
 			Result.key_pressed_actions.extend (agent on_key_down_quit)
-			Result.surface.draw_rectangle (create {GAME_COLOR}.make_rgb (0, 0, 0), 0, 0, Result.width, Result.height)
+			game_library.iteration_actions.extend (agent on_iteration_background(?, l_image,Result))
+			create l_icon_image.make ("Diablo-icon.bmp")
 			if l_icon_image.is_openable then
 				l_icon_image.open
 				if l_icon_image.is_open then
@@ -98,7 +107,7 @@ feature {NONE} -- Initialization
 					a_window.key_pressed_actions.extend (agent on_key_down_sound(?, ?, l_sound,sound_source,second_music_source,l_second_music_loop,music_source,l_music_loop))	-- When a key is pressed, the on_key_down will be launch
 																														-- The on_key_down routine will receive the sound and the source
 																														-- Note that you can add more than one event routine for an event
-					game_library.iteration_actions.extend (agent on_iteration(?, a_window))	-- To be sure that the sound will auto update sources buffers. You can use the launch_in_thread
+					game_library.iteration_actions.extend (agent on_iteration_sound(?, a_window))	-- To be sure that the sound will auto update sources buffers. You can use the launch_in_thread
 																							-- feature of the AUDIO_CONTROLLER instead, but your application must be multi-thread enable to do so.
 					music_source.play	-- Play the music
 				else
@@ -113,11 +122,18 @@ feature {NONE} -- Initialization
 		end
 
 
-	on_iteration(a_timestamp:NATURAL; a_window:GAME_WINDOW)
+	on_iteration_sound(a_timestamp:NATURAL; a_window:GAME_WINDOW)
 			-- Each game loop iteration, update the audio buffers and the `a_window' surface
 		do
 			audio_library.update
 			a_window.update		-- Be sure that the window always has a body (try to remove it to see what I mean)
+		end
+
+	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
+			-- Event that is launch at each iteration.
+		do
+			l_window.surface.draw_surface (a_image, 0, 0)
+			l_window.update
 		end
 
 	on_key_down_quit(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
