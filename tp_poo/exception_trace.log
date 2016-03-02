@@ -21,3 +21,4 @@ APPLICATION         make @3
 APPLICATION         root's creation                                     
 <0000000003DB35A8>                         Routine failure.              Exit
 -------------------------------------------------------------------------------
+Catcall detected in {PROCEDURE}.call for arg#1: expected TUPLE [NATURAL_32, !GAME_KEY_STATE, !AUDIO_SOUND, !AUDIO_SOURCE, !AUDIO_SOURCE, !AUDIO_SOUND, !AUDIO_SOURCE, !AUDIO_SOUND] but got TUPLE [NATURAL_32, !GAME_KEY_STATE]
