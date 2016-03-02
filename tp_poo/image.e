@@ -22,7 +22,7 @@ feature {NONE} -- Initialization
 		local
 			l_imageBackground: IMG_IMAGE_FILE
 		do
-			create l_imageBackground.make ("background_resized.jpg")
+			create l_imageBackground.make ("menu_resized.jpg")
 			if l_imageBackground.is_openable then
 				l_imageBackground.open
 				if l_imageBackground.is_open then
