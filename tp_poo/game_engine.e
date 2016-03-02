@@ -33,6 +33,7 @@ feature
 			l_window := create_window
 			sound.play_music
 			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
+			l_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, l_window))
 			l_window.key_pressed_actions.extend (agent on_key_down_quit)
 			l_window.key_pressed_actions.extend (agent on_key_down_sound)
 			game_library.quit_signal_actions.extend (agent on_quit)		-- When the X of the window is pressed, execute the on_quit method.
@@ -78,6 +79,32 @@ feature
 		do
 			l_window.surface.draw_surface (a_image, 0, 0)
 			l_window.update
+		end
+
+	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW)
+			-- When the user pressed on a mouse button on `a_window'
+		do
+			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
+				if a_mouse_state.x>=244 and a_mouse_state.x<=548 then
+					if a_mouse_state.y>=206 and a_mouse_state.y<=231 then
+						print("Single Player")
+					end
+					if a_mouse_state.y>=251 and a_mouse_state.y<=276 then
+						print("Multi Player")
+					end
+					if a_mouse_state.y>=296 and a_mouse_state.y<=321 then
+						print("Replay Intro")
+					end
+					if a_mouse_state.y>=341 and a_mouse_state.y<=366 then
+						print("Show Credits")
+					end
+					if a_mouse_state.y>=386 and a_mouse_state.y<=411 then
+						print("Exit Diablo")
+						game_library.stop
+					end
+
+				end
+			end
 		end
 
 	on_key_down_quit(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
