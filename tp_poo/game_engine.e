@@ -31,7 +31,7 @@ feature
 			l_window:GAME_WINDOW_SURFACED
 		do
 			l_window := create_window
-			sound.play_music
+			sound.play_music ("beginning")
 			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
 			l_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, l_window))
 			l_window.key_pressed_actions.extend (agent on_key_down_quit)
@@ -50,7 +50,7 @@ feature
 			l_image:IMAGE
 			l_window:GAME_WINDOW_SURFACED
 		do
-			create l_image
+			create l_image.make ("background_resized.jpg")
 			create l_window_builder
 			if not l_image.has_error then
 				l_window_builder.set_dimension (l_image.width, l_image.height)
@@ -72,6 +72,16 @@ feature
 			end
 		end
 
+	change_background(background:STRING;l_window:GAME_WINDOW_SURFACED)
+		local
+			l_image:IMAGE
+		do
+			create l_image.make (background)
+			game_library.iteration_actions.start
+			game_library.iteration_actions.remove
+			game_library.iteration_actions.extend (agent on_iteration_background(?,l_image,l_window))
+
+			end
 
 
 	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
@@ -81,29 +91,15 @@ feature
 			l_window.update
 		end
 
-	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW)
+	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
 			-- When the user pressed on a mouse button on `a_window'
+
+		local
+			l_menu_principal:MENU_PRINCIPAL
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
-				if a_mouse_state.x>=244 and a_mouse_state.x<=548 then
-					if a_mouse_state.y>=206 and a_mouse_state.y<=231 then
-						print("Single Player")
-					end
-					if a_mouse_state.y>=251 and a_mouse_state.y<=276 then
-						print("Multi Player")
-					end
-					if a_mouse_state.y>=296 and a_mouse_state.y<=321 then
-						print("Replay Intro")
-					end
-					if a_mouse_state.y>=341 and a_mouse_state.y<=366 then
-						print("Show Credits")
-					end
-					if a_mouse_state.y>=386 and a_mouse_state.y<=411 then
-						print("Exit Diablo")
-						game_library.stop
-					end
-
-				end
+				change_background("menu_resized.jpg",a_window)
+				create l_menu_principal.make
 			end
 		end
 

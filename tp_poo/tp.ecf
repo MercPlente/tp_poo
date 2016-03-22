@@ -15,8 +15,6 @@
 			<file_rule>
 				<exclude>/theme$</exclude>
 				<exclude>/EIFGENs$</exclude>
-				<exclude>/CVS$</exclude>
-				<exclude>/.svn$</exclude>
 			</file_rule>
 		</cluster>
 	</target>

@@ -2,3 +2,4 @@ project_test
 project
 EIFGENs
 *.dll
+exception_trace

@@ -15,9 +15,27 @@ inherit
 create
 	set_sound
 
-feature {NONE} -- Initialization
+create
+--	menu_music
 
-			-- Run application.
+--feature {NONE}
+
+--	menu_music (song:STRING)
+--		do
+--			audio_library.sources_wipe_out
+--			create music_loop.make (song)
+--			--audio_library.sources
+--			music_source:=audio_library.last_source_added
+--			if music_loop.is_openable then
+--				music_loop.open
+--			end
+--
+--		end
+
+
+feature {NONE}
+
+
 
 	set_sound
 
@@ -29,9 +47,9 @@ feature {NONE} -- Initialization
 
 
 			audio_library.sources_add
-			music_source:=audio_library.last_source_added	-- The first source will be use for playing the music
+			music_source:=audio_library.last_source_added
 			audio_library.sources_add
-			sound_source:=audio_library.last_source_added	-- The second source will be use for playing the space sound
+			sound_source:=audio_library.last_source_added
 			audio_library.sources_add
 			second_music_source:=audio_library.last_source_added
 
@@ -49,11 +67,16 @@ feature {NONE} -- Initialization
 
 feature
 
-	play_music
+	play_music (menu_current:STRING)
 		do
 			if music_intro.is_open and music_loop.is_open then
-				music_source.queue_sound (music_intro)				-- Playing the intro first
-				music_source.queue_sound_infinite_loop (music_loop)	-- After the intro end, loop the music loop									-- feature of the AUDIO_CONTROLLER instead, but your application must be multi-thread enable to do so.
+				music_source.stop
+				if menu_current.is_equal ("beginning") then
+					music_source.queue_sound_infinite_loop (music_intro)
+				end
+				if menu_current.is_equal ("menu_principal") then
+					music_source.queue_sound_infinite_loop (music_loop)
+				end
 				music_source.play	-- Play the music
 			end
 		end

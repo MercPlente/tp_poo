@@ -1,8 +1,5 @@
 note
-	description : "[
-					Example of sound playing with background music (containing intro and loop body).
-					The sound is trigger with a key press event from a window.
-				]"
+	description : " "
 	author		: "Marc Plante, Insipire by Louis Marchand"
 	date        : " "
 	revision    : " "
@@ -37,5 +34,5 @@ feature {NONE} -- Initialization
 			game_library.quit_library  -- Clear the library before quitting
 		end
 
-	
+
 end

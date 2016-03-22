@@ -9,32 +9,32 @@ class
 
 inherit
 	GAME_SURFACE
-		redefine
-			default_create
+		rename
+			make as make_surface
 		end
 
 create
-	default_create
+	make
 
 feature {NONE} -- Initialization
 
-	default_create
+	make (background:STRING)
 		local
 			l_imageBackground: IMG_IMAGE_FILE
 		do
-			create l_imageBackground.make ("menu_resized.jpg")
+			create l_imageBackground.make (background)
 			if l_imageBackground.is_openable then
 				l_imageBackground.open
 				if l_imageBackground.is_open then
 					make_from_image (l_imageBackground)
 				else
 					has_error := True
-					make(1,1)
+					make_surface(1,1)
 				end
 			else
 				has_error := True
-				make(1,1)
+				make_surface(1,1)
 			end
 		end
-
+	
 end
