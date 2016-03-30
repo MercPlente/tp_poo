@@ -8,19 +8,28 @@ class
 	GAME_ENGINE
 
 inherit
+
+
 	GAME_LIBRARY_SHARED		-- To use `game_library'
 	AUDIO_LIBRARY_SHARED	-- To use `audio_library'
 	IMG_LIBRARY_SHARED		-- To use `image_file_library'
+
+create
+
+
 create
 	make
+
+
 
 feature {NONE} -- Initialization
 
 	make
 			-- Initialization for `Current'.
 		do
-			create sound.set_sound
+			create sounds.set_sound
 		end
+
 
 feature
 
@@ -31,8 +40,9 @@ feature
 			l_window:GAME_WINDOW_SURFACED
 		do
 			l_window := create_window
-			sound.play_music ("beginning")
-			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
+			sounds.play_music ("beginning")
+
+			game_library.iteration_actions.extend (agent sounds.on_iteration_sound)
 			l_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, l_window))
 			l_window.key_pressed_actions.extend (agent on_key_down_quit)
 			l_window.key_pressed_actions.extend (agent on_key_down_sound)
@@ -99,7 +109,8 @@ feature
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				change_background("menu_resized.jpg",a_window)
-				create l_menu_principal.make
+				sounds.play_music ("menu_principal")
+				create l_menu_principal.make(sounds,a_window)
 			end
 		end
 
@@ -115,10 +126,10 @@ feature
 			-- When the space button is pressed (in `a_key_state'), play `a_sount' in `a_sound_source'
 		do
 			if a_key_state.is_space then			-- If the space key as been pressed, play the space sound
-				sound.on_space_key
+				sounds.on_space_key
 			end
 			if a_key_state.is_a then
-				sound.on_a_key
+				sounds.on_a_key
 			end
 
 		end
@@ -130,6 +141,7 @@ feature
 		end
 
 
-	sound:SOUND
+	sounds:SOUND
+
 
 end
