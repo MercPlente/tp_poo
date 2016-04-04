@@ -5,7 +5,7 @@ note
 	revision: "$Revision$"
 
 class
-	SINGLE_PLAYER
+	MENU_SINGLE_PLAYER
 
 inherit
 	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
