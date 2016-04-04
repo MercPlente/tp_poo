@@ -61,7 +61,7 @@ feature {NONE} -- Initialization
 						print("Show Credits%N")
 					end
 					if a_mouse_state.y>=386 and a_mouse_state.y<=411 then
-						print("Exit Diaablo%N")
+						print("Exit Diablo%N")
 						game_library.stop
 					end
 				end
