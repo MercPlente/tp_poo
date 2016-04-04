@@ -48,20 +48,20 @@ feature {NONE} -- Initialization
 
 				if a_mouse_state.x>=244 and a_mouse_state.x<=548 then
 					if a_mouse_state.y>=206 and a_mouse_state.y<=231 then
-						print("Single Player")
+						print("Single Player%N")
 						--change_background("menu_resized.jpg",a_window)
 					end
 					if a_mouse_state.y>=251 and a_mouse_state.y<=276 then
-						print("MultiPlayer")
+						print("Multi Player%N")
 					end
 					if a_mouse_state.y>=296 and a_mouse_state.y<=321 then
-						print("Replay Intro")
+						print("Replay Intro%N")
 					end
 					if a_mouse_state.y>=341 and a_mouse_state.y<=366 then
-						print("Show Credits")
+						print("Show Credits%N")
 					end
 					if a_mouse_state.y>=386 and a_mouse_state.y<=411 then
-						print("Exit Diablo")
+						print("Exit Diablo%N")
 						game_library.stop
 					end
 				end
