@@ -1,6 +1,6 @@
 note
-	description: "Summary description for {IMAGE}."
-	author: ""
+	description: "Classe gerant les images du programmes."
+	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -16,9 +16,10 @@ inherit
 create
 	make
 
-feature {NONE} -- Initialization
+feature {NONE} -- Initialisation
 
 	make (background:STRING)
+	-- Fonction modifiant le fond d'ecran.
 		local
 			l_imageBackground: IMG_IMAGE_FILE
 		do
@@ -36,5 +37,5 @@ feature {NONE} -- Initialization
 				make_surface(1,1)
 			end
 		end
-	
+
 end

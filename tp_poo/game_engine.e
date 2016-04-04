@@ -1,6 +1,6 @@
 note
-	description: "Summary description for {GAME_ENGINE}."
-	author: ""
+	description: "Classe pour modifier des elements en jeu."
+	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -10,9 +10,9 @@ class
 inherit
 
 
-	GAME_LIBRARY_SHARED		-- To use `game_library'
-	AUDIO_LIBRARY_SHARED	-- To use `audio_library'
-	IMG_LIBRARY_SHARED		-- To use `image_file_library'
+	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
+	AUDIO_LIBRARY_SHARED	-- Pour Utilliser `audio_library'
+	IMG_LIBRARY_SHARED		-- Pour Utilliser `image_file_library'
 
 create
 
@@ -22,10 +22,10 @@ create
 
 
 
-feature {NONE} -- Initialization
+feature {NONE} -- Initialisation
 
 	make
-			-- Initialization for `Current'.
+			-- Initialisation des sons `sounds'.
 		do
 			create sounds.set_sound
 		end
@@ -35,7 +35,7 @@ feature
 
 
 	run_game
-			-- Preparing and launching the game
+			-- Prepare et lancer le jeu (fênetre, son et action)
 		local
 			l_window:GAME_WINDOW_SURFACED
 		do
@@ -46,13 +46,13 @@ feature
 			l_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, l_window))
 			l_window.key_pressed_actions.extend (agent on_key_down_quit)
 			l_window.key_pressed_actions.extend (agent on_key_down_sound)
-			game_library.quit_signal_actions.extend (agent on_quit)		-- When the X of the window is pressed, execute the on_quit method.
-			game_library.launch	-- The controller will loop until the stop controller.method is called (in method on_quit).
-			l_window.close	-- To be sure that every ressources inside `l_window' can be disposed at `quit_library' call
+			game_library.quit_signal_actions.extend (agent on_quit)
+			game_library.launch
+			l_window.close
 		end
 
 	create_window:GAME_WINDOW_SURFACED
-			-- Create the window that will be show. The window have an icon and a title
+			-- Creee la fenetre affichee a l'ecran. La fenetre contient un titre et un icone
 		local
 			l_icon_image:GAME_IMAGE_BMP_FILE
 			l_icon:GAME_SURFACE
@@ -83,6 +83,7 @@ feature
 		end
 
 	change_background(background:STRING;l_window:GAME_WINDOW_SURFACED)
+	-- Utilisse "IMAGE" pour modifier le background
 		local
 			l_image:IMAGE
 		do
@@ -95,14 +96,14 @@ feature
 
 
 	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
-			-- Event that is launch at each iteration.
+			-- Evenement qui modifie le fond d'ecran a chaque iteration.
 		do
 			l_window.surface.draw_surface (a_image, 0, 0)
 			l_window.update
 		end
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
-			-- When the user pressed on a mouse button on `a_window'
+			-- Fonction qui change le menu et fond d'ecran quand l'utilisateur fait un clique gauche à l'ecran
 
 		local
 			l_menu_principal:MENU_PRINCIPAL
@@ -115,17 +116,17 @@ feature
 		end
 
 	on_key_down_quit(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
-			-- When the escape button is pressed (in `a_key_state') exit the application
+			-- Quand la touche "escape" est appuyee, l'application se termine
 		do
-			if a_key_state.is_escape then			-- If the escape key as been pressed,
-				game_library.stop					-- quit the application
+			if a_key_state.is_escape then
+				game_library.stop
 			end
 		end
 
 	on_key_down_sound(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
-			-- When the space button is pressed (in `a_key_state'), play `a_sount' in `a_sound_source'
+			-- Lorsque la touche sace est appuyee, le son "on_space_key" jouera une fois.
 		do
-			if a_key_state.is_space then			-- If the space key as been pressed, play the space sound
+			if a_key_state.is_space then
 				sounds.on_space_key
 			end
 			if a_key_state.is_a then
@@ -135,9 +136,9 @@ feature
 		end
 
 	on_quit(a_timestamp:NATURAL)
-			-- This method is called when the quit signal is send to the application (ex: window X button pressed).
+			-- Fonction pour arreter la librairie
 		do
-			game_library.stop  -- Stop the controller loop (allow controller.launch to return)
+			game_library.stop
 		end
 
 

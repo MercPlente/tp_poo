@@ -1,5 +1,5 @@
 note
-	description: "Summary description for {SOUND}."
+	description: "Classe gerant les sons de l'application."
 	author: ""
 	date: "$Date$"
 	revision: "$Revision$"
@@ -8,8 +8,8 @@ class
 	SOUND
 
 inherit
-	AUDIO_LIBRARY_SHARED	-- To use `audio_library'
-	GAME_LIBRARY_SHARED		-- To use `game_library'
+	AUDIO_LIBRARY_SHARED	-- Pour Utilliser `audio_library'
+	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
 	EXCEPTIONS
 
 create
@@ -38,12 +38,13 @@ feature {NONE}
 
 
 	set_sound
+	-- Fonction creant les sources et les audio sound file / ouvre les pistes a jouer
 
 		do
-			create sound.make ("ding.ogg")			-- This sound will be played when the user press the space bar.
-			create music_intro.make ("intro.ogg")		-- This sound will be played once at the begining of the music
-			create music_loop.make ("tristram.ogg")		-- This sound will be loop until the application stop.
-			create second_music_loop.make ("cath.ogg")											-- The library can use every sound file format that the libsndfile library can use (see: http://www.mega-nerd.com/libsndfile)
+			create sound.make ("ding.ogg")
+			create music_intro.make ("intro.ogg")
+			create music_loop.make ("tristram.ogg")
+			create second_music_loop.make ("cath.ogg")
 
 
 			audio_library.sources_add
@@ -68,6 +69,7 @@ feature {NONE}
 feature
 
 	play_music (menu_current:STRING)
+	--Change la musique en loop selon le menu
 		do
 			if music_intro.is_open and music_loop.is_open then
 				music_source.stop
@@ -82,20 +84,22 @@ feature
 		end
 
 	on_iteration_sound(a_time: NATURAL)
-			-- Each game loop iteration, update the audio buffers and the `a_window' surface
+			-- Evenement qui met a jour la librairie de son a chaque iteration
 		do
 			audio_library.update
 		end
 
 	on_space_key
+	-- Fonction qui vide le buffer, met un son au debut de la source et la fait jouer.
 		do
-			sound_source.stop					-- Be sure that the queue buffer is empty on the sound_source object (when stop, the source queue is clear)
-			sound.restart						-- Be sure that the sound is at the beginning
-			sound_source.queue_sound (sound)	-- Queud the sound into the source queue
-			sound_source.play					-- Play the source
+			sound_source.stop
+			sound.restart
+			sound_source.queue_sound (sound)
+			sound_source.play
 		end
 
 	on_a_key
+		-- Arrete la source de musique principal et demarre la deuxieme
 		do
 			music_source.stop
 			second_music_source.queue_sound_infinite_loop (second_music_loop)
