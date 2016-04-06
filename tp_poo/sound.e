@@ -63,6 +63,11 @@ feature {NONE}
 			else
 				print("Sound files not valid.")
 			end
+		ensure
+			Sound_Ouvert:sound.is_open
+			Music_Ouvert:music_intro.is_open
+			Music_Loop_Ouvert:music_loop.is_open
+			Second_Musique_Loop_Ouvert:second_music_loop.is_open
 
 		end
 
@@ -96,6 +101,8 @@ feature
 			sound.restart
 			sound_source.queue_sound (sound)
 			sound_source.play
+		ensure
+			Source_Ouvert:sound_source.is_playing
 		end
 
 	on_a_key
@@ -104,6 +111,8 @@ feature
 			music_source.stop
 			second_music_source.queue_sound_infinite_loop (second_music_loop)
 			second_music_source.play
+		ensure
+			Source_Ouvert:second_music_source.is_playing
 		end
 
 

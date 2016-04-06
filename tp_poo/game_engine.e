@@ -104,6 +104,9 @@ feature
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
 			-- Fonction qui change le menu et fond d'ecran quand l'utilisateur fait un clique gauche à l'ecran
+	require
+		Souris_Appuyer_Correctement: a_mouse_state.is_left_button_pressed
+		Nombre_Click: a_nb_clicks >= 1
 
 		local
 			l_menu_principal:MENU_PRINCIPAL
@@ -117,6 +120,8 @@ feature
 
 	on_key_down_quit(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
 			-- Quand la touche "escape" est appuyee, l'application se termine
+	require
+		Key_State: a_key_state.is_escape
 		do
 			if a_key_state.is_escape then
 				game_library.stop
@@ -125,6 +130,8 @@ feature
 
 	on_key_down_sound(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
 			-- Lorsque la touche sace est appuyee, le son "on_space_key" jouera une fois.
+	require
+		Key_State: a_key_state.is_space
 		do
 			if a_key_state.is_space then
 				sounds.on_space_key

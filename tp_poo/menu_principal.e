@@ -43,9 +43,13 @@ feature {NONE} -- Initialization
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
 			-- Fonction envoyant l'utilisateur dans la section "Single Player", "Multiplayer", "Replay Intro"
 			--ou "show credit" selon l'endroit ou il clique
-		local
-			l_menu_single_player:SINGLE_PLAYER
 
+	require
+		Souris_Appuyer_Correctement: a_mouse_state.is_left_button_pressed
+		Nombre_Click: a_nb_clicks >= 1
+
+		local
+			l_menu_single_player:MENU_SINGLE_PLAYER
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 

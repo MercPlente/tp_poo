@@ -5,7 +5,7 @@ note
 	revision: "$Revision$"
 
 class
-	SINGLE_PLAYER
+	MENU_SINGLE_PLAYER
 
 inherit
 	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
@@ -22,7 +22,6 @@ feature {NONE}
 
 		local
 			l_image:IMAGE
-			quit:BOOLEAN
 
 		do
 			a_window.clear_events
@@ -38,9 +37,6 @@ feature {NONE}
 			create l_image.make ("single_player.png")
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, a_window))
 			game_library.iteration_actions.extend (agent on_iteration_background(?,l_image,a_window))
-			if quit = true then
-				
-			end
 		end
 
 	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
