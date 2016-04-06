@@ -19,7 +19,7 @@ create
 feature {NONE}
 
 	single_player (a_window:GAME_WINDOW_SURFACED)
-
+		-- Fonction qui recommence les iterations avec les nouvelles valeurs pour ce menu.
 		local
 			l_image:IMAGE
 
@@ -47,14 +47,18 @@ feature {NONE}
 		end
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
-			-- description TODO
+			-- Fonction envoyant l'utilisateur dans la section "New Game", "Continuer"
+			--ou "back" selon l'endroit ou il clique
+		require
+			Souris_Appuyer_Correctement: a_mouse_state.is_left_button_pressed
+			Nombre_Click: a_nb_clicks >= 1
 
 		local
 			l_new_game:NEW_GAME
 
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
-				--print([a_mouse_state.x,a_mouse_state.y])
+				
 				if a_mouse_state.x>=235 and a_mouse_state.x<=556 then
 					if a_mouse_state.y>=56 and a_mouse_state.y<=130 then
 						create l_new_game.new_game (a_window)

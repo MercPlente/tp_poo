@@ -19,7 +19,7 @@ create
 feature {NONE}
 
 	new_game (a_window:GAME_WINDOW_SURFACED)
-
+		-- Fonction qui recommence les iterations avec les nouvelles valeurs pour ce menu.
 		local
 			l_image:IMAGE
 
@@ -48,7 +48,11 @@ feature {NONE}
 		end
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
-			-- description TODO
+			-- Fonction envoyant l'utilisateur dans la section "Start"
+			--ou "back" selon l'endroit ou il clique
+		require
+			Souris_Appuyer_Correctement: a_mouse_state.is_left_button_pressed
+			Nombre_Click: a_nb_clicks >= 1
 
 		local
 			l_village:VILLAGE

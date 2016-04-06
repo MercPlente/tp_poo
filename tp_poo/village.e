@@ -1,5 +1,5 @@
 note
-	description: "Summary description for {VILLAGE}."
+	description: "Classe qui gère la région 'village'."
 	author: ""
 	date: "$Date$"
 	revision: "$Revision$"
@@ -19,7 +19,7 @@ create
 feature {NONE}
 
 	new_village (a_sound:SOUND; a_window:GAME_WINDOW_SURFACED)
-
+		-- Fonction qui recommence les iterations avec les nouvelles valeurs pour cette région.
 		local
 			l_image:IMAGE
 			--l_player:PLAYER
@@ -29,7 +29,7 @@ feature {NONE}
 			create l_image.make ("village.png")
 			sounds := a_sound
 			--a_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, a_window))
-			game_library.iteration_actions.extend (agent sounds.on_iteration_sound)
+			--game_library.iteration_actions.extend (agent sounds.on_iteration_sound)
 			--game_library.iteration_actions.extend (agent on_iteration_background(?,l_image,a_window))
 
 		end
