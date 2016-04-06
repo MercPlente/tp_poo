@@ -1,11 +1,11 @@
 note
-	description: "Classe gerant les options lorsque l'utilisateur choisi le mode: Single Player."
+	description: "Menu de création d'un nouveau personnage. L'utilisateur doit choisir son nom de héros."
 	author: "Marc Plante, Jeremie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
 class
-	SINGLE_PLAYER
+	NEW_GAME
 
 inherit
 	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
@@ -14,15 +14,14 @@ inherit
 	EXCEPTIONS
 
 create
-	single_player
+	new_game
 
 feature {NONE}
 
-	single_player (a_window:GAME_WINDOW_SURFACED)
+	new_game (a_window:GAME_WINDOW_SURFACED)
 
 		local
 			l_image:IMAGE
-			quit:BOOLEAN
 
 		do
 			a_window.clear_events
@@ -35,12 +34,10 @@ feature {NONE}
 				game_library.iteration_actions.back
 			end
 
-			create l_image.make ("single_player.png")
+			create l_image.make ("create_game.png")
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, a_window))
 			game_library.iteration_actions.extend (agent on_iteration_background(?,l_image,a_window))
-			if quit = true then
-				
-			end
+
 		end
 
 	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
@@ -54,20 +51,14 @@ feature {NONE}
 			-- description TODO
 
 		local
-			l_new_game:NEW_GAME
+			l_village:VILLAGE
 
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				--print([a_mouse_state.x,a_mouse_state.y])
-				if a_mouse_state.x>=235 and a_mouse_state.x<=556 then
-					if a_mouse_state.y>=56 and a_mouse_state.y<=130 then
-						create l_new_game.new_game (a_window)
-					end
-					if a_mouse_state.y>=170 and a_mouse_state.y<=242 then
-						--continue
-					end
-					if a_mouse_state.y>=56 and a_mouse_state.y<=130 then
-						--back
+				if a_mouse_state.x>=604 and a_mouse_state.x<=779 then
+					if a_mouse_state.y>=516 and a_mouse_state.y<=569 then
+						--in_game
 					end
 				end
 			end
