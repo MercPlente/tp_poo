@@ -20,8 +20,6 @@ feature {NONE} -- Initialisation
 
 	make (background:STRING)
 	-- Fonction modifiant le fond d'ecran.
-	require
-		Background_Correct: background.ends_with (".jpg")
 		local
 			l_imageBackground: IMG_IMAGE_FILE
 		do
