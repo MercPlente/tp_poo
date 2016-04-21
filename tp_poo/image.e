@@ -38,4 +38,28 @@ feature {NONE} -- Initialisation
 			end
 		end
 
+
+feature {ANY}
+
+	change_background(background:STRING;l_window:GAME_WINDOW_SURFACED)
+	-- Utilisse "IMAGE" pour modifier le background
+		local
+			l_image:IMAGE
+		do
+			create l_image.make (background)
+			game_library.iteration_actions.start
+			if game_library.iteration_actions.writable then
+				game_library.iteration_actions.remove
+			end
+			
+
+			end
+
+	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
+			-- Evenement qui modifie le fond d'ecran a chaque iteration.
+		do
+			l_window.surface.draw_surface (a_image, 0, 0)
+			l_window.update
+		end
+
 end

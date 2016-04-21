@@ -21,18 +21,18 @@ feature {NONE} -- Initialisation
 	make
 			-- Rouler l'application.
 		local
-			l_engine:detachable GAME_ENGINE
+			l_menu:detachable MENU_DEPART
 		do
 			game_library.enable_video -- Active les fonctionnalitees video
 			image_file_library.enable_image (true, false, false)
 			audio_library.enable_sound
-			create l_engine.make
-			l_engine.run_game	  -- Roule la fonction "run_game".
-			l_engine := Void
+			create l_menu.make
+			l_menu := Void
 			audio_library.quit_library
 			image_file_library.quit_library
 			game_library.quit_library
 		end
+
 
 
 end

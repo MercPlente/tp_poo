@@ -18,7 +18,7 @@ create
 
 feature {NONE}
 
-	new_game (a_window:GAME_WINDOW_SURFACED)
+	new_game (a_window:GAME_WINDOW_SURFACED;a_sound:SOUND)
 		-- Fonction qui recommence les iterations avec les nouvelles valeurs pour ce menu.
 		local
 			l_image:IMAGE

@@ -15,26 +15,8 @@ inherit
 create
 	set_sound
 
-create
---	menu_music
 
---feature {NONE}
-
---	menu_music (song:STRING)
---		do
---			audio_library.sources_wipe_out
---			create music_loop.make (song)
---			--audio_library.sources
---			music_source:=audio_library.last_source_added
---			if music_loop.is_openable then
---				music_loop.open
---			end
---
---		end
-
-
-feature {NONE}
-
+feature {ANY}
 
 
 	set_sound
@@ -73,15 +55,15 @@ feature {NONE}
 
 feature
 
-	play_music (menu_current:STRING)
+	play_music (song_name:STRING)
 	--Change la musique en loop selon le menu
 		do
 			if music_intro.is_open and music_loop.is_open then
 				music_source.stop
-				if menu_current.is_equal ("beginning") then
+				if song_name.is_equal ("beginning") then
 					music_source.queue_sound_infinite_loop (music_intro)
 				end
-				if menu_current.is_equal ("menu_principal") then
+				if song_name.is_equal ("menu_principal") then
 					music_source.queue_sound_infinite_loop (music_loop)
 				end
 				music_source.play	-- Play the music

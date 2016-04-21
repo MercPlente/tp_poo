@@ -14,21 +14,7 @@ inherit
 	AUDIO_LIBRARY_SHARED	-- Pour Utilliser `audio_library'
 	IMG_LIBRARY_SHARED		-- Pour Utilliser `image_file_library'
 
-create
-
-
-create
-	make
-
-
-
 feature {NONE} -- Initialisation
-
-	make
-			-- Initialisation des sons `sounds'.
-		do
-			create sounds.set_sound
-		end
 
 
 feature
@@ -39,7 +25,7 @@ feature
 		local
 			l_window:GAME_WINDOW_SURFACED
 		do
-			l_window := create_window
+			--l_window := create_window
 			sounds.play_music ("beginning")
 
 			game_library.iteration_actions.extend (agent sounds.on_iteration_sound)
@@ -51,49 +37,7 @@ feature
 			l_window.close
 		end
 
-	create_window:GAME_WINDOW_SURFACED
-			-- Creee la fenetre affichee a l'ecran. La fenetre contient un titre et un icone
-		local
-			l_icon_image:GAME_IMAGE_BMP_FILE
-			l_icon:GAME_SURFACE
-			l_window_builder:GAME_WINDOW_SURFACED_BUILDER
-			l_image:IMAGE
-			l_window:GAME_WINDOW_SURFACED
-		do
-			create l_image.make ("background_resized.jpg")
-			create l_window_builder
-			if not l_image.has_error then
-				l_window_builder.set_dimension (l_image.width, l_image.height)
-			end
-			Result := l_window_builder.generate_window
-			l_window_builder.set_title ("Diablo IV")
-			Result.key_pressed_actions.extend (agent on_key_down_quit)
-			game_library.iteration_actions.extend (agent on_iteration_background(?, l_image,Result))
-			create l_icon_image.make ("Diablo-icon.bmp")
-			if l_icon_image.is_openable then
-				l_icon_image.open
-				if l_icon_image.is_open then
-					create l_icon.share_from_image (l_icon_image)
-					l_icon.set_transparent_color (create {GAME_COLOR}.make_rgb (255, 0, 255))
-					Result.set_icon (l_icon)
-				else
-					print("Cannot set the window icon.")
-				end
-			end
-		end
-
-	change_background(background:STRING;l_window:GAME_WINDOW_SURFACED)
-	-- Utilisse "IMAGE" pour modifier le background
-		local
-			l_image:IMAGE
-		do
-			create l_image.make (background)
-			game_library.iteration_actions.start
-			game_library.iteration_actions.remove
-			game_library.iteration_actions.extend (agent on_iteration_background(?,l_image,l_window))
-
-			end
-
+	
 
 	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
 			-- Evenement qui modifie le fond d'ecran a chaque iteration.
