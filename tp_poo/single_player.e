@@ -51,15 +51,13 @@ feature {NONE}
 
 				if a_mouse_state.x>=235 and a_mouse_state.x<=556 then
 					if a_mouse_state.y>=56 and a_mouse_state.y<=130 then
-						create l_new_game.new_game (window,sound)
-						print("bug")
+						create l_new_game.make (window,sound)
 					end
 					if a_mouse_state.y>=170 and a_mouse_state.y<=242 then
 						--continue
 					end
-					if a_mouse_state.y>=250 and a_mouse_state.y<=280 then
+					if a_mouse_state.y>=490 and a_mouse_state.y<=560 then
 						--back
-						print("back")
 						retour_precedant
 						return_single_player := True
 						game_library.stop
@@ -90,7 +88,7 @@ feature {ANY}
 				Precursor
 				game_library.launch
 				if menu_new_game_selectioner then
-					create l_menu_new_game.new_game (window,sound)
+					create l_menu_new_game.make (window,sound)
 					return_new_game := True
 				end
 			end

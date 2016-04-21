@@ -77,7 +77,7 @@ feature
 			from
 				return_depart := False
 			until
-				return_depart
+				return_depart or quitter
 			loop
 				menu_principal_selectionne := False
 				game_library.clear_all_events
@@ -85,6 +85,7 @@ feature
 				game_library.launch
 				if menu_principal_selectionne then
 					create l_menu_principal.make (sound,window)
+					quitter := l_menu_principal.quitter
 					return_principal := True
 				end
 			end

@@ -22,7 +22,6 @@ feature {NONE} -- Initialisation
 		ensure
 			Son_Assigne: sound = a_sound
 			Window_Assigne: window = a_window
---			Image_Assigne: surface = a_image
 		end
 
 feature
@@ -58,7 +57,7 @@ feature {ANY}
 
 	return_new_game : BOOLEAN
 
+	return_load_village : BOOLEAN
 
---	surface : GAME_SURFACE
 
 end

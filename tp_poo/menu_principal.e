@@ -52,23 +52,19 @@ feature {NONE} -- Initialization
 
 				if a_mouse_state.x>=244 and a_mouse_state.x<=548 then
 					if a_mouse_state.y>=206 and a_mouse_state.y<=231 then
-						print("Single Player%N")
 						entrer_menu_single_player
 					end
 					if a_mouse_state.y>=251 and a_mouse_state.y<=276 then
-						print("Multi Player%N")
 					end
 					if a_mouse_state.y>=296 and a_mouse_state.y<=321 then
-						print("Replay Intro%N")
 						retour_precedant
 						return_principal := True
 						game_library.stop
 					end
 					if a_mouse_state.y>=341 and a_mouse_state.y<=366 then
-						print("Show Credits%N")
 					end
 					if a_mouse_state.y>=386 and a_mouse_state.y<=411 then
-						print("Exit Diablo%N")
+						quitter := True
 						game_library.stop
 					end
 				end
@@ -94,7 +90,7 @@ feature {ANY}
 			from
 				return_principal := False
 			until
-				return_principal
+				return_principal or quitter
 			loop
 				menu_single_player_selectioner := False
 				game_library.clear_all_events
