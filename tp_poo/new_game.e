@@ -26,7 +26,7 @@ create
 feature {NONE}
 
 	make (a_window:GAME_WINDOW_SURFACED;a_sound:SOUND)
-		-- Fonction qui recommence les iterations avec les nouvelles valeurs pour ce menu.
+		-- Construit le menu : image et continue la musique
 		local
 			l_image:IMAGE
 		do
@@ -36,13 +36,6 @@ feature {NONE}
 			menu_action
 		end
 
-
-	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
-			-- Evenement mettant a jour le fond d'ecran a chaque iteration .
-		do
-			l_window.surface.draw_surface (a_image, 0, 0)
-			l_window.update
-		end
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_SURFACE)
 			-- Fonction envoyant l'utilisateur dans la section "Start"
@@ -71,11 +64,13 @@ feature {NONE}
 		end
 
 	start_game
+	-- Commence la partie
 		do
 			print("start game")
 		end
 
 	retour_precedant
+	-- Creee les images et son du menu precedent pour revenir en arriere
 		do
 			create image.make("single_player.png")
 			image.change_background("single_player.png",window)
@@ -84,6 +79,7 @@ feature {NONE}
 FEATURE {ANY}
 
 	menu_action
+	-- Faire afficher et gerer les events du menu
 		local
 			l_village: VILLAGE
 		do
@@ -104,5 +100,6 @@ FEATURE {ANY}
 		end
 
 		load_village_selectionner : BOOLEAN
+		-- Bool pour savoir si on entre dans le prochain menu
 
 end

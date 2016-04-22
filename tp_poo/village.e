@@ -29,11 +29,6 @@ feature {NONE}
 			create l_image.make ("village.png")
 			l_image.change_background("village.png",a_window)
 			sounds := a_sound
-			print("nice village")
-			--a_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, a_window))
-			--game_library.iteration_actions.extend (agent sounds.on_iteration_sound)
-			--game_library.iteration_actions.extend (agent on_iteration_background(?,l_image,a_window))
-
 		end
 
 	sounds:SOUND

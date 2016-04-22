@@ -26,7 +26,7 @@ create
 feature {NONE}
 
 	make (a_window:GAME_WINDOW_SURFACED;a_sound:SOUND)
-		-- Fonction qui recommence les iterations avec les nouvelles valeurs pour ce menu.
+		-- Construit le menu : image et continue la musique
 		local
 			l_image:IMAGE
 		do
@@ -67,6 +67,7 @@ feature {NONE}
 		end
 
 	retour_precedant
+	-- Creee les images et son du menu precedent pour revenir en arriere
 		do
 			create image.make("menu_resized.jpg")
 			image.change_background("menu_resized.jpg",window)
@@ -75,6 +76,7 @@ feature {NONE}
 feature {ANY}
 
 	menu_action
+	-- Faire afficher et gerer les events du menu
 		local
 			l_menu_new_game: NEW_GAME
 		do
@@ -95,5 +97,6 @@ feature {ANY}
 		end
 
 		menu_new_game_selectioner : BOOLEAN
+		-- Bool pour savoir si on entre dans le prochain menu
 
 end

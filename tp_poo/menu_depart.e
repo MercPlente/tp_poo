@@ -1,6 +1,6 @@
 note
 	description: "Summary description for {MENU_DEPART}."
-	author: ""
+	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -26,6 +26,7 @@ create
 feature {NONE}
 
 	make
+		-- Construit la fenetre et le menu principal : image et son
 		local
 			l_window:GAME_WINDOW_SURFACED
 			l_image:IMAGE
@@ -71,6 +72,7 @@ feature {NONE}
 feature
 
 	menu_action
+		-- Faire afficher et gerer les events du menu
 		local
 			l_menu_principal:MENU_PRINCIPAL
 		do
@@ -92,6 +94,7 @@ feature
 		end
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_image:GAME_SURFACE)
+		-- Fonction qui entre dans la fonction entrer_menu_principal lorsqu'un clique est fait dans la fenetre.
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				entrer_menu_principal
@@ -99,13 +102,15 @@ feature
 		end
 
 	entrer_menu_principal
+		-- Met le menu_principal_selectionne a True pour entrer dans le menu principal en retournant dans la boucle et arreter les events.
 		do
 			menu_principal_selectionne := True
 			game_library.stop
 		end
 
-	menu_principal_selectionne:BOOLEAN
 
+	menu_principal_selectionne:BOOLEAN
+	-- Bool pour savoir si on entre dans le prochain menu
 
 
 end

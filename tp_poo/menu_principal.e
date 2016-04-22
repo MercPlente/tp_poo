@@ -1,6 +1,6 @@
 note
 	description: "Classe gerant le menu principal."
-	author: ""
+	author: "Marc Plante, Jeremie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -25,7 +25,7 @@ create
 feature {NONE} -- Initialization
 
 	make (a_sound:SOUND;a_window:GAME_WINDOW_SURFACED)
-		-- Fonction qui recommence les iterations avec les nouvelles valeurs pour ce menu.
+		-- Construit le menu : son et image
 		local
 			l_image:IMAGE
 		do
@@ -73,6 +73,7 @@ feature {NONE} -- Initialization
 
 
 	retour_precedant
+		-- Creee les images et son du menu precedent pour revenir en arriere.
 		do
 			sound.play_music ("beginning")
 			create image.make("background_resized.jpg")
@@ -84,6 +85,7 @@ feature {NONE} -- Initialization
 feature {ANY}
 
 	menu_action
+	-- Faire afficher et gerer les events du menu
 		local
 			l_menu_single_player: MENU_SINGLE_PLAYER
 		do
@@ -104,12 +106,14 @@ feature {ANY}
 		end
 
 	entrer_menu_single_player
+	-- Met le entrer_menu_single_player a True pour entrer dans le menu single player en retournant dans la boucle et arreter les events.
 		do
 			menu_single_player_selectioner := True
 			game_library.stop
 		end
 
 	menu_single_player_selectioner: BOOLEAN
+	-- Bool pour savoir si on entre dans le prochain menu
 
 
 end
