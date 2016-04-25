@@ -66,7 +66,7 @@ feature {NONE}
 	start_game
 	-- Commence la partie
 		do
-			print("start game")
+			print("Arrive bientot")
 		end
 
 	retour_precedant
