@@ -1,7 +1,7 @@
 note
 	description: "Classe gerant les images du programmes."
 	author: "Marc Plante"
-	date: "$Date$"
+	date: "$2016-04-25$"
 	revision: "$Revision$"
 
 class
@@ -51,7 +51,7 @@ feature {ANY}
 			if game_library.iteration_actions.writable then
 				game_library.iteration_actions.remove
 			end
-			
+
 
 			end
 

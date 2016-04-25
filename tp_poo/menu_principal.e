@@ -49,21 +49,20 @@ feature {NONE} -- Initialization
 			l_menu_single_player:MENU_SINGLE_PLAYER
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
-
 				if a_mouse_state.x>=244 and a_mouse_state.x<=548 then
-					if a_mouse_state.y>=206 and a_mouse_state.y<=231 then
+					if a_mouse_state.y>=249 and a_mouse_state.y<=276 then
 						entrer_menu_single_player
 					end
-					if a_mouse_state.y>=251 and a_mouse_state.y<=276 then
+					if a_mouse_state.y>=302 and a_mouse_state.y<=335 then
 					end
-					if a_mouse_state.y>=296 and a_mouse_state.y<=321 then
+					if a_mouse_state.y>=355 and a_mouse_state.y<=384 then
 						retour_precedant
 						return_principal := True
 						game_library.stop
 					end
-					if a_mouse_state.y>=341 and a_mouse_state.y<=366 then
+					if a_mouse_state.y>=408 and a_mouse_state.y<=438 then
 					end
-					if a_mouse_state.y>=386 and a_mouse_state.y<=411 then
+					if a_mouse_state.y>=456 and a_mouse_state.y<=500 then
 						quitter := True
 						game_library.stop
 					end
