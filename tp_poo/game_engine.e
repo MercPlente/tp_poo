@@ -30,7 +30,7 @@ feature -- Access
 	run (a_window:GAME_WINDOW_SURFACED)
 			-- Create ressources and launch the game
 		do
-			
+
 			player.y := 375
 			player.x := 200
 			player.next_y := 375
