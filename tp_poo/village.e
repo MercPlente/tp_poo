@@ -9,7 +9,7 @@ class
 
 inherit
 	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
-	AUDIO_LIBRARY_SHARED	-- Pour Utilliser `audio_library'
+	GAME_SURFACE
 	IMG_LIBRARY_SHARED		-- Pour Utilliser `image_file_library'
 	EXCEPTIONS
 
@@ -18,19 +18,25 @@ create
 
 feature {NONE}
 
-	new_village (a_sound:SOUND; a_window:GAME_WINDOW_SURFACED)
+	new_village
 		-- Fonction qui recommence les iterations avec les nouvelles valeurs pour cette région.
 		local
-			l_image:IMAGE
-			--l_player:PLAYER
-
+			l_image: IMG_IMAGE_FILE
 		do
-			game_library.clear_all_events
-			create l_image.make ("village.png")
-			l_image.change_background("village.png",a_window)
-			sounds := a_sound
+			create l_image.make ("background_test.png")
+			if l_image.is_openable then
+				l_image.open
+				if l_image.is_open then
+					make_from_image (l_image)
+				else
+					has_error := True
+					make(1,1)
+				end
+			else
+				has_error := True
+				make(1,1)
+			end
 		end
 
-	sounds:SOUND
 
 end

@@ -46,13 +46,13 @@ feature {NONE}
 
 		local
 			l_village:VILLAGE
+			l_game_engine:detachable GAME_ENGINE
 
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				if a_mouse_state.x>=604 and a_mouse_state.x<=779 then
 					if a_mouse_state.y>=516 and a_mouse_state.y<=569 then
-						--in_game
-						start_game
+						start_game (window)
 					end
 				end
 				if a_mouse_state.x>=50 and a_mouse_state.x<=224 and a_mouse_state.y>=515 and a_mouse_state.y<=566 then
@@ -63,10 +63,18 @@ feature {NONE}
 			end
 		end
 
-	start_game
+	start_game (a_window:GAME_WINDOW_SURFACED)
 	-- Commence la partie
+		local
+			l_game_engine:GAME_ENGINE
+
 		do
 			print("Arrive bientot")
+			game_library.clear_all_events
+			create l_game_engine.make (a_window)
+			if not l_game_engine.has_error then
+				l_game_engine.run (a_window)
+			end
 		end
 
 	retour_precedant
@@ -93,7 +101,7 @@ FEATURE {ANY}
 				Precursor
 				game_library.launch
 				if load_village_selectionner then
-					create l_village.new_village (sound,window)
+					create l_village.new_village
 					return_load_village := True
 				end
 			end

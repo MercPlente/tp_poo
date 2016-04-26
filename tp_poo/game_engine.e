@@ -1,5 +1,5 @@
 note
-	description: "Classe pour modifier des elements en jeu."
+	description: "Classe pour modifier des elements en jeu. Grandement inspirée de la classe 'engine' de Louis"
 	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
@@ -8,92 +8,103 @@ class
 	GAME_ENGINE
 
 inherit
-
-
-	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
-	AUDIO_LIBRARY_SHARED	-- Pour Utilliser `audio_library'
+	GAME_LIBRARY_SHARED		-- To use `game_library'
 	IMG_LIBRARY_SHARED		-- Pour Utilliser `image_file_library'
+	EXCEPTIONS
 
-feature {NONE} -- Initialisation
+create
+	make
 
+feature {NONE} -- Initialization
 
-feature
-
-
-	run_game
-			-- Prepare et lancer le jeu (fênetre, son et action)
-		local
-			l_window:GAME_WINDOW_SURFACED
+	make (a_window:GAME_WINDOW_SURFACED)
+			-- Initialization of `Current'
 		do
-			--l_window := create_window
-			sounds.play_music ("beginning")
+			create village.new_village
+			create player.new_player
+			has_error := village.has_error or player.has_error
+		end
 
-			game_library.iteration_actions.extend (agent sounds.on_iteration_sound)
-			l_window.mouse_button_pressed_actions.extend (agent on_mouse_pressed(?, ?, ?, l_window))
-			l_window.key_pressed_actions.extend (agent on_key_down_quit)
-			l_window.key_pressed_actions.extend (agent on_key_down_sound)
+feature -- Access
+
+	run (a_window:GAME_WINDOW_SURFACED)
+			-- Create ressources and launch the game
+		do
+			
+			player.y := 375
+			player.x := 200
+			player.next_y := 375
+			player.next_x := 200
 			game_library.quit_signal_actions.extend (agent on_quit)
+			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down)	-- When a mouse button is pressed
+			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
 			game_library.launch
-			l_window.close
 		end
 
-	
+	has_error:BOOLEAN
+			-- `True' if an error occured during the creation of `Current'
 
-	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
-			-- Evenement qui modifie le fond d'ecran a chaque iteration.
+	village:VILLAGE
+			-- The background
+
+	player:PLAYER
+			-- The main character of the game
+
+
+
+feature {NONE} -- Implementation
+
+	on_iteration(a_timestamp:NATURAL_32; a_window:GAME_WINDOW_SURFACED)
+			-- Event that is launch at each iteration.
 		do
-			l_window.surface.draw_surface (a_image, 0, 0)
-			l_window.update
-		end
-
-	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
-			-- Fonction qui change le menu et fond d'ecran quand l'utilisateur fait un clique gauche à l'ecran
-	require
-		Souris_Appuyer_Correctement: a_mouse_state.is_left_button_pressed
-		Nombre_Click: a_nb_clicks >= 1
-
-		local
-			l_menu_principal:MENU_PRINCIPAL
-		do
-			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
-				change_background("menu_resized.jpg",a_window)
-				sounds.play_music ("menu_principal")
-				create l_menu_principal.make(sounds,a_window)
-			end
-		end
-
-	on_key_down_quit(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
-			-- Quand la touche "escape" est appuyee, l'application se termine
-	require
-		Key_State: a_key_state.is_escape
-		do
-			if a_key_state.is_escape then
-				game_library.stop
-			end
-		end
-
-	on_key_down_sound(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
-			-- Lorsque la touche sace est appuyee, le son "on_space_key" jouera une fois.
-	require
-		Key_State: a_key_state.is_space
-		do
-			if a_key_state.is_space then
-				sounds.on_space_key
-			end
-			if a_key_state.is_a then
-				sounds.on_a_key
+			player.update (a_timestamp)	-- Update Player animation and coordinate
+			-- Be sure that Player does not get out of the screen
+			if player.x < 0 then
+				player.x := 0
+			elseif player.x + player.sub_image_width > village.width then
+				player.x := village.width - player.sub_image_width
 			end
 
+			-- Draw the scene
+			a_window.surface.draw_surface (village, 0, 0)
+			a_window.surface.draw_sub_surface (
+									player.surface, player.sub_image_x, player.sub_image_y,
+									player.sub_image_width, player.sub_image_height, player.x, player.y
+								)
+
+			-- Update modification in the screen
+			a_window.update
 		end
 
-	on_quit(a_timestamp:NATURAL)
-			-- Fonction pour arreter la librairie
+	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8)
+			-- When the user pressed the left mouse button (from `a_mouse_state'), start to move maryo
 		do
-			game_library.stop
+
+			player.next_x := a_mouse_state.x
+			player.next_y := a_mouse_state.y
+
+			if a_mouse_state.x > player.x + (player.surface.width // 6) then
+				player.stop_left
+				player.go_right (a_timestamp)
+			elseif a_mouse_state.x < player.x + (player.surface.width // 6) then
+				player.stop_right
+				player.go_left (a_timestamp)
+			end
+
+			if a_mouse_state.y > player.y + (player.surface.height // 2) then
+				player.stop_up
+				player.go_down (a_timestamp)
+			elseif a_mouse_state.y < player.y + (player.surface.height // 2) then
+				player.stop_down
+				player.go_up (a_timestamp)
+			end
+
 		end
 
-
-	sounds:SOUND
-
+	on_quit(a_timestamp: NATURAL_32)
+			-- This method is called when the quit signal is send to the application (ex: window X button pressed).
+		do
+			game_library.stop  -- Stop the controller loop (allow game_library.launch to return)
+		end
 
 end
