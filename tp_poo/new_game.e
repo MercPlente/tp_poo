@@ -69,7 +69,6 @@ feature {NONE}
 			l_game_engine:GAME_ENGINE
 
 		do
-			print("Arrive bientot")
 			game_library.clear_all_events
 			create l_game_engine.make (a_window)
 			if not l_game_engine.has_error then
