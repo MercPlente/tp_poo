@@ -9,7 +9,7 @@ class
 
 inherit
 	ENTITY
---	GAME_LIBRARY_SHARED
+
 
 create
 	new_player
@@ -27,7 +27,7 @@ feature {NONE} -- Initialization
 				l_image.open
 				if l_image.is_open then
 					create right_surface.make_from_image (l_image)
-					create {GAME_SURFACE_ROTATE_ZOOM} left_surface.make_zoom_x_y (right_surface, -1, 1, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} left_surface.make_zoom_x_y (right_surface, -1, 1, False)
 					sub_image_width := right_surface.width // 3
 					sub_image_height := right_surface.height
 				else

@@ -15,6 +15,8 @@ feature {ANY}
 		local
 			l_coordinate:TUPLE[x,y:INTEGER]
 			l_delta_time:NATURAL_32
+			l_movement_time:INTEGER_32
+			--l_background:BACKGROUND
 		do
 			if (next_x - (x + (surface_width // 6)) > -3 and next_x - (x + (surface_width // 6)) < 3) then
 				if going_right then
@@ -42,16 +44,21 @@ feature {ANY}
 				if l_delta_time // movement_delta > 0 then
 					if going_right then
 						turn_right
-						x := x + (l_delta_time // movement_delta).to_integer_32
+						l_movement_time := (l_delta_time // movement_delta).to_integer_32
+						x := x + l_movement_time
+						--l_background.set_next_background_x (x)
 					elseif going_left then
 						turn_left
 						x := x - (l_delta_time // movement_delta).to_integer_32
+						--l_background.set_next_background_x (x)
 					end
 
 					if going_up then
 						y := y - (l_delta_time // movement_delta).to_integer_32
+						--l_background.set_next_background_y (y)
 					elseif going_down then
 						y := y + (l_delta_time // movement_delta).to_integer_32
+						--l_background.set_next_background_y (y)
 					end
 					old_timestamp := old_timestamp + (l_delta_time // movement_delta) * movement_delta
 				end

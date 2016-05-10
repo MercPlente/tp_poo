@@ -44,10 +44,6 @@ feature {NONE}
 			Souris_Appuyer_Correctement: a_mouse_state.is_left_button_pressed
 			Nombre_Click: a_nb_clicks >= 1
 
-		local
-			l_village:VILLAGE
-			l_game_engine:detachable GAME_ENGINE
-
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				if a_mouse_state.x>=604 and a_mouse_state.x<=779 then
@@ -70,7 +66,7 @@ feature {NONE}
 
 		do
 			game_library.clear_all_events
-			create l_game_engine.make (a_window)
+			create l_game_engine.make_run (a_window)
 			if not l_game_engine.has_error then
 				l_game_engine.run (a_window)
 			end
