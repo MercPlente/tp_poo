@@ -95,7 +95,15 @@ feature
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_image:GAME_SURFACE)
 		-- Fonction qui entre dans la fonction entrer_menu_principal lorsqu'un clique est fait dans la fenetre.
+		local
+			test : SERVER_POO
+			message : STRING
 		do
+			if a_nb_clicks = 1 and a_mouse_state.is_right_button_pressed then
+				message := "patate"
+				create test.client(message)
+
+			end
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				entrer_menu_principal
 			end
