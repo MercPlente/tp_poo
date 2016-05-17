@@ -28,31 +28,52 @@ feature {NONE} -- Initialization
 			io.put_string (l_message)
 			io.put_new_line
 			if l_message = "requete" then
-				renvoyer_high_score
+				renvoyer_highscore
 			else
-				high_score(l_message)
+				highscore(l_message)
 			end
 			l_socket.close
 		end
 
 
-		high_score(message:STRING)
+		highscore(message:STRING)
 		-- prend le high score / le change s'il est meilleur
+			local
+				l_highscore_file: PLAIN_TEXT_FILE
+				l_score: INTEGER
+				l_highscore: INTEGER
 			do
+				l_score := message.to_integer
+
+				create l_highscore_file.make_open_read_write ("highscore.txt")
+				l_highscore_file.read_stream (l_highscore_file.count)
+				l_highscore := l_highscore_file.last_string.twin.to_integer
+				l_highscore_file.close
+
+				if l_score > l_highscore then
+					l_highscore_file.make_open_write ("highscore.txt")
+					l_highscore_file.put_string (message)
+					l_highscore_file.close
+				end
 
 			end
 
-		renvoyer_high_score
+		renvoyer_highscore
 		-- prend le high score et le renvoit dans le jeu s'il est plus grand
 			local
-				l_high_score : STRING
+				l_highscore : STRING
 				l_socket: NETWORK_DATAGRAM_SOCKET
+				l_highscore_file: PLAIN_TEXT_FILE
 			do
-				-- shit pour trouver le high score
+				create l_highscore_file.make_open_read_write ("highscore.txt")
+				l_highscore_file.read_stream (l_highscore_file.count)
+				l_highscore := l_highscore_file.last_string.twin
+				l_highscore_file.close
+
 				create l_socket.make_targeted ("localhost", 1337)
-				create l_high_score.make_empty
-				l_socket.put_integer (l_high_score.count)
-				l_socket.put_string (l_high_score)
+				create l_highscore.make_empty
+				l_socket.put_integer (l_highscore.count)
+				l_socket.put_string (l_highscore)
 			end
 
 
