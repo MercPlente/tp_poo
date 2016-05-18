@@ -47,6 +47,8 @@ feature {NONE} -- Initialization
 
 		local
 			l_menu_single_player:MENU_SINGLE_PLAYER
+			l_thread:TP_THREAD
+			highscore : STRING
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				if a_mouse_state.x>=244 and a_mouse_state.x<=548 then
@@ -61,6 +63,15 @@ feature {NONE} -- Initialization
 						game_library.stop
 					end
 					if a_mouse_state.y>=408 and a_mouse_state.y<=438 then
+						create l_thread.make
+						l_thread.launch
+						from
+						until
+							l_thread.recu = true
+						loop
+						end
+						highscore := l_thread.highscore
+						print(highscore)
 					end
 					if a_mouse_state.y>=456 and a_mouse_state.y<=500 then
 						quitter := True

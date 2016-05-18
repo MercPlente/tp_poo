@@ -26,32 +26,11 @@ feature {NONE} -- Initialisation
 			game_library.enable_video -- Active les fonctionnalitees video
 			image_file_library.enable_image (true, false, false)
 			audio_library.enable_sound
-			essaie_thread
 			create l_menu.make
 			l_menu := Void
 			audio_library.quit_library
 			image_file_library.quit_library
 			game_library.quit_library
-		end
-
-essaie_thread
--- utillise un thread
-		local
-			l_thread:TP_THREAD
-			i:INTEGER
-		do
-			create l_thread.make (" CouCou ")
-			l_thread.launch
-			from i:=1
-			until i>1000
-			loop
-				io.put_string ("Louis")
-				io.put_string ("%N")
-				i:=i+1
-			end
-			l_thread.stop_thread
-			l_thread.join
-			io.put_new_line
 		end
 
 end

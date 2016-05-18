@@ -27,7 +27,7 @@ feature {NONE} -- Initialization
 			l_message:=l_socket.last_string
 			io.put_string (l_message)
 			io.put_new_line
-			if l_message = "requete" then
+			if l_message ~ "requete" then
 				renvoyer_highscore
 			else
 				highscore(l_message)
@@ -40,14 +40,14 @@ feature {NONE} -- Initialization
 		-- prend le high score / le change s'il est meilleur
 			local
 				l_highscore_file: PLAIN_TEXT_FILE
-				l_score: INTEGER
-				l_highscore: INTEGER
+				l_score: NATURAL_32
+				l_highscore: NATURAL_32
 			do
-				l_score := message.to_integer
+				l_score := message.to_natural_32
 
 				create l_highscore_file.make_open_read_write ("highscore.txt")
 				l_highscore_file.read_stream (l_highscore_file.count)
-				l_highscore := l_highscore_file.last_string.twin.to_integer
+				l_highscore := l_highscore_file.last_string.twin.to_natural_32
 				l_highscore_file.close
 
 				if l_score > l_highscore then
@@ -70,8 +70,8 @@ feature {NONE} -- Initialization
 				l_highscore := l_highscore_file.last_string.twin
 				l_highscore_file.close
 
-				create l_socket.make_targeted ("localhost", 1337)
-				create l_highscore.make_empty
+				create l_socket.make_targeted ("localhost", 1338)
+				--create l_highscore.make_empty
 				l_socket.put_integer (l_highscore.count)
 				l_socket.put_string (l_highscore)
 			end

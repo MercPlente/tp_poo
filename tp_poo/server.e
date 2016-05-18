@@ -22,10 +22,11 @@ feature {ANY} -- Initialization
 		do
 			l_port:=1337
 			create l_socket.make_targeted ("localhost", l_port)
+			high_score := ""
+			reponse_recu := FALSE
 			l_message := message
 			l_socket.put_integer (l_message.count)
 			l_socket.put_string (l_message)
-			attendre_reponse
 			l_socket.close
 		end
 
@@ -37,13 +38,14 @@ feature {ANY} -- Initialization
 			l_taille_message:INTEGER
 			l_message:STRING
 		do
-			l_port:=1337
+			l_port:=1338
 			create l_socket.make_bound (l_port)
 			l_socket.read_integer
 			l_taille_message:=l_socket.last_integer
 			l_socket.read_stream (l_taille_message)
 			l_message:=l_socket.last_string
 			high_score := l_message
+			reponse_recu := TRUE
 		end
 
 
@@ -66,4 +68,5 @@ feature {ANY} -- Initialization
 
 
 	high_score : STRING
+	reponse_recu : BOOLEAN
 end

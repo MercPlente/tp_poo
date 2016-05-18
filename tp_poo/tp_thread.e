@@ -8,6 +8,7 @@ class
 	TP_THREAD
 
 inherit
+	GAME_LIBRARY_SHARED
 	THREAD
 	rename
 		make as make_thread
@@ -15,11 +16,12 @@ inherit
 create
 	make
 feature {NONE}
-	make (chaine:STRING)
+	make
 		do
 			make_thread
 			must_stop:= false
-			chaine_utiliser := chaine
+			recu := false
+			highscore := ""
 		end
 
 feature
@@ -28,20 +30,34 @@ feature
 			must_stop := true
 		end
 
+	highscore : STRING
+	recu : BOOLEAN
+
 feature {NONE}
 	execute
+
+		local
+			serveur: SERVER_POO
+			--temps: NATURAL_32
+			--temps_string: STRING
 		do
+			--temps:= game_library.time_since_create
+			--temps_string:= temps.out
+			create serveur.client("requete")
 			from
 			until
-				must_stop
+				serveur.reponse_recu = true
 			loop
-				io.put_string (chaine_utiliser)
-				io.output.flush
+				serveur.attendre_reponse
 			end
+			stop_thread
+			highscore := serveur.high_score
+			recu := true
+
 		end
 
 feature {NONE}
 	must_stop: BOOLEAN
-	chaine_utiliser:STRING
+
 
 end

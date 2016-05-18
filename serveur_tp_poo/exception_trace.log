@@ -1,0 +1,23 @@
+
+serveur_tp_poo: system execution failed.
+Following is the set of recorded exceptions:
+
+-------------------------------------------------------------------------------
+Class / Object      Routine                Nature of exception           Effect
+-------------------------------------------------------------------------------
+STRING_8            to_natural_32 @1       is_natural:                  
+<0000000003F21858>  (From READABLE_STRING_GENERAL)
+                                           Precondition violated.        Fail
+-------------------------------------------------------------------------------
+APPLICATION         highscore @1                                        
+<0000000003F215A8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+APPLICATION         serveur @11                                         
+<0000000003F215A8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+APPLICATION         root's creation                                     
+<0000000003F215A8>                         Routine failure.              Exit
+-------------------------------------------------------------------------------
+
+
+serveur_tp_poo: PANIC: caught signal #21 (Ctrl-Break) -- Giving up...
