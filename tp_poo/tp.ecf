@@ -28,7 +28,7 @@
 			<file_rule>
 				<exclude>^test_unitaires$</exclude>
 			</file_rule>
-			<cluster name="test_unitaires" location="C:\Users\marcopolo\Documents\Eiffel User Files\15.11\projects\tp_poo\test_unitaires\"/>
+			<cluster name="test_unitaires" location=".\test_unitaires\"/>
 		</cluster>
 	</target>
 </system>

@@ -37,7 +37,7 @@ feature -- Access
 			player.next_y := 375
 			player.next_x := 200
 			game_library.quit_signal_actions.extend (agent on_quit)
-			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down)	-- When a mouse button is pressed
+			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down_2)
 			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
 			game_library.launch
@@ -69,35 +69,43 @@ feature {NONE} -- Implementation
 			end
 
 			-- Draw the scene
-			a_window.surface.draw_sub_surface (background.game_running_surface, background.next_background_x, background.next_background_y, 800, 600, background.camera_x, background.camera_y)
+			a_window.surface.draw_sub_surface (background.game_running_surface, (player.x + player.sub_image_width // 2) + a_window.surface.width // 2, (player.y + player.sub_image_height // 2) + a_window.surface.height // 2, 800, 600, background.camera_x, background.camera_y)
 			a_window.surface.draw_sub_surface (
 									player.surface, player.sub_image_x, player.sub_image_y,
-									player.sub_image_width, player.sub_image_height, player.x, player.y
+									player.sub_image_width, player.sub_image_height, (a_window.surface.width - player.sub_image_width) // 2, (a_window.surface.height - player.sub_image_height) // 2
 								)
 
 			-- Update modification in the screen
 			a_window.update
 		end
 
-	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8)
+	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
 			-- When the user pressed the left mouse button (from `a_mouse_state'), start to move maryo
 
 		do
+			if (player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2) >= 0 then
+				player.next_x := (player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2)
+			else
+				player.next_x := 0
+			end
+			if (player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2) >= 0 then
+				player.next_y := (player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2)
+			else
+				player.next_y := 0
+			end
 
-			player.next_x := a_mouse_state.x
-			player.next_y := a_mouse_state.y
-			if a_mouse_state.x > player.x + (player.surface.width // 6) then
+			if ((player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2)) > (player.x + player.sub_image_width // 2) then
 				player.stop_left
 				player.go_right (a_timestamp)
-			elseif a_mouse_state.x < player.x + (player.surface.width // 6) then
+			elseif ((player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2)) < (player.x + player.sub_image_width // 2) then
 				player.stop_right
 				player.go_left (a_timestamp)
 			end
 
-			if a_mouse_state.y > player.y + (player.surface.height // 2) then
+			if ((player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2)) > (player.y + player.sub_image_height // 2) then
 				player.stop_up
 				player.go_down (a_timestamp)
-			elseif a_mouse_state.y < player.y + (player.surface.height // 2) then
+			elseif ((player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2)) < (player.y + player.sub_image_height // 2) then
 				player.stop_down
 				player.go_up (a_timestamp)
 			end
@@ -108,10 +116,10 @@ feature {NONE} -- Implementation
 
 		do
 			if  a_mouse_state.x >= (ecran.width // 2) then
-				print("yé plus grand que la moitier")
+				--print("yé plus grand que la moitier")
 				background.next_background_x := background.camera_x + ((a_mouse_state.x) + ecran.width // 2)
 			else
-				print("yé plus petit que la moitier")
+				--print("yé plus petit que la moitier")
 				background.next_background_x := background.camera_x + (-(a_mouse_state.x) + ecran.width // 2)
 			end
 
