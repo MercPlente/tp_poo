@@ -687,3 +687,193 @@ APPLICATION         make @5
 APPLICATION         root's creation                                     
 <0000000004B415E8>                         Routine failure.              Exit
 -------------------------------------------------------------------------------
+
+tp_poo: system execution failed.
+Following is the set of recorded exceptions:
+
+******************************** Thread exception *****************************
+In thread           Root thread            0x0 (thread id)
+*******************************************************************************
+-------------------------------------------------------------------------------
+Class / Object      Routine                Nature of exception           Effect
+-------------------------------------------------------------------------------
+PLAYER              set_next_x @1          is_x_ok:                     
+<000000000469D1E8>  (From ABSTRACT_ENTITY) Precondition violated.        Fail
+-------------------------------------------------------------------------------
+GAME_ENGINE         on_mouse_down @5                                    
+<000000000469CEC8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           fast_call                                           
+<000000000469DA98>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           call @5                                             
+<000000000469DA98>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+ACTION_SEQUENCE     call @22                                            
+<000000000469D908>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_WINDOW_SURFACED
+                    mouse_button_pressed_events_dispatcher @4
+<0000000004665C08>  (From GAME_WINDOW_EVENTS)
+                                           Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_WINDOW_SURFACED
+                    inline-agent#7 of make @1
+<0000000004665C08>  (From GAME_WINDOW_EVENTS)
+                                           Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           fast_call                                           
+<00000000046665D8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           call @5                                             
+<00000000046665D8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+ACTION_SEQUENCE     call @22                                            
+<000000000469C5C8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_EVENTS_CONTROLLER
+                    decode_event @17       
+<00000000046307A8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_EVENTS_CONTROLLER
+                    poll_event @8          
+<00000000046307A8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_LIBRARY_CONTROLLER
+                    update_events @1       
+<0000000004630628>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_LIBRARY_CONTROLLER
+                    launch @4              
+<0000000004630628>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_ENGINE         run @9                                              
+<000000000469CEC8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+NEW_GAME            start_game @4                                       
+<0000000004688CF8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+NEW_GAME            on_mouse_pressed @4                                 
+<0000000004688CF8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           fast_call                                           
+<000000000468A5D8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           call @5                                             
+<000000000468A5D8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+ACTION_SEQUENCE     call @22                                            
+<000000000468A448>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_WINDOW_SURFACED
+                    mouse_button_pressed_events_dispatcher @4
+<0000000004665C08>  (From GAME_WINDOW_EVENTS)
+                                           Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_WINDOW_SURFACED
+                    inline-agent#7 of make @1
+<0000000004665C08>  (From GAME_WINDOW_EVENTS)
+                                           Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           fast_call                                           
+<00000000046665D8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           call @5                                             
+<00000000046665D8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+ACTION_SEQUENCE     call @22                                            
+<00000000046897F8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_EVENTS_CONTROLLER
+                    decode_event @17       
+<00000000046307A8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_EVENTS_CONTROLLER
+                    poll_event @8          
+<00000000046307A8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_LIBRARY_CONTROLLER
+                    update_events @1       
+<0000000004630628>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_LIBRARY_CONTROLLER
+                    launch @4              
+<0000000004630628>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+NEW_GAME            menu_action @6                                      
+<0000000004688CF8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+NEW_GAME            make @4                                             
+<0000000004688CF8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+MENU_SINGLE_PLAYER  on_mouse_pressed @4                                 
+<000000000467D2C8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           fast_call                                           
+<000000000467EBB8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           call @5                                             
+<000000000467EBB8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+ACTION_SEQUENCE     call @22                                            
+<000000000467EA28>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_WINDOW_SURFACED
+                    mouse_button_pressed_events_dispatcher @4
+<0000000004665C08>  (From GAME_WINDOW_EVENTS)
+                                           Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_WINDOW_SURFACED
+                    inline-agent#7 of make @1
+<0000000004665C08>  (From GAME_WINDOW_EVENTS)
+                                           Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           fast_call                                           
+<00000000046665D8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+PROCEDURE           call @5                                             
+<00000000046665D8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+ACTION_SEQUENCE     call @22                                            
+<000000000467DDD8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_EVENTS_CONTROLLER
+                    decode_event @17       
+<00000000046307A8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_EVENTS_CONTROLLER
+                    poll_event @8          
+<00000000046307A8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_LIBRARY_CONTROLLER
+                    update_events @1       
+<0000000004630628>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+GAME_LIBRARY_CONTROLLER
+                    launch @4              
+<0000000004630628>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+MENU_SINGLE_PLAYER  menu_action @6                                      
+<000000000467D2C8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+MENU_SINGLE_PLAYER  make @4                                             
+<000000000467D2C8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+MENU_PRINCIPAL      menu_action @8                                      
+<0000000004671A98>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+MENU_PRINCIPAL      make @5                                             
+<0000000004671A98>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+MENU_DEPART         menu_action @8                                      
+<0000000004662308>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+MENU_DEPART         make @7                                             
+<0000000004662308>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+APPLICATION         make @5                                             
+<00000000046305E8>                         Routine failure.              Fail
+-------------------------------------------------------------------------------
+APPLICATION         root's creation                                     
+<00000000046305E8>                         Routine failure.              Exit
+-------------------------------------------------------------------------------
