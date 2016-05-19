@@ -23,6 +23,7 @@ feature {NONE} -- Initialization
 			create background.nouvelle_camera(a_window)
 			create player.new_player
 			create {LINKED_LIST[ENNEMY]} ennemies.make
+			--ennemies.extend(create {ENNEMY}.new_ennemy("personnage.png",5,30,30))
 			ecran := a_window
 			has_error := background.has_error
 		end
@@ -35,7 +36,7 @@ feature -- Access
 	run (a_window:GAME_WINDOW_SURFACED)
 			-- Create ressources and launch the game
 		do
-			--ennemies.extend(create {ENNEMY}.new_ennemy("personnage.png",5,30,30))
+
 			player.y := 375
 			player.x := 200
 			player.next_y := 375
@@ -66,6 +67,8 @@ feature {NONE} -- Implementation
 
 	on_iteration(a_timestamp:NATURAL_32; a_window:GAME_WINDOW_SURFACED)
 			-- Event that is launch at each iteration.
+		local
+			i:INTEGER
 		do
 			player.update (a_timestamp)	-- Update Player animation and coordinate
 			-- Be sure that Player does not get out of the screen
@@ -81,6 +84,17 @@ feature {NONE} -- Implementation
 									player.surface, player.sub_image_x, player.sub_image_y,
 									player.sub_image_width, player.sub_image_height, (a_window.surface.width - player.sub_image_width) // 2, (a_window.surface.height - player.sub_image_height) // 2
 								)
+			if not ennemies.is_empty then
+				from
+					i := 1
+				until
+					i < ennemies.count
+				loop
+					a_window.surface.draw_sub_surface (ennemies[i].surface,ennemies[i].x, ennemies[i].y, ennemies[i].surface.width, ennemies[i].surface.height, ennemies[i].next_x, ennemies[i].next_y)
+					i := i + 1
+				end
+
+			end
 
 			-- Update modification in the screen
 			a_window.update
