@@ -1,6 +1,6 @@
 note
 	description: "Classe gerant les sons de l'application."
-	author: ""
+	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
 

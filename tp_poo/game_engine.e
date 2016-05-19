@@ -22,18 +22,20 @@ feature {NONE} -- Initialization
 		do
 			create background.nouvelle_camera(a_window)
 			create player.new_player
-			create ennemy.new_ennemy("personnage.png",5,30,30)
-			 ecran := a_window
+			create {LINKED_LIST[ENNEMY]} ennemies.make
+			ecran := a_window
 			has_error := background.has_error
-			--create {LINKED_LIST}liste_ennemies.make
-
 		end
 
 feature -- Access
 
+	ennemies: LIST[ENNEMY]
+			-- List of ennemies
+
 	run (a_window:GAME_WINDOW_SURFACED)
 			-- Create ressources and launch the game
 		do
+			--ennemies.extend(create {ENNEMY}.new_ennemy("personnage.png",5,30,30))
 			player.y := 375
 			player.x := 200
 			player.next_y := 375
@@ -50,15 +52,14 @@ feature -- Access
 	player:PLAYER
 			-- The main character of the game
 
-	ennemy: ENNEMY
-
 	has_error : BOOLEAN
+		-- Verifie s'il n'y a pas d'erreur avant de commencer le jeu
 
 	background:BACKGROUND
+		-- La classe background pour utiliser la camera
 
 	ecran:GAME_WINDOW_SURFACED
-
-	--liste_ennemies : LIST[player]
+	-- La surface en cours
 
 
 feature {NONE} -- Implementation
@@ -86,7 +87,7 @@ feature {NONE} -- Implementation
 		end
 
 	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
-			-- When the user pressed the left mouse button (from `a_mouse_state'), start to move maryo
+			--  Fait deplacer le player
 
 		do
 			if (player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2) >= 0 then
@@ -119,17 +120,13 @@ feature {NONE} -- Implementation
 		end
 
 	on_mouse_down_2(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8)
-
+		-- on mouseclick pour faire changer la prochaine position du background
 		do
 			if  a_mouse_state.x >= (ecran.width // 2) then
-				--print("yé plus grand que la moitier")
 				background.next_background_x := background.camera_x + ((a_mouse_state.x) + ecran.width // 2)
 			else
-				--print("yé plus petit que la moitier")
 				background.next_background_x := background.camera_x + (-(a_mouse_state.x) + ecran.width // 2)
 			end
-
-			--background.next_background_y := background.camera_y + (a_mouse_state.y - ecran.height // 2)
 
 		end
 

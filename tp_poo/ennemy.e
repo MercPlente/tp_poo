@@ -1,6 +1,6 @@
 note
 	description: "Classe permettant de creer et gerer les ennemies dans l'application."
-	author: ""
+	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -16,7 +16,7 @@ create
 feature {NONE} -- Initialization
 
 	new_ennemy(image:STRING;a_hp:INTEGER;a_x:INTEGER;a_y:INTEGER)
-			-- Initialization of `Current'
+	-- Constructeur de la classe ENNEMY pour creer un nouvel ennemie
 		local
 			l_image:IMG_IMAGE_FILE
 		do

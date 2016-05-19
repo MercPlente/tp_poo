@@ -17,6 +17,7 @@ create
 	make
 feature {NONE}
 	make
+	-- Constructeur du thread et le demmare
 		do
 			make_thread
 			must_stop:= false
@@ -26,16 +27,20 @@ feature {NONE}
 
 feature
 	stop_thread
+	-- Arreter le thread
 		do
 			must_stop := true
 		end
 
 	highscore : STRING
+	-- String contenant le highscore
+
 	recu : BOOLEAN
+	-- Bool pour savoir si le client a recu une reponse du serveur
 
 feature {NONE}
 	execute
-
+	-- l'execution du thread
 		local
 			serveur: SERVER_POO
 			--temps: NATURAL_32
@@ -58,6 +63,7 @@ feature {NONE}
 
 feature {NONE}
 	must_stop: BOOLEAN
+	-- Bool pour faire arreter le thread
 
 
 end
