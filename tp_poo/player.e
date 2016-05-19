@@ -44,6 +44,8 @@ feature {NONE} -- Initialization
 			initialize_animation_coordinate
 		end
 
+
+
 	initialize_animation_coordinate
 			-- Create the `animation_coordinates'
 		do

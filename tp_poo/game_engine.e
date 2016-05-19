@@ -22,8 +22,10 @@ feature {NONE} -- Initialization
 		do
 			create background.nouvelle_camera(a_window)
 			create player.new_player
+			create ennemy.new_ennemy("personnage.png",5,30,30)
 			 ecran := a_window
 			has_error := background.has_error
+			--create {LINKED_LIST}liste_ennemies.make
 
 		end
 
@@ -36,6 +38,7 @@ feature -- Access
 			player.x := 200
 			player.next_y := 375
 			player.next_x := 200
+			player.hp := 30
 			game_library.quit_signal_actions.extend (agent on_quit)
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down_2)
@@ -47,12 +50,15 @@ feature -- Access
 	player:PLAYER
 			-- The main character of the game
 
+	ennemy: ENNEMY
+
 	has_error : BOOLEAN
 
 	background:BACKGROUND
 
 	ecran:GAME_WINDOW_SURFACED
 
+	--liste_ennemies : LIST[player]
 
 
 feature {NONE} -- Implementation

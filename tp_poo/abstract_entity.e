@@ -119,11 +119,27 @@ feature {ANY}
 			Is_Assign: next_y = a_y
 		end
 
+
+
+	hp:INTEGER assign set_hp
+		-- hit point de l'entite
+
 	x:INTEGER assign set_x
 			-- Vertical position of `Current'
 
 	y:INTEGER assign set_y
 			-- Horizontal position of `Current'
+
+	set_hp(a_hp:INTEGER)
+			-- Assign the value of `hp' with `a_hp'
+		require
+			correct : a_hp >= 0
+		do
+			hp := a_hp
+		ensure
+			Is_ok: a_hp >= 0
+			Is_Assign: hp = a_hp
+		end
 
 	set_x(a_x:INTEGER)
 			-- Assign the value of `x' with `a_x'
