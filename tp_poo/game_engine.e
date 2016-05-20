@@ -74,12 +74,23 @@ feature {NONE} -- Implementation
 			-- Be sure that Player does not get out of the screen
 			if player.x < 0 then
 				player.x := 0
-			elseif player.x + player.sub_image_width > ecran.width then
-				player.x := ecran.width - player.sub_image_width
+				player.stop_left
+			elseif player.x > 1600 - player.sub_image_width then
+				player.x := 1600 - player.sub_image_width
+				player.stop_right
 			end
 
+			if player.y < 0 then
+				player.y := 0
+				player.stop_up
+			elseif player.y > 1200 - player.sub_image_height then
+				player.y := 1200 - player.sub_image_height
+				player.stop_down
+			end
+
+
 			-- Draw the scene
-			a_window.surface.draw_sub_surface (background.game_running_surface, (player.x + player.sub_image_width // 2) + a_window.surface.width // 2, (player.y + player.sub_image_height // 2) + a_window.surface.height // 2, 800, 600, background.camera_x, background.camera_y)
+			a_window.surface.draw_sub_surface (background.game_running_surface, (player.x + player.sub_image_width // 2), (player.y + player.sub_image_height // 2), 800, 600, 0, 0)
 			a_window.surface.draw_sub_surface (
 									player.surface, player.sub_image_x, player.sub_image_y,
 									player.sub_image_width, player.sub_image_height, (a_window.surface.width - player.sub_image_width) // 2, (a_window.surface.height - player.sub_image_height) // 2

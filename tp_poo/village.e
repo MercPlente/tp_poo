@@ -23,7 +23,7 @@ feature {NONE}
 		local
 			l_image: IMG_IMAGE_FILE
 		do
-			create l_image.make ("background_test.png")
+			create l_image.make ("village.png")
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
