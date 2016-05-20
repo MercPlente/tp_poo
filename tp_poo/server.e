@@ -1,6 +1,6 @@
 note
-	description: "Summary description for {SERVER}."
-	author: ""
+	description: "Classe du coter client du serveur"
+	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -13,7 +13,7 @@ create
 feature {ANY} -- Initialization
 
 	client(message:STRING)
-			-- Exécution du programme serveur
+			-- Exécution du programme client
 		local
 			l_socket: NETWORK_DATAGRAM_SOCKET
 			l_port:INTEGER
@@ -31,7 +31,7 @@ feature {ANY} -- Initialization
 		end
 
 	attendre_reponse
-	--boucle pour attendre la reponse
+	--boucle pour attendre la reponse du serveur et changer le highscore
 		local
 			l_socket: NETWORK_DATAGRAM_SOCKET
 			l_port:INTEGER
@@ -68,5 +68,9 @@ feature {ANY} -- Initialization
 
 
 	high_score : STRING
+	-- String contenant le highscore
+
 	reponse_recu : BOOLEAN
+	-- Boolean pour savoir quand le serveur a répondu
+
 end

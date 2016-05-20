@@ -1,5 +1,5 @@
 note
-	description : "serveur_tp_poo application root class"
+	description : "Classe pour demarrer le serveur et attendre une reponse"
 	date        : "$Date$"
 	revision    : "$Revision$"
 
@@ -71,7 +71,6 @@ feature {NONE} -- Initialization
 				l_highscore_file.close
 
 				create l_socket.make_targeted ("localhost", 1338)
-				--create l_highscore.make_empty
 				l_socket.put_integer (l_highscore.count)
 				l_socket.put_string (l_highscore)
 			end

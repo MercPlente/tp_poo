@@ -1,6 +1,6 @@
 note
-	description: "Summary description for {BACKGROUND}."
-	author: ""
+	description: "Classe pour aider le contrôle de la camera."
+	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -18,6 +18,7 @@ create
 feature {ANY}
 
 	nouvelle_camera(a_window:GAME_WINDOW_SURFACED)
+	-- make pour creer une nouvelle camera avec la surface du jeu
 		local
 			l_image: IMG_IMAGE_FILE
 		do
@@ -38,14 +39,19 @@ feature {ANY}
 		end
 
 	has_error : BOOLEAN
+	-- Bool pour eviter les erreurs
 
 	camera_x, camera_y:INTEGER
+	-- Position x et y relative de la camera
 
 	next_background_x:INTEGER assign set_next_background_x
+	-- Futur position x de la camera assigner par default par "set_next_background_x"
 
 	next_background_y:INTEGER assign set_next_background_y
+	-- Futur position y de la camera assigner par default par "set_next_background_y"
 
 	game_running_surface:GAME_SURFACE
+	-- La surface du jeu
 
 	set_next_background_x(a_x:INTEGER)
 				-- Assign the value of `next_background_x' with `a_x'

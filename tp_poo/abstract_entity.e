@@ -1,6 +1,6 @@
 note
-	description: "Summary description for {ABSTRACT_ENTITY}."
-	author: ""
+	description: "Classe abstraite contenant les attribues / setter / iteration des entitées."
+	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -16,7 +16,6 @@ feature {ANY}
 			l_coordinate:TUPLE[x,y:INTEGER]
 			l_delta_time:NATURAL_32
 			l_movement_time:INTEGER_32
-			--l_background:BACKGROUND
 		do
 			if (next_x - (x + (surface_width // 6)) > -3 and next_x - (x + (surface_width // 6)) < 3) then
 				if going_right then
@@ -46,19 +45,15 @@ feature {ANY}
 						turn_right
 						l_movement_time := (l_delta_time // movement_delta).to_integer_32
 						x := x + l_movement_time
-						--l_background.set_next_background_x (x)
 					elseif going_left then
 						turn_left
 						x := x - (l_delta_time // movement_delta).to_integer_32
-						--l_background.set_next_background_x (x)
 					end
 
 					if going_up then
 						y := y - (l_delta_time // movement_delta).to_integer_32
-						--l_background.set_next_background_y (y)
 					elseif going_down then
 						y := y + (l_delta_time // movement_delta).to_integer_32
-						--l_background.set_next_background_y (y)
 					end
 					old_timestamp := old_timestamp + (l_delta_time // movement_delta) * movement_delta
 				end
@@ -66,18 +61,22 @@ feature {ANY}
 		end
 
 	surface_width:INTEGER
+	-- La largeur de la surface
 		deferred
 		end
 
 	surface_height:INTEGER
+	-- La hauteur de la surface
 		deferred
 		end
 
 	turn_left
+	-- Fonction lorsqu'une entité tourne a gauche
 		deferred
 		end
 
 	turn_right
+	-- Fonction lorsqu'une entité tourne a droite
 		deferred
 		end
 
@@ -119,11 +118,27 @@ feature {ANY}
 			Is_Assign: next_y = a_y
 		end
 
+
+
+	hp:INTEGER assign set_hp
+		-- hit point de l'entite
+
 	x:INTEGER assign set_x
 			-- Vertical position of `Current'
 
 	y:INTEGER assign set_y
 			-- Horizontal position of `Current'
+
+	set_hp(a_hp:INTEGER)
+			-- Assign the value of `hp' with `a_hp'
+		require
+			correct : a_hp >= 0
+		do
+			hp := a_hp
+		ensure
+			Is_ok: a_hp >= 0
+			Is_Assign: hp = a_hp
+		end
 
 	set_x(a_x:INTEGER)
 			-- Assign the value of `x' with `a_x'

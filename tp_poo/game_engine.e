@@ -22,20 +22,26 @@ feature {NONE} -- Initialization
 		do
 			create background.nouvelle_camera(a_window)
 			create player.new_player
-			 ecran := a_window
+			create {LINKED_LIST[ENNEMY]} ennemies.make
+			--ennemies.extend(create {ENNEMY}.new_ennemy("personnage.png",5,30,30))
+			ecran := a_window
 			has_error := background.has_error
-
 		end
 
 feature -- Access
 
+	ennemies: LIST[ENNEMY]
+			-- List of ennemies
+
 	run (a_window:GAME_WINDOW_SURFACED)
 			-- Create ressources and launch the game
 		do
+
 			player.y := 375
 			player.x := 200
 			player.next_y := 375
 			player.next_x := 200
+			player.hp := 30
 			game_library.quit_signal_actions.extend (agent on_quit)
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down_2)
@@ -48,17 +54,21 @@ feature -- Access
 			-- The main character of the game
 
 	has_error : BOOLEAN
+		-- Verifie s'il n'y a pas d'erreur avant de commencer le jeu
 
 	background:BACKGROUND
+		-- La classe background pour utiliser la camera
 
 	ecran:GAME_WINDOW_SURFACED
-
+	-- La surface en cours
 
 
 feature {NONE} -- Implementation
 
 	on_iteration(a_timestamp:NATURAL_32; a_window:GAME_WINDOW_SURFACED)
 			-- Event that is launch at each iteration.
+		local
+			i:INTEGER
 		do
 			player.update (a_timestamp)	-- Update Player animation and coordinate
 			-- Be sure that Player does not get out of the screen
@@ -74,13 +84,24 @@ feature {NONE} -- Implementation
 									player.surface, player.sub_image_x, player.sub_image_y,
 									player.sub_image_width, player.sub_image_height, (a_window.surface.width - player.sub_image_width) // 2, (a_window.surface.height - player.sub_image_height) // 2
 								)
+			if not ennemies.is_empty then
+				from
+					i := 1
+				until
+					i < ennemies.count
+				loop
+					a_window.surface.draw_sub_surface (ennemies[i].surface,ennemies[i].x, ennemies[i].y, ennemies[i].surface.width, ennemies[i].surface.height, ennemies[i].next_x, ennemies[i].next_y)
+					i := i + 1
+				end
+
+			end
 
 			-- Update modification in the screen
 			a_window.update
 		end
 
 	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
-			-- When the user pressed the left mouse button (from `a_mouse_state'), start to move maryo
+			--  Fait deplacer le player
 
 		do
 			if (player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2) >= 0 then
@@ -113,17 +134,13 @@ feature {NONE} -- Implementation
 		end
 
 	on_mouse_down_2(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8)
-
+		-- on mouseclick pour faire changer la prochaine position du background
 		do
 			if  a_mouse_state.x >= (ecran.width // 2) then
-				--print("yé plus grand que la moitier")
 				background.next_background_x := background.camera_x + ((a_mouse_state.x) + ecran.width // 2)
 			else
-				--print("yé plus petit que la moitier")
 				background.next_background_x := background.camera_x + (-(a_mouse_state.x) + ecran.width // 2)
 			end
-
-			--background.next_background_y := background.camera_y + (a_mouse_state.y - ecran.height // 2)
 
 		end
 
