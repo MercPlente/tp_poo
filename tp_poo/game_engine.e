@@ -20,7 +20,7 @@ feature {NONE} -- Initialization
 	make_run (a_window:GAME_WINDOW_SURFACED)
 			-- Initialization of `Current'
 		do
-			create background.nouvelle_camera(a_window)
+			create background.make_background(a_window)
 			create player.new_player
 			create {LINKED_LIST[ENNEMY]} ennemies.make
 			--ennemies.extend(create {ENNEMY}.new_ennemy("personnage.png",5,30,30))
@@ -43,8 +43,8 @@ feature -- Access
 			player.next_x := 200
 			player.hp := 30
 			game_library.quit_signal_actions.extend (agent on_quit)
+			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
-			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down_2)
 			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
 			game_library.launch
 		end
@@ -111,6 +111,16 @@ feature {NONE} -- Implementation
 			a_window.update
 		end
 
+	verifier_collisions(player_x: INTEGER; player_y: INTEGER; carte: STRING)
+			-- Vérifie si le joueur entre en collision avec un objet selon des coordonnees précises
+		do
+			if carte = "village" then
+				--collisions village
+			elseif carte = "dungeon" then
+				--collisions dungeon
+			end
+		end
+
 	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
 			--  Fait deplacer le player
 
@@ -144,15 +154,42 @@ feature {NONE} -- Implementation
 
 		end
 
-	on_mouse_down_2(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8)
-		-- on mouseclick pour faire changer la prochaine position du background
+	on_key_down(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
+		-- Sert seulement à vérifier la position actuel du personnage en appuyant sur la touche "k"
 		do
-			if  a_mouse_state.x >= (ecran.width // 2) then
-				background.next_background_x := background.camera_x + ((a_mouse_state.x) + ecran.width // 2)
-			else
-				background.next_background_x := background.camera_x + (-(a_mouse_state.x) + ecran.width // 2)
+			if not a_key_state.is_repeat then
+				if a_key_state.is_k then
+					print("Les coordonnees du joueur sont: (")
+					print(player.x)
+					print(", ")
+					print(player.y)
+					print(")%N")
+				end
+				if a_key_state.is_m then -- sert à tester le changement de cartes
+					if background.current_map.is_equal("village") then
+						changer_carte("dungeon")
+					elseif background.current_map.is_equal("dungeon") then
+						changer_carte("village")
+					end
+				end
 			end
+		end
 
+	changer_carte(nouvelle_carte: STRING)
+		-- change la carte
+		local
+			village: VILLAGE
+			dungeon: DUNGEON
+		do
+			if nouvelle_carte.is_equal("village") then
+				create village.new_village
+				background.game_running_surface := village
+				background.current_map := "village"
+			elseif nouvelle_carte.is_equal("dungeon") then
+				create dungeon.new_dungeon
+				background.game_running_surface := dungeon
+				background.current_map := "dungeon"
+			end
 		end
 
 	on_quit(a_timestamp: NATURAL_32)
