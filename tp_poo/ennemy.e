@@ -28,19 +28,25 @@ feature {NONE} -- Initialization
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
-					create right_surface.make_from_image (l_image)
-					left_surface := right_surface
+					create surface_up.make_from_image (l_image)
+					surface_down := surface_up
+					surface_right := surface_up
+					surface_left := surface_down
 				else
 					has_error := False
-					create right_surface.make(1,1)
-					left_surface := right_surface
+					create surface_up.make(1,1)
+					surface_down := surface_up
+					surface_right := surface_up
+					surface_left := surface_down
 				end
 			else
 				has_error := False
-				create right_surface.make(1,1)
-				left_surface := right_surface
+				create surface_up.make(1,1)
+				surface_down := surface_up
+				surface_right := surface_up
+				surface_left := surface_down
 			end
-			surface := right_surface
+			surface := surface_up
 			create {ARRAYED_LIST[TUPLE[x,y:INTEGER]]} animation_coordinates.make(0)
 		end
 

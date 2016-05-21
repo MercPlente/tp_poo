@@ -40,6 +40,14 @@ feature {NONE}
 		do
 		end
 
+	turn_up
+		do
+		end
+
+	turn_down
+		do
+		end
+
 	surface_width:INTEGER
 		do
 			Result := 100

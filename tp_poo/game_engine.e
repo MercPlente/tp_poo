@@ -86,7 +86,11 @@ feature {NONE} -- Implementation
 			player.update (a_timestamp)	-- Update Player animation and coordinate
 			-- Be sure that Player does not get out of the screen
 
-			collisions()
+			if background.current_map.is_equal ("village") then
+				collisions_village()
+			elseif background.current_map.is_equal ("dungeon") then
+				collisions_dungeon()
+			end
 
 			if player.x < 0 then
 				player.x := 0
@@ -191,8 +195,8 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	collisions()
-		-- vérifie si le personnage est en collision avec un obstacle
+	collisions_village()
+		-- vérifie si le personnage est en collision avec un obstacle sur la carte "village"
 		local
 			plus_petite_difference_x: INTEGER
 			plus_petite_difference_y: INTEGER
@@ -255,14 +259,15 @@ feature {NONE} -- Implementation
 						end
 					end
 				end
-
-
-			elseif background.current_map.is_equal ("dungeon") then
-
-
 			end
-
 		end
+
+	collisions_dungeon()
+		-- vérifie si le personnage est en collision avec un obstacle sur la carte "dungeon"
+		do
+			
+		end
+
 
 	changer_carte(nouvelle_carte: STRING)
 		-- change la carte

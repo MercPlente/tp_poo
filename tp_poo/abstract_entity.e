@@ -51,8 +51,10 @@ feature {ANY}
 					end
 
 					if going_up then
+						turn_up
 						y := y - (l_delta_time // movement_delta).to_integer_32
 					elseif going_down then
+						turn_down
 						y := y + (l_delta_time // movement_delta).to_integer_32
 					end
 					old_timestamp := old_timestamp + (l_delta_time // movement_delta) * movement_delta
@@ -67,6 +69,16 @@ feature {ANY}
 
 	surface_height:INTEGER
 	-- La hauteur de la surface
+		deferred
+		end
+
+	turn_up
+	-- Fonction lorsqu'une entité tourne en haut
+		deferred
+		end
+
+	turn_down
+	-- Fonction lorsqu'une entité tourne en bas
 		deferred
 		end
 
