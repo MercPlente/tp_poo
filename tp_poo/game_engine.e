@@ -25,6 +25,8 @@ feature {NONE} -- Initialization
 			create background.make_background(a_window)
 			create player.new_player
 			create {LINKED_LIST[ENNEMY]} ennemies.make
+			create village.new_village
+			create dungeon.new_dungeon
 			--ennemies.extend(create {ENNEMY}.new_ennemy("personnage.png",5,30,30))
 			ecran := a_window
 			has_error := background.has_error
@@ -68,6 +70,12 @@ feature -- Access
 	sound: SOUND
 	-- Le son du jeu
 
+	village: VILLAGE
+	-- la carte village
+
+	dungeon: DUNGEON
+	-- la carte dungeon
+
 feature {NONE} -- Implementation
 
 	on_iteration(a_timestamp:NATURAL_32; a_window:GAME_WINDOW_SURFACED)
@@ -77,6 +85,9 @@ feature {NONE} -- Implementation
 		do
 			player.update (a_timestamp)	-- Update Player animation and coordinate
 			-- Be sure that Player does not get out of the screen
+
+			collisions()
+
 			if player.x < 0 then
 				player.x := 0
 				player.stop_left
@@ -180,18 +191,86 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	collisions()
+		-- vérifie si le personnage est en collision avec un obstacle
+		local
+			plus_petite_difference_x: INTEGER
+			plus_petite_difference_y: INTEGER
+		do
+			if background.current_map.is_equal ("village") then
+				if player.x >= 392 and player.x <= 1065 and player.y >= 0 and player.y <= 68 then  -- collision avec le toit
+					plus_petite_difference_y := 68 - player.y
+					if 1065 - player.x <= player.x - 392 then
+						plus_petite_difference_x := 1065 - player.x
+					else
+						plus_petite_difference_x := player.x - 392
+					end
+					if plus_petite_difference_y <= plus_petite_difference_x then
+						player.y := 69
+						player.next_y := 69
+						player.stop_up
+					else
+						if 1065 - player.x <= player.x - 392 then
+							player.x := 1066
+							player.next_x := 1066
+							player.stop_left
+						else
+							player.x := 391
+							player.next_x := 391
+							player.stop_right
+						end
+					end
+				end
+
+				if player.x >= 545 and player.x <= 935 and player.y >= 385 and player.y <= 635 then -- collision avec la fontaine
+					if 935 - player.x <= player.x - 545 then
+						plus_petite_difference_x := 935 - player.x
+					else
+						plus_petite_difference_x := player.x - 545
+					end
+					if 635 - player.y <= player.y - 385 then
+						plus_petite_difference_y := 635 - player.y
+					else
+						plus_petite_difference_y := player.y - 385
+					end
+					if plus_petite_difference_y <= plus_petite_difference_x then
+						if 635 - player.y <= player.y - 385 then
+							player.y := 636
+							player.next_y := 636
+							player.stop_up
+						else
+							player.y := 384
+							player.next_y := 384
+							player.stop_down
+						end
+					else
+						if 935 - player.x <= player.x - 545 then
+							player.x := 936
+							player.next_x := 936
+							player.stop_left
+						else
+							player.x := 544
+							player.next_x := 544
+							player.stop_right
+						end
+					end
+				end
+
+
+			elseif background.current_map.is_equal ("dungeon") then
+
+
+			end
+
+		end
+
 	changer_carte(nouvelle_carte: STRING)
 		-- change la carte
-		local
-			village: VILLAGE
-			dungeon: DUNGEON
 		do
 			if nouvelle_carte.is_equal("village") then
-				create village.new_village
 				background.game_running_surface := village
 				background.current_map := "village"
 			elseif nouvelle_carte.is_equal("dungeon") then
-				create dungeon.new_dungeon
 				background.game_running_surface := dungeon
 				background.current_map := "dungeon"
 			end
@@ -201,6 +280,7 @@ feature {NONE} -- Implementation
 			-- This method is called when the quit signal is send to the application (ex: window X button pressed).
 		do
 			game_library.stop  -- Stop the controller loop (allow game_library.launch to return)
+			sound.play_music ("beginning")
 		end
 
 feature {ANY}
