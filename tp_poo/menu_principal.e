@@ -29,7 +29,6 @@ feature {NONE} -- Initialization
 		local
 			l_image:IMAGE
 		do
-			a_sound.play_music ("menu_principal")
 			create l_image.make("menu_resized.jpg")
 			l_image.change_background("menu_resized.jpg",a_window)
 			make_menu (a_window, a_sound, l_image)

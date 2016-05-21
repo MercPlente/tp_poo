@@ -21,6 +21,7 @@ feature {NONE} -- Initialization
 			-- Initialization of `Current'
 		do
 			sound := a_sound
+			sound.play_music ("menu_principal")
 			create background.make_background(a_window)
 			create player.new_player
 			create {LINKED_LIST[ENNEMY]} ennemies.make
