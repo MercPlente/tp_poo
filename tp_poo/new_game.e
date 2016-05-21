@@ -33,6 +33,7 @@ feature {NONE}
 			create l_image.make("create_game.png")
 			l_image.change_background("single_player.png",a_window)
 			make_menu (a_window, a_sound, l_image)
+			sound := a_sound
 			menu_action
 		end
 
@@ -66,7 +67,7 @@ feature {NONE}
 
 		do
 			game_library.clear_all_events
-			create l_game_engine.make_run (a_window)
+			create l_game_engine.make_run (a_window,sound)
 			if not l_game_engine.has_error then
 				l_game_engine.run (a_window)
 			end

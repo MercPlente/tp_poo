@@ -17,9 +17,10 @@ create
 
 feature {NONE} -- Initialization
 
-	make_run (a_window:GAME_WINDOW_SURFACED)
+	make_run (a_window:GAME_WINDOW_SURFACED;a_sound:SOUND)
 			-- Initialization of `Current'
 		do
+			sound := a_sound
 			create background.make_background(a_window)
 			create player.new_player
 			create {LINKED_LIST[ENNEMY]} ennemies.make
@@ -42,6 +43,7 @@ feature -- Access
 			player.next_y := 375
 			player.next_x := 200
 			player.hp := 30
+			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
 			game_library.quit_signal_actions.extend (agent on_quit)
 			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
@@ -62,6 +64,8 @@ feature -- Access
 	ecran:GAME_WINDOW_SURFACED
 	-- La surface en cours
 
+	sound: SOUND
+	-- Le son du jeu
 
 feature {NONE} -- Implementation
 
