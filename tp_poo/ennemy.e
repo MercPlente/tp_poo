@@ -31,20 +31,32 @@ feature {NONE} -- Initialization
 					create surface_up.make_from_image (l_image)
 					surface_down := surface_up
 					surface_right := surface_up
-					surface_left := surface_down
+					surface_left := surface_up
+					surface_up_right := surface_up
+					surface_up_left := surface_up
+					surface_down_right := surface_up
+					surface_down_left := surface_up
 				else
 					has_error := False
 					create surface_up.make(1,1)
 					surface_down := surface_up
 					surface_right := surface_up
-					surface_left := surface_down
+					surface_left := surface_up
+					surface_up_right := surface_up
+					surface_up_left := surface_up
+					surface_down_right := surface_up
+					surface_down_left := surface_up
 				end
 			else
 				has_error := False
 				create surface_up.make(1,1)
 				surface_down := surface_up
 				surface_right := surface_up
-				surface_left := surface_down
+				surface_left := surface_up
+				surface_up_right := surface_up
+				surface_up_left := surface_up
+				surface_down_right := surface_up
+				surface_down_left := surface_up
 			end
 			surface := surface_up
 			create {ARRAYED_LIST[TUPLE[x,y:INTEGER]]} animation_coordinates.make(0)

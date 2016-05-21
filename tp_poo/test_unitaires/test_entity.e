@@ -48,6 +48,22 @@ feature {NONE}
 		do
 		end
 
+	turn_up_right
+		do
+		end
+
+	turn_down_right
+		do
+		end
+
+	turn_up_left
+		do
+		end
+
+	turn_down_left
+		do
+		end
+
 	surface_width:INTEGER
 		do
 			Result := 100

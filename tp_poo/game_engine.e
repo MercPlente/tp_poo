@@ -45,7 +45,7 @@ feature -- Access
 			player.x := 200
 			player.next_y := 375
 			player.next_x := 200
-			player.hp := 30
+			player.hp := 50
 			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
 			game_library.quit_signal_actions.extend (agent on_quit)
 			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
@@ -265,7 +265,7 @@ feature {NONE} -- Implementation
 	collisions_dungeon()
 		-- vérifie si le personnage est en collision avec un obstacle sur la carte "dungeon"
 		do
-			
+
 		end
 
 

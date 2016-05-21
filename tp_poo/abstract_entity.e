@@ -57,6 +57,16 @@ feature {ANY}
 						turn_down
 						y := y + (l_delta_time // movement_delta).to_integer_32
 					end
+					if going_up and going_right then
+						turn_up_right
+					elseif going_up and going_left then
+						turn_up_left
+					elseif going_down and going_right then
+						turn_down_right
+					elseif going_down and going_left then
+						turn_down_left
+					end
+
 					old_timestamp := old_timestamp + (l_delta_time // movement_delta) * movement_delta
 				end
 			end
@@ -89,6 +99,23 @@ feature {ANY}
 
 	turn_right
 	-- Fonction lorsqu'une entité tourne a droite
+		deferred
+		end
+
+	turn_up_right
+	-- Fonction lorsqu'une entité regarde en diagonale haut-droite
+		deferred
+		end
+	turn_down_right
+	-- Fonction lorsqu'une entité regarde en diagonale bas-droite
+		deferred
+		end
+	turn_up_left
+	-- Fonction lorsqu'une entité regarde en diagonale haut-gauche
+		deferred
+		end
+	turn_down_left
+	-- Fonction lorsqu'une entité regarde en diagonale bas-gauche
 		deferred
 		end
 

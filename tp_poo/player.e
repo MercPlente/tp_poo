@@ -21,10 +21,14 @@ feature {NONE} -- Initialization
 		local
 			l_image:IMG_IMAGE_FILE
 			l_image2:IMG_IMAGE_FILE
+			l_image3:IMG_IMAGE_FILE
+			l_image4:IMG_IMAGE_FILE
 		do
 			has_error := False
 			create l_image.make ("kenny.png")
 			create l_image2.make ("kenny_rotated.png")
+			create l_image3.make ("kenny_diag_hautdroite.png")
+			create l_image4.make ("kenny_diag_basdroite.png")
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
@@ -43,6 +47,7 @@ feature {NONE} -- Initialization
 				create surface_up.make(1,1)
 				surface_down := surface_up
 			end
+
 			if l_image2.is_openable then
 				l_image2.open
 				if l_image2.is_open then
@@ -57,7 +62,38 @@ feature {NONE} -- Initialization
 				has_error := False
 				create surface_right.make(1,1)
 				surface_left := surface_right
+			end
 
+			if l_image3.is_openable then
+				l_image3.open
+				if l_image3.is_open then
+					create surface_up_right.make_from_image (l_image3)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_left.make_rotate(surface_up_right, 180, True)
+				else
+					has_error := False
+					create surface_up_right.make(1,1)
+					surface_down_left := surface_up_right
+				end
+			else
+				has_error := False
+				create surface_up_right.make(1,1)
+				surface_down_left := surface_up_right
+			end
+
+			if l_image4.is_openable then
+				l_image4.open
+				if l_image4.is_open then
+					create surface_down_right.make_from_image (l_image4)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_left.make_rotate(surface_down_right, 180, True)
+				else
+					has_error := False
+					create surface_down_right.make(1,1)
+					surface_up_left := surface_down_right
+				end
+			else
+				has_error := False
+				create surface_down_right.make(1,1)
+				surface_up_left := surface_down_right
 			end
 
 			surface := surface_up
