@@ -52,6 +52,7 @@ feature -- Access
 			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
 			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
+			game_library.iteration_actions.extend (agent deplacement_ennemies(?) )
 			game_library.launch
 		end
 
@@ -122,7 +123,7 @@ feature {NONE} -- Implementation
 				until
 					i >= ennemies.count
 				loop
-					print(i)
+					--fix sa daem steuplait pis apres enleve le comment :)
 					a_window.surface.draw_sub_surface (ennemies[i + 1].surface,ennemies[i + 1].x, ennemies[i + 1].y, ennemies[i + 1].surface.width, ennemies[i + 1].surface.height, ennemies[i + 1].next_x, ennemies[i + 1].next_y)
 					i := i + 1
 				end
@@ -174,6 +175,49 @@ feature {NONE} -- Implementation
 				player.go_up (a_timestamp)
 			end
 
+		end
+
+
+	deplacement_ennemies(a_timestamp: NATURAL_32)
+	-- Fait déplacer les ennemies selon l'emplacement du joueur
+		local
+			i : INTEGER
+		do
+			if not ennemies.is_empty then
+				from
+					i := 0
+				until
+					i >= ennemies.count
+				loop
+
+					if ennemies[i + 1].x - player.x >= 30 and ennemies[i + 1].x >= player.x  then
+						ennemies[i + 1].x := ennemies[i + 1].x - 1
+					else
+						ennemies[i + 1].x := ennemies[i + 1].x
+					end
+
+					if ennemies[i + 1].x - player.x <= -30 and ennemies[i + 1].x <= player.x  then
+						ennemies[i + 1].x := ennemies[i + 1].x + 1
+					else
+						ennemies[i + 1].x := ennemies[i + 1].x
+					end
+
+					if ennemies[i + 1].y - player.y >= 30 and ennemies[i + 1].y >= player.y  then
+						ennemies[i + 1].y := ennemies[i + 1].y - 1
+					else
+						ennemies[i + 1].y := ennemies[i + 1].y
+					end
+
+					if ennemies[i + 1].y - player.y <= -30 and ennemies[i + 1].y <= player.y  then
+						ennemies[i + 1].y := ennemies[i + 1].y + 1
+					else
+						ennemies[i + 1].y := ennemies[i + 1].y
+					end
+
+					i := i + 1
+				end
+
+			end
 		end
 
 	on_key_down(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
