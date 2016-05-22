@@ -27,8 +27,8 @@ feature {NONE} -- Initialization
 			create {LINKED_LIST[ENNEMY]} ennemies.make
 			create village.new_village
 			create dungeon.new_dungeon
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,30,0))
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,30,20))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,100,100))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,600,600))
 			ecran := a_window
 			has_error := background.has_error
 		end
@@ -119,12 +119,18 @@ feature {NONE} -- Implementation
 								)
 			if not ennemies.is_empty then
 				from
-					i := 0
+					i := 1
 				until
-					i >= ennemies.count
+					i > ennemies.count
 				loop
+					print("x: ")
+					print(ennemies[i].x)
+					print("%N")
+					print("y: ")
+					print(ennemies[i].y)
+					print("%N")
 					--fix sa daem steuplait pis apres enleve le comment :)
-					a_window.surface.draw_sub_surface (ennemies[i + 1].surface,ennemies[i + 1].x, ennemies[i + 1].y, ennemies[i + 1].surface.width, ennemies[i + 1].surface.height, ennemies[i + 1].next_x, ennemies[i + 1].next_y)
+					a_window.surface.draw_sub_surface (ennemies[i].surface,ennemies[i].sub_image_x, ennemies[i].sub_image_y, ennemies[i].sub_image_width, ennemies[i].sub_image_height, ennemies[i].x, ennemies[i].y)
 					i := i + 1
 				end
 
