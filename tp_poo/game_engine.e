@@ -27,6 +27,7 @@ feature {NONE} -- Initialization
 			create {LINKED_LIST[ENNEMY]} ennemies.make
 			create village.new_village
 			create dungeon.new_dungeon
+			create deckard_cain.new_cain(980, 230)
 			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,100,100))
 			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,600,600))
 			ecran := a_window
@@ -51,6 +52,7 @@ feature -- Access
 			game_library.quit_signal_actions.extend (agent on_quit)
 			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
+			-- a_window.mouse_motion_actions.extend (agent on_mouse_motion(?, ?) ) -- When a mouse moves on screen
 			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
 			game_library.iteration_actions.extend (agent deplacement_ennemies(?) )
 			game_library.launch
@@ -78,6 +80,9 @@ feature -- Access
 	dungeon: DUNGEON
 	-- la carte dungeon
 
+	deckard_cain: DECKARD_CAIN
+	-- deckard cain (npc)
+
 feature {NONE} -- Implementation
 
 	on_iteration(a_timestamp:NATURAL_32; a_window:GAME_WINDOW_SURFACED)
@@ -90,6 +95,7 @@ feature {NONE} -- Implementation
 
 			if background.current_map.is_equal ("village") then
 				collisions_village()
+				pivoter_cain()
 			elseif background.current_map.is_equal ("dungeon") then
 				collisions_dungeon()
 			end
@@ -119,18 +125,21 @@ feature {NONE} -- Implementation
 									(a_window.surface.width - player.sub_image_width) // 2,
 									(a_window.surface.height - player.sub_image_height) // 2
 								)
+			a_window.surface.draw_surface (deckard_cain.surface,
+									(a_window.surface.width - player.sub_image_width) // 2 - (player.x - deckard_cain.x),
+									(a_window.surface.height - player.sub_image_height) // 2 - (player.y - deckard_cain.y)
+								)
 			if not ennemies.is_empty then
 				from
 					i := 1
 				until
 					i > ennemies.count
 				loop
-					--fix sa daem steuplait pis apres enleve le comment :)
 					a_window.surface.draw_sub_surface (
 											ennemies[i].surface,ennemies[i].sub_image_x, ennemies[i].sub_image_y,
 											ennemies[i].sub_image_width, ennemies[i].sub_image_height,
-											(a_window.surface.width - ennemies[i].sub_image_width) // 2 - (player.x - ennemies[i].x),
-											(a_window.surface.height - ennemies[i].sub_image_height) // 2 - (player.y - ennemies[i].y)
+											(a_window.surface.width - player.sub_image_width) // 2 - (player.x - ennemies[i].x),
+											(a_window.surface.height - player.sub_image_height) // 2 - (player.y - ennemies[i].y)
 										)
 					i := i + 1
 				end
@@ -241,6 +250,12 @@ feature {NONE} -- Implementation
 					print(player.y)
 					print(")%N%N")
 
+					print("Les coordonnees de Deckard Cain sont: (")
+					print(deckard_cain.x)
+					print(", ")
+					print(deckard_cain.y)
+					print(")%N%N")
+
 					if not ennemies.is_empty then
 						from
 							i := 1
@@ -264,6 +279,36 @@ feature {NONE} -- Implementation
 					elseif background.current_map.is_equal("dungeon") then
 						changer_carte("village")
 					end
+				end
+			end
+		end
+
+	pivoter_cain()
+		-- fait pivoter deckard_cain selon la position du player
+		do
+			if player.x - deckard_cain.x < 20 and player.x - deckard_cain.x > -20 then
+				if deckard_cain.y >= player.y then
+					deckard_cain.turn_up
+				else
+					deckard_cain.turn_down
+				end
+			elseif player.y - deckard_cain.y < 20 and player.y - deckard_cain.y > -20 then
+				if deckard_cain.x >= player.x then
+					deckard_cain.turn_left
+				else
+					deckard_cain.turn_right
+				end
+			elseif deckard_cain.x > player.x then
+				if deckard_cain.y > player.y then
+					deckard_cain.turn_up_left
+				else
+					deckard_cain.turn_down_left
+				end
+			elseif deckard_cain.x < player.x then
+				if deckard_cain.y > player.y then
+					deckard_cain.turn_up_right
+				else
+					deckard_cain.turn_down_right
 				end
 			end
 		end
@@ -352,6 +397,11 @@ feature {NONE} -- Implementation
 				background.game_running_surface := dungeon
 				background.current_map := "dungeon"
 			end
+		end
+
+	on_mouse_motion (a_timestamp: NATURAL_32; mouse_state:GAME_MOUSE_MOTION_STATE)
+		do
+
 		end
 
 	on_quit(a_timestamp: NATURAL_32)
