@@ -115,7 +115,9 @@ feature {NONE} -- Implementation
 			a_window.surface.draw_sub_surface (background.game_running_surface, (player.x + player.sub_image_width // 2), (player.y + player.sub_image_height // 2), 800, 600, 0, 0)
 			a_window.surface.draw_sub_surface (
 									player.surface, player.sub_image_x, player.sub_image_y,
-									player.sub_image_width, player.sub_image_height, (a_window.surface.width - player.sub_image_width) // 2, (a_window.surface.height - player.sub_image_height) // 2
+									player.sub_image_width, player.sub_image_height,
+									(a_window.surface.width - player.sub_image_width) // 2,
+									(a_window.surface.height - player.sub_image_height) // 2
 								)
 			if not ennemies.is_empty then
 				from
@@ -123,14 +125,13 @@ feature {NONE} -- Implementation
 				until
 					i > ennemies.count
 				loop
-					print("x: ")
-					print(ennemies[i].x)
-					print("%N")
-					print("y: ")
-					print(ennemies[i].y)
-					print("%N")
 					--fix sa daem steuplait pis apres enleve le comment :)
-					a_window.surface.draw_sub_surface (ennemies[i].surface,ennemies[i].sub_image_x, ennemies[i].sub_image_y, ennemies[i].sub_image_width, ennemies[i].sub_image_height, ennemies[i].x, ennemies[i].y)
+					a_window.surface.draw_sub_surface (
+											ennemies[i].surface,ennemies[i].sub_image_x, ennemies[i].sub_image_y,
+											ennemies[i].sub_image_width, ennemies[i].sub_image_height,
+											(a_window.surface.width - ennemies[i].sub_image_width) // 2 - (player.x - ennemies[i].x),
+											(a_window.surface.height - ennemies[i].sub_image_height) // 2 - (player.y - ennemies[i].y)
+										)
 					i := i + 1
 				end
 
@@ -228,6 +229,9 @@ feature {NONE} -- Implementation
 
 	on_key_down(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
 		-- Sert seulement à vérifier la position actuel du personnage en appuyant sur la touche "k"
+		-- Ou changer de carte en appuyant sur "m"
+		local
+			i: INTEGER
 		do
 			if not a_key_state.is_repeat then
 				if a_key_state.is_k then
@@ -235,7 +239,24 @@ feature {NONE} -- Implementation
 					print(player.x)
 					print(", ")
 					print(player.y)
-					print(")%N")
+					print(")%N%N")
+
+					if not ennemies.is_empty then
+						from
+							i := 1
+						until
+							i > ennemies.count
+						loop
+							print("Les coordonnees de l'ennemi sont: (")
+							print(ennemies[i].x)
+							print(", ")
+							print(ennemies[i].y)
+							print(")%N%N")
+							i := i + 1
+						end
+
+					end
+
 				end
 				if a_key_state.is_m then -- sert à tester le changement de cartes
 					if background.current_map.is_equal("village") then
