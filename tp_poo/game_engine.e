@@ -27,7 +27,8 @@ feature {NONE} -- Initialization
 			create {LINKED_LIST[ENNEMY]} ennemies.make
 			create village.new_village
 			create dungeon.new_dungeon
-			--ennemies.extend(create {ENNEMY}.new_ennemy("personnage.png",5,30,30))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,30,0))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,30,20))
 			ecran := a_window
 			has_error := background.has_error
 		end
@@ -117,11 +118,12 @@ feature {NONE} -- Implementation
 								)
 			if not ennemies.is_empty then
 				from
-					i := 1
+					i := 0
 				until
-					i < ennemies.count
+					i >= ennemies.count
 				loop
-					a_window.surface.draw_sub_surface (ennemies[i].surface,ennemies[i].x, ennemies[i].y, ennemies[i].surface.width, ennemies[i].surface.height, ennemies[i].next_x, ennemies[i].next_y)
+					print(i)
+					a_window.surface.draw_sub_surface (ennemies[i + 1].surface,ennemies[i + 1].x, ennemies[i + 1].y, ennemies[i + 1].surface.width, ennemies[i + 1].surface.height, ennemies[i + 1].next_x, ennemies[i + 1].next_y)
 					i := i + 1
 				end
 
