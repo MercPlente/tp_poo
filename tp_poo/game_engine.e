@@ -28,8 +28,9 @@ feature {NONE} -- Initialization
 			create village.new_village
 			create dungeon.new_dungeon
 			create deckard_cain.new_cain(980, 230)
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,100,100))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,100,600))
 			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,600,600))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,700,500))
 			ecran := a_window
 			has_error := background.has_error
 		end
@@ -187,37 +188,56 @@ feature {NONE} -- Implementation
 					i >= ennemies.count
 				loop
 					bool := false
-					--bool := collision(i+1)
-					--if  then
+					bool := collisions_ennemies(i+1)
+					if ennemies[i + 1].x - player.x < 30 and ennemies[i + 1].x - player.x > -30 and ennemies[i + 1].y - player.y < 30 and ennemies[i + 1].y - player.y > 30  then
 
-						if ennemies[i + 1].x - player.x >= 30 and ennemies[i + 1].x >= player.x  then
-							ennemies[i + 1].x := ennemies[i + 1].x - 1
+					else
+						if bool = false  then
 
-						elseif ennemies[i + 1].x >= player.x then
-							ennemies[i + 1].x := ennemies[i + 1].x + 1
+							if ennemies[i + 1].x - player.x > 30 and ennemies[i + 1].x >= player.x  then
+								ennemies[i + 1].x := ennemies[i + 1].x - 1
+
+							elseif ennemies[i + 1].x >= player.x then
+								if ennemies[i + 1].x - player.x = 30 then
+
+								else
+									ennemies[i + 1].x := ennemies[i + 1].x + 1
+								end
+							end
+
+							if ennemies[i + 1].x - player.x < -30 and ennemies[i + 1].x <= player.x  then
+								ennemies[i + 1].x := ennemies[i + 1].x + 1
+							elseif ennemies[i + 1].x <= player.x  then
+								if ennemies[i + 1].x - player.x = -30  then
+
+								else
+									ennemies[i + 1].x := ennemies[i + 1].x -1
+								end
+							end
+
+							if ennemies[i + 1].y - player.y > 30 and ennemies[i + 1].y >= player.y  then
+								ennemies[i + 1].y := ennemies[i + 1].y - 1
+
+							elseif ennemies[i + 1].y >= player.y then
+								if ennemies[i + 1].y - player.y = 30  then
+
+								else
+									ennemies[i + 1].y := ennemies[i + 1].y + 1
+								end
+							end
+
+							if ennemies[i + 1].y - player.y < -30 and ennemies[i + 1].y <= player.y  then
+								ennemies[i + 1].y := ennemies[i + 1].y + 1
+
+							elseif ennemies[i + 1].y <= player.y  then
+								if ennemies[i + 1].y - player.y = -30  then
+
+								else
+									ennemies[i + 1].y := ennemies[i + 1].y -1
+								end
+							end
 						end
-
-						if ennemies[i + 1].x - player.x <= -30 and ennemies[i + 1].x <= player.x  then
-							ennemies[i + 1].x := ennemies[i + 1].x + 1
-						elseif ennemies[i + 1].x <= player.x  then
-
-							ennemies[i + 1].x := ennemies[i + 1].x -1
-						end
-
-						if ennemies[i + 1].y - player.y >= 30 and ennemies[i + 1].y >= player.y  then
-							ennemies[i + 1].y := ennemies[i + 1].y - 1
-
-						elseif ennemies[i + 1].y >= player.y then
-							ennemies[i + 1].y := ennemies[i + 1].y + 1
-						end
-
-						if ennemies[i + 1].y - player.y <= -30 and ennemies[i + 1].y <= player.y  then
-							ennemies[i + 1].y := ennemies[i + 1].y + 1
-
-						elseif ennemies[i + 1].y <= player.y  then
-							ennemies[i + 1].y := ennemies[i + 1].y -1
-						end
-					--end
+					end
 					i := i + 1
 				end
 
@@ -235,6 +255,7 @@ feature {NONE} -- Implementation
 		do
 			direction_x := 0
 			direction_y := 0
+			collision := false
 			if ennemies[a_i].x > player.x  then
 					direction_x := 1
 				end
@@ -242,37 +263,61 @@ feature {NONE} -- Implementation
 			if ennemies[a_i].y > player.y then
 					direction_y := 1
 				end
+
 			from
 				i := a_i
 			until
-				i >= ennemies.count - i
+				i > ennemies.count - i
 			loop
+				collision_x := false
+				collision_y := false
 				if direction_x = 1 then
-					if ennemies[a_i].x - ennemies[i + 1].x < ennemies[i].surface.width and ennemies[a_i].x >= ennemies[i + 1].x  then
+
+					if ennemies[a_i].x - ennemies[i + 1].x < 50 and ennemies[a_i].x <= ennemies[i + 1].x  then
 						collision_x := true
 					end
 				else
-					if ennemies[a_i].x - ennemies[i + 1].x < -(ennemies[i].surface.width) and ennemies[a_i].x <= ennemies[i + 1].x  then
+					if ennemies[i + 1].x - ennemies[a_i].x < 50 and ennemies[a_i].x >= ennemies[i + 1].x  then
 						collision_x := true
 					end
 				end
 
 
 				if direction_y =1 then
-					if ennemies[a_i].y - ennemies[i + 1].y < ennemies[i].surface.height and ennemies[a_i].y >= ennemies[i + 1].y  then
+					if ennemies[a_i].y - ennemies[i + 1].y < 50 and ennemies[a_i].y <= ennemies[i + 1].y  then
 						collision_y := true
 					end
 				else
-					if ennemies[a_i].y - ennemies[i + 1].y < -(ennemies[i].surface.height) and ennemies[a_i].y <= ennemies[i + 1].y then
+					if ennemies[i + 1].y - ennemies[a_i].y < 50 and ennemies[a_i].y >= ennemies[i + 1].y then
 						collision_y := true
 					end
 				end
 
 				if collision_x = true and collision_y = true  then
 					collision := true
+					print( "  rip   ")
 				end
 
+--				if collision = true and direction_x = 0 then
+--					ennemies[i + 1].x := ennemies[i + 1].x + 25
+--				end
+
+--				if collision = true and direction_x = 1 then
+--					ennemies[i + 1].x := ennemies[i + 1].x - 25
+--				end
+
+----				if collision = true and direction_y = 1 then
+--					ennemies[i + 1].y := ennemies[i + 1].y - 25
+--				end
+
+--				if collision = true and direction_y = 0 then
+--					ennemies[i + 1].y := ennemies[i + 1].y + 25
+--				end
+
+				i := i + 1
 			end
+
+
 			Result := collision
 		end
 
