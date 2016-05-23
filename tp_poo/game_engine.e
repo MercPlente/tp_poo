@@ -83,6 +83,7 @@ feature -- Access
 	deckard_cain: DECKARD_CAIN
 	-- deckard cain (npc)
 
+
 feature {NONE} -- Implementation
 
 	on_iteration(a_timestamp:NATURAL_32; a_window:GAME_WINDOW_SURFACED)
@@ -198,6 +199,7 @@ feature {NONE} -- Implementation
 	-- Fait déplacer les ennemies selon l'emplacement du joueur
 		local
 			i : INTEGER
+			bool : BOOLEAN
 		do
 			if not ennemies.is_empty then
 				from
@@ -205,36 +207,96 @@ feature {NONE} -- Implementation
 				until
 					i >= ennemies.count
 				loop
+					bool := false
+					--bool := collision(i+1)
+					--if  then
 
-					if ennemies[i + 1].x - player.x >= 30 and ennemies[i + 1].x >= player.x  then
-						ennemies[i + 1].x := ennemies[i + 1].x - 1
-					else
-						ennemies[i + 1].x := ennemies[i + 1].x
-					end
+						if ennemies[i + 1].x - player.x >= 30 and ennemies[i + 1].x >= player.x  then
+							ennemies[i + 1].x := ennemies[i + 1].x - 1
 
-					if ennemies[i + 1].x - player.x <= -30 and ennemies[i + 1].x <= player.x  then
-						ennemies[i + 1].x := ennemies[i + 1].x + 1
-					else
-						ennemies[i + 1].x := ennemies[i + 1].x
-					end
+						elseif ennemies[i + 1].x >= player.x then
+							ennemies[i + 1].x := ennemies[i + 1].x + 1
+						end
 
-					if ennemies[i + 1].y - player.y >= 30 and ennemies[i + 1].y >= player.y  then
-						ennemies[i + 1].y := ennemies[i + 1].y - 1
-					else
-						ennemies[i + 1].y := ennemies[i + 1].y
-					end
+						if ennemies[i + 1].x - player.x <= -30 and ennemies[i + 1].x <= player.x  then
+							ennemies[i + 1].x := ennemies[i + 1].x + 1
+						elseif ennemies[i + 1].x <= player.x  then
 
-					if ennemies[i + 1].y - player.y <= -30 and ennemies[i + 1].y <= player.y  then
-						ennemies[i + 1].y := ennemies[i + 1].y + 1
-					else
-						ennemies[i + 1].y := ennemies[i + 1].y
-					end
+							ennemies[i + 1].x := ennemies[i + 1].x -1
+						end
 
+						if ennemies[i + 1].y - player.y >= 30 and ennemies[i + 1].y >= player.y  then
+							ennemies[i + 1].y := ennemies[i + 1].y - 1
+
+						elseif ennemies[i + 1].y >= player.y then
+							ennemies[i + 1].y := ennemies[i + 1].y + 1
+						end
+
+						if ennemies[i + 1].y - player.y <= -30 and ennemies[i + 1].y <= player.y  then
+							ennemies[i + 1].y := ennemies[i + 1].y + 1
+
+						elseif ennemies[i + 1].y <= player.y  then
+							ennemies[i + 1].y := ennemies[i + 1].y -1
+						end
+					--end
 					i := i + 1
 				end
 
 			end
 		end
+
+	collisions_ennemies(a_i : INTEGER) : BOOLEAN
+		local
+			direction_x : INTEGER
+			direction_y : INTEGER
+			i : INTEGER
+			collision_x : BOOLEAN
+			collision_y : BOOLEAN
+			collision : BOOLEAN
+		do
+			direction_x := 0
+			direction_y := 0
+			if ennemies[a_i].x > player.x  then
+					direction_x := 1
+				end
+
+			if ennemies[a_i].y > player.y then
+					direction_y := 1
+				end
+			from
+				i := a_i
+			until
+				i >= ennemies.count - i
+			loop
+				if direction_x = 1 then
+					if ennemies[a_i].x - ennemies[i + 1].x < ennemies[i].surface.width and ennemies[a_i].x >= ennemies[i + 1].x  then
+						collision_x := true
+					end
+				else
+					if ennemies[a_i].x - ennemies[i + 1].x < -(ennemies[i].surface.width) and ennemies[a_i].x <= ennemies[i + 1].x  then
+						collision_x := true
+					end
+				end
+
+
+				if direction_y =1 then
+					if ennemies[a_i].y - ennemies[i + 1].y < ennemies[i].surface.height and ennemies[a_i].y >= ennemies[i + 1].y  then
+						collision_y := true
+					end
+				else
+					if ennemies[a_i].y - ennemies[i + 1].y < -(ennemies[i].surface.height) and ennemies[a_i].y <= ennemies[i + 1].y then
+						collision_y := true
+					end
+				end
+
+				if collision_x = true and collision_y = true  then
+					collision := true
+				end
+
+			end
+			Result := collision
+		end
+
 
 	on_key_down(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
 		-- Sert seulement à vérifier la position actuel du personnage en appuyant sur la touche "k"
