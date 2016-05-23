@@ -94,29 +94,6 @@ feature {NONE} -- Implementation
 			player.update (a_timestamp)	-- Update Player animation and coordinate
 			-- Be sure that Player does not get out of the screen
 
-			if background.current_map.is_equal ("village") then
-				collisions_village()
-				pivoter_cain()
-			elseif background.current_map.is_equal ("dungeon") then
-				collisions_dungeon()
-			end
-
-			if player.x < 0 then
-				player.x := 0
-				player.stop_left
-			elseif player.x > 1600 - player.sub_image_width then
-				player.x := 1600 - player.sub_image_width
-				player.stop_right
-			end
-
-			if player.y < 0 then
-				player.y := 0
-				player.stop_up
-			elseif player.y > 1200 - player.sub_image_height then
-				player.y := 1200 - player.sub_image_height
-				player.stop_down
-			end
-
 
 			-- Draw the scene
 			a_window.surface.draw_sub_surface (background.game_running_surface, (player.x + player.sub_image_width // 2), (player.y + player.sub_image_height // 2), 800, 600, 0, 0)
@@ -126,10 +103,7 @@ feature {NONE} -- Implementation
 									(a_window.surface.width - player.sub_image_width) // 2,
 									(a_window.surface.height - player.sub_image_height) // 2
 								)
-			a_window.surface.draw_surface (deckard_cain.surface,
-									(a_window.surface.width - player.sub_image_width) // 2 - (player.x - deckard_cain.x),
-									(a_window.surface.height - player.sub_image_height) // 2 - (player.y - deckard_cain.y)
-								)
+
 			if not ennemies.is_empty then
 				from
 					i := 1
@@ -147,31 +121,36 @@ feature {NONE} -- Implementation
 
 			end
 
+			if background.current_map.is_equal ("village") then
+				collisions_village(a_timestamp)
+				pivoter_cain
+				a_window.surface.draw_surface (deckard_cain.surface,
+									(a_window.surface.width - player.sub_image_width) // 2 - (player.x - deckard_cain.x),
+									(a_window.surface.height - player.sub_image_height) // 2 - (player.y - deckard_cain.y)
+								)
+				a_window.surface.draw_surface (background.filtre_village, 0, 0)
+
+			elseif background.current_map.is_equal ("dungeon") then
+				collisions_dungeon(a_timestamp)
+				a_window.surface.draw_surface (background.filtre_dungeon, 0, 0)
+			end
+
+
 			-- Update modification in the screen
 			a_window.update
-		end
-
-	verifier_collisions(player_x: INTEGER; player_y: INTEGER; carte: STRING)
-			-- Vérifie si le joueur entre en collision avec un objet selon des coordonnees précises
-		do
-			if carte = "village" then
-				--collisions village
-			elseif carte = "dungeon" then
-				--collisions dungeon
-			end
 		end
 
 	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
 			--  Fait deplacer le player
 
 		do
-			if (player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2) >= 0 then
-				player.next_x := (player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2)
+			if player.x + (a_mouse_state.x - a_window.surface.width // 2) >= 0 then
+				player.next_x := player.x + (a_mouse_state.x - a_window.surface.width // 2)
 			else
 				player.next_x := 0
 			end
-			if (player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2) >= 0 then
-				player.next_y := (player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2)
+			if player.y + (a_mouse_state.y - a_window.surface.height // 2) >= 0 then
+				player.next_y := player.y + (a_mouse_state.y - a_window.surface.height // 2)
 			else
 				player.next_y := 0
 			end
@@ -337,15 +316,15 @@ feature {NONE} -- Implementation
 				end
 				if a_key_state.is_m then -- sert à tester le changement de cartes
 					if background.current_map.is_equal("village") then
-						changer_carte("dungeon")
+						changer_carte("dungeon", a_timestamp)
 					elseif background.current_map.is_equal("dungeon") then
-						changer_carte("village")
+						changer_carte("village", a_timestamp)
 					end
 				end
 			end
 		end
 
-	pivoter_cain()
+	pivoter_cain
 		-- fait pivoter deckard_cain selon la position du player
 		do
 			if player.x - deckard_cain.x < 20 and player.x - deckard_cain.x > -20 then
@@ -375,14 +354,34 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	collisions_village()
+	collisions_village(a_timestamp: NATURAL_32)
 		-- vérifie si le personnage est en collision avec un obstacle sur la carte "village"
 		local
 			plus_petite_difference_x: INTEGER
 			plus_petite_difference_y: INTEGER
 		do
 			if background.current_map.is_equal ("village") then
-				if player.x >= 392 and player.x <= 1065 and player.y >= 0 and player.y <= 68 then  -- collision avec le toit
+				if player.x < 0 then
+					player.x := 0
+					player.stop_left
+				elseif player.x > 1600 - player.sub_image_width then
+					player.x := 1600 - player.sub_image_width
+					player.stop_right
+				end
+
+				if player.y < 0 then
+					player.y := 0
+					player.stop_up
+				elseif player.y > 1200 - player.sub_image_height then
+					player.y := 1200 - player.sub_image_height
+					player.stop_down
+				end
+
+				if ((player.x >= 392 and player.x <= 710)
+					or
+					(player.x >= 743 and player.x <= 1065))
+					and
+					(player.y >= 0 and player.y <= 68) then  -- collision avec le toit
 					plus_petite_difference_y := 68 - player.y
 					if 1065 - player.x <= player.x - 392 then
 						plus_petite_difference_x := 1065 - player.x
@@ -404,6 +403,8 @@ feature {NONE} -- Implementation
 							player.stop_right
 						end
 					end
+				elseif (player.x >= 711 and player.x <= 742) and (player.y >= 0 and player.y <= 65) then
+					changer_carte("dungeon", a_timestamp)
 				end
 
 				if player.x >= 545 and player.x <= 935 and player.y >= 385 and player.y <= 635 then -- collision avec la fontaine
@@ -442,22 +443,61 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	collisions_dungeon()
+	collisions_dungeon(a_timestamp: NATURAL_32)
 		-- vérifie si le personnage est en collision avec un obstacle sur la carte "dungeon"
 		do
+			if background.current_map.is_equal ("dungeon") then
 
+				if (player.x >= 521 and player.x <= 612) and (player.y >= 2000 - player.sub_image_height) then
+					changer_carte("village", a_timestamp)
+				end
+
+				if player.x < 0 then
+					player.x := 0
+					player.stop_left
+				elseif player.x > 1200 - player.sub_image_width then
+					player.x := 1200 - player.sub_image_width
+					player.stop_right
+				end
+
+				if player.y < 0 then
+					player.y := 0
+					player.stop_up
+				elseif player.y > 2000 - player.sub_image_height then
+					player.y := 2000 - player.sub_image_height
+					player.stop_down
+				end
+			end
 		end
 
 
-	changer_carte(nouvelle_carte: STRING)
+	changer_carte(nouvelle_carte: STRING; a_timestamp: NATURAL_32)
 		-- change la carte
 		do
 			if nouvelle_carte.is_equal("village") then
 				background.game_running_surface := village
 				background.current_map := "village"
+				player.x := 725
+				player.y := 69
+				player.turn_down
+				player.next_x := 725
+				player.next_y := 85
+				if player.going_up then
+					player.stop_up
+				end
+				player.go_down (a_timestamp)
 			elseif nouvelle_carte.is_equal("dungeon") then
 				background.game_running_surface := dungeon
 				background.current_map := "dungeon"
+				player.x := 568
+				player.y := 1949
+				player.turn_up
+				player.next_x := 568
+				player.next_y := 1935
+				if player.going_down then
+					player.stop_down
+				end
+				player.go_up (a_timestamp)
 			end
 		end
 

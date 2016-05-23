@@ -21,6 +21,9 @@ feature {ANY}
 	-- make pour creer une nouvelle camera avec la surface du jeu
 		local
 			l_image: IMG_IMAGE_FILE
+			l_image2: IMG_IMAGE_FILE
+			l_image3: IMG_IMAGE_FILE
+			l_image4: IMG_IMAGE_FILE
 		do
 			has_error := False
 			create l_image.make ("village.png")
@@ -36,6 +39,48 @@ feature {ANY}
 			else
 				create game_running_surface.make(1,1)
 				has_error := True
+			end
+
+			create l_image2.make ("dungeon_door.png")
+			if l_image2.is_openable then
+				l_image2.open
+				if l_image2.is_open then
+					create door.make_from_image (l_image2)
+				else
+					has_error := True
+					create door.make(1,1)
+				end
+			else
+				has_error := True
+				create door.make(1,1)
+			end
+
+			create l_image3.make ("filtre_dungeon.png")
+			if l_image3.is_openable then
+				l_image3.open
+				if l_image3.is_open then
+					create filtre_dungeon.make_from_image (l_image3)
+				else
+					has_error := True
+					create filtre_dungeon.make(1,1)
+				end
+			else
+				has_error := True
+				create filtre_dungeon.make(1,1)
+			end
+
+			create l_image4.make ("filtre_village.png")
+			if l_image4.is_openable then
+				l_image4.open
+				if l_image4.is_open then
+					create filtre_village.make_from_image (l_image4)
+				else
+					has_error := True
+					create filtre_village.make(1,1)
+				end
+			else
+				has_error := True
+				create filtre_village.make(1,1)
 			end
 		end
 
@@ -57,8 +102,16 @@ feature {ANY}
 	set_running_surface(nouvelle_surface:GAME_SURFACE)
 	-- change la surface du jeu
 		do
-			print("changing surface%N")
 			game_running_surface := nouvelle_surface
 		end
+
+	filtre_dungeon: GAME_SURFACE
+	-- filtre spooky pour la carte dungeon
+
+	filtre_village: GAME_SURFACE
+	-- filtre spooky pour la carte dungeon
+
+	door: GAME_SURFACE
+	-- la porte du dungeon
 
 end

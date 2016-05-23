@@ -17,7 +17,7 @@ feature {ANY}
 			l_delta_time:NATURAL_32
 			l_movement_time:INTEGER_32
 		do
-			if (next_x - (x + (surface_width // 6)) > -3 and next_x - (x + (surface_width // 6)) < 3) then
+			if (next_x - x > -3 and next_x - x < 3) then
 				if going_right then
 					stop_right
 				elseif going_left then
@@ -25,7 +25,7 @@ feature {ANY}
 				end
 			end
 
-			if (next_y - (y + (surface_height // 2)) > -3 and next_y - (y + (surface_height // 2)) < 3) then
+			if (next_y - y > -3 and next_y - y < 3) then
 				if going_up then
 					stop_up
 				elseif going_down then
