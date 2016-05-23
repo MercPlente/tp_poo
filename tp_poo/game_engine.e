@@ -21,7 +21,7 @@ feature {NONE} -- Initialization
 			-- Initialization of `Current'
 		do
 			sound := a_sound
-			sound.play_music ("menu_principal")
+			sound.play_music ("tristram")
 			create background.make_background(a_window)
 			create player.new_player
 			create {LINKED_LIST[ENNEMY]} ennemies.make
@@ -134,6 +134,7 @@ feature {NONE} -- Implementation
 			elseif background.current_map.is_equal ("dungeon") then
 				collisions_dungeon(a_timestamp)
 				a_window.surface.draw_surface (background.filtre_dungeon, 0, 0)
+
 			end
 
 
@@ -449,6 +450,7 @@ feature {NONE} -- Implementation
 						end
 					end
 				elseif (player.x >= 711 and player.x <= 742) and (player.y >= 0 and player.y <= 65) then
+					sound.play_music ("dungeon")
 					changer_carte("dungeon", a_timestamp)
 				end
 
@@ -495,6 +497,7 @@ feature {NONE} -- Implementation
 
 				if (player.x >= 521 and player.x <= 612) and (player.y >= 2000 - player.sub_image_height) then
 					changer_carte("village", a_timestamp)
+					sound.play_music("tristram")
 				end
 
 				if player.x < 0 then

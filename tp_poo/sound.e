@@ -63,8 +63,11 @@ feature
 				if song_name.is_equal ("beginning") then
 					music_source.queue_sound_infinite_loop (music_intro)
 				end
-				if song_name.is_equal ("menu_principal") then
+				if song_name.is_equal ("tristram") then
 					music_source.queue_sound_infinite_loop (music_loop)
+				end
+				if song_name.is_equal ("dungeon") then
+					music_source.queue_sound_infinite_loop (second_music_loop)
 				end
 				music_source.play	-- Play the music
 			end
