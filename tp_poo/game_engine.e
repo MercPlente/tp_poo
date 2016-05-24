@@ -93,7 +93,6 @@ feature {NONE} -- Implementation
 			i:INTEGER
 		do
 			player.update (a_timestamp)	-- Update Player animation and coordinate
-			-- Be sure that Player does not get out of the screen
 
 
 			-- Draw the scene
@@ -105,7 +104,19 @@ feature {NONE} -- Implementation
 									(a_window.surface.height - player.sub_image_height) // 2
 								)
 
-			if not ennemies.is_empty then
+
+
+			if background.current_map.is_equal ("village") then
+				collisions_village(a_timestamp)
+				pivoter_cain
+				a_window.surface.draw_surface (deckard_cain.surface,
+									(a_window.surface.width - player.sub_image_width) // 2 - (player.x - deckard_cain.x),
+									(a_window.surface.height - player.sub_image_height) // 2 - (player.y - deckard_cain.y)
+								)
+				a_window.surface.draw_surface (background.filtre_village, 0, 0)
+
+			elseif background.current_map.is_equal ("dungeon") then
+				if not ennemies.is_empty then
 				from
 					i := 1
 				until
@@ -121,17 +132,6 @@ feature {NONE} -- Implementation
 				end
 
 			end
-
-			if background.current_map.is_equal ("village") then
-				collisions_village(a_timestamp)
-				pivoter_cain
-				a_window.surface.draw_surface (deckard_cain.surface,
-									(a_window.surface.width - player.sub_image_width) // 2 - (player.x - deckard_cain.x),
-									(a_window.surface.height - player.sub_image_height) // 2 - (player.y - deckard_cain.y)
-								)
-				a_window.surface.draw_surface (background.filtre_village, 0, 0)
-
-			elseif background.current_map.is_equal ("dungeon") then
 				collisions_dungeon(a_timestamp)
 				a_window.surface.draw_surface (background.filtre_dungeon, 0, 0)
 
@@ -458,7 +458,6 @@ feature {NONE} -- Implementation
 						end
 					end
 				elseif (player.x >= 711 and player.x <= 742) and (player.y >= 0 and player.y <= 65) then
-					sound.play_music ("dungeon")
 					changer_carte("dungeon", a_timestamp)
 				end
 
@@ -505,7 +504,6 @@ feature {NONE} -- Implementation
 
 				if (player.x >= 521 and player.x <= 612) and (player.y >= 2000 - player.sub_image_height) then
 					changer_carte("village", a_timestamp)
-					sound.play_music("tristram")
 				end
 
 				if player.x < 0 then
@@ -531,6 +529,7 @@ feature {NONE} -- Implementation
 		-- change la carte
 		do
 			if nouvelle_carte.is_equal("village") then
+				sound.play_music("tristram")
 				background.game_running_surface := village
 				background.current_map := "village"
 				player.x := 725
@@ -543,6 +542,7 @@ feature {NONE} -- Implementation
 				end
 				player.go_down (a_timestamp)
 			elseif nouvelle_carte.is_equal("dungeon") then
+				sound.play_music ("dungeon")
 				background.game_running_surface := dungeon
 				background.current_map := "dungeon"
 				player.x := 568
