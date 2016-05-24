@@ -53,7 +53,7 @@ feature -- Access
 			game_library.quit_signal_actions.extend (agent on_quit)
 			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
-			-- a_window.mouse_motion_actions.extend (agent on_mouse_motion(?, ?) ) -- When a mouse moves on screen
+			-- a_window.mouse_motion_actions.extend (agent on_mouse_motion(?, ?, ?, ?) ) -- When a mouse moves on screen
 			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
 			game_library.iteration_actions.extend (agent deplacement_ennemies(?) )
 			game_library.launch
@@ -173,6 +173,12 @@ feature {NONE} -- Implementation
 				player.go_up (a_timestamp)
 			end
 
+--			print("%NNEXT POSITION: ")
+--			print(player.next_x)
+--			print(" : ")
+--			print(player.next_y)
+--			print("%N")
+
 		end
 
 
@@ -184,57 +190,57 @@ feature {NONE} -- Implementation
 		do
 			if not ennemies.is_empty then
 				from
-					i := 0
+					i := 1
 				until
-					i >= ennemies.count
+					i > ennemies.count
 				loop
 					bool := false
-					bool := collisions_ennemies(i+1)
-					if ennemies[i + 1].x - player.x < 30 and ennemies[i + 1].x - player.x > -30 and ennemies[i + 1].y - player.y < 30 and ennemies[i + 1].y - player.y > 30  then
+					bool := collisions_ennemies(i)
+					if ennemies[i].x - player.x < 30 and ennemies[i].x - player.x > -30 and ennemies[i].y - player.y < 30 and ennemies[i].y - player.y > 30  then
 
 					else
 						if bool = false  then
 
-							if ennemies[i + 1].x - player.x > 30 and ennemies[i + 1].x >= player.x  then
-								ennemies[i + 1].x := ennemies[i + 1].x - 1
+							if ennemies[i].x - player.x > 30 and ennemies[i].x >= player.x  then
+								ennemies[i].x := ennemies[i].x - 1
 
-							elseif ennemies[i + 1].x >= player.x then
-								if ennemies[i + 1].x - player.x = 30 then
+							elseif ennemies[i].x >= player.x then
+								if ennemies[i].x - player.x = 30 then
 
 								else
-									ennemies[i + 1].x := ennemies[i + 1].x + 1
+									ennemies[i].x := ennemies[i].x + 1
 								end
 							end
 
-							if ennemies[i + 1].x - player.x < -30 and ennemies[i + 1].x <= player.x  then
-								ennemies[i + 1].x := ennemies[i + 1].x + 1
-							elseif ennemies[i + 1].x <= player.x  then
-								if ennemies[i + 1].x - player.x = -30  then
+							if ennemies[i].x - player.x < -30 and ennemies[i].x <= player.x  then
+								ennemies[i].x := ennemies[i].x + 1
+							elseif ennemies[i].x <= player.x  then
+								if ennemies[i].x - player.x = -30  then
 
 								else
-									ennemies[i + 1].x := ennemies[i + 1].x -1
+									ennemies[i].x := ennemies[i].x -1
 								end
 							end
 
-							if ennemies[i + 1].y - player.y > 30 and ennemies[i + 1].y >= player.y  then
-								ennemies[i + 1].y := ennemies[i + 1].y - 1
+							if ennemies[i].y - player.y > 30 and ennemies[i].y >= player.y  then
+								ennemies[i].y := ennemies[i].y - 1
 
-							elseif ennemies[i + 1].y >= player.y then
-								if ennemies[i + 1].y - player.y = 30  then
+							elseif ennemies[i].y >= player.y then
+								if ennemies[i].y - player.y = 30  then
 
 								else
-									ennemies[i + 1].y := ennemies[i + 1].y + 1
+									ennemies[i].y := ennemies[i].y + 1
 								end
 							end
 
-							if ennemies[i + 1].y - player.y < -30 and ennemies[i + 1].y <= player.y  then
-								ennemies[i + 1].y := ennemies[i + 1].y + 1
+							if ennemies[i].y - player.y < -30 and ennemies[i].y <= player.y  then
+								ennemies[i].y := ennemies[i].y + 1
 
-							elseif ennemies[i + 1].y <= player.y  then
-								if ennemies[i + 1].y - player.y = -30  then
+							elseif ennemies[i].y <= player.y  then
+								if ennemies[i].y - player.y = -30  then
 
 								else
-									ennemies[i + 1].y := ennemies[i + 1].y -1
+									ennemies[i].y := ennemies[i].y -1
 								end
 							end
 						end
@@ -257,46 +263,48 @@ feature {NONE} -- Implementation
 			direction_x := 0
 			direction_y := 0
 			collision := false
-			if ennemies[a_i].x > player.x  then
+			if ennemies[a_i].x >= player.x  then
 					direction_x := 1
 				end
 
-			if ennemies[a_i].y > player.y then
+			if ennemies[a_i].y >= player.y then
 					direction_y := 1
 				end
 
 			from
-				i := a_i
+				i := 1
 			until
-				i > ennemies.count - i
+				i > ennemies.count
 			loop
 				collision_x := false
 				collision_y := false
-				if direction_x = 1 then
+				if not (i = a_i) then
+					if direction_x = 1 then
 
-					if ennemies[a_i].x - ennemies[i + 1].x < 50 and ennemies[a_i].x <= ennemies[i + 1].x  then
-						collision_x := true
+						if ennemies[a_i].x - ennemies[i].x <= 50 and ennemies[a_i].x >= ennemies[i].x  then
+							collision_x := true
+						end
+					else
+						if ennemies[i].x - ennemies[a_i].x <= 50 and ennemies[a_i].x <= ennemies[i].x  then
+							collision_x := true
+						end
 					end
-				else
-					if ennemies[i + 1].x - ennemies[a_i].x < 50 and ennemies[a_i].x >= ennemies[i + 1].x  then
-						collision_x := true
-					end
-				end
 
 
-				if direction_y =1 then
-					if ennemies[a_i].y - ennemies[i + 1].y < 50 and ennemies[a_i].y <= ennemies[i + 1].y  then
-						collision_y := true
-					end
-				else
-					if ennemies[i + 1].y - ennemies[a_i].y < 50 and ennemies[a_i].y >= ennemies[i + 1].y then
-						collision_y := true
+					if direction_y =1 then
+						if ennemies[a_i].y - ennemies[i].y <= 50 and ennemies[a_i].y >= ennemies[i].y  then
+							collision_y := true
+						end
+					else
+						if ennemies[i].y - ennemies[a_i].y <= 50 and ennemies[a_i].y <= ennemies[i].y then
+							collision_y := true
+						end
 					end
 				end
 
 				if collision_x = true and collision_y = true  then
 					collision := true
-					print( "  rip   ")
+
 				end
 
 --				if collision = true and direction_x = 0 then
@@ -549,7 +557,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	on_mouse_motion (a_timestamp: NATURAL_32; mouse_state:GAME_MOUSE_MOTION_STATE)
+	on_mouse_motion (a_timestamp: NATURAL_32; mouse_state:GAME_MOUSE_MOTION_STATE; int1: INTEGER; int2: INTEGER)
 		do
 
 		end
