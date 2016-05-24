@@ -208,7 +208,7 @@ feature {NONE} -- Implementation
 								if ennemies[i].x - player.x = 30 then
 
 								else
-									ennemies[i].x := ennemies[i].x + 1
+									ennemies[i].x := ennemies[i].x
 								end
 							end
 
@@ -218,7 +218,7 @@ feature {NONE} -- Implementation
 								if ennemies[i].x - player.x = -30  then
 
 								else
-									ennemies[i].x := ennemies[i].x -1
+									ennemies[i].x := ennemies[i].x
 								end
 							end
 
@@ -229,7 +229,7 @@ feature {NONE} -- Implementation
 								if ennemies[i].y - player.y = 30  then
 
 								else
-									ennemies[i].y := ennemies[i].y + 1
+									ennemies[i].y := ennemies[i].y
 								end
 							end
 
@@ -240,7 +240,7 @@ feature {NONE} -- Implementation
 								if ennemies[i].y - player.y = -30  then
 
 								else
-									ennemies[i].y := ennemies[i].y -1
+									ennemies[i].y := ennemies[i].y
 								end
 							end
 						end
