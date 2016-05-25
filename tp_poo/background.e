@@ -25,6 +25,7 @@ feature {ANY}
 			l_image3: IMG_IMAGE_FILE
 			l_image4: IMG_IMAGE_FILE
 		do
+			door_open := False
 			has_error := False
 			create l_image.make ("village.png")
 			current_map := "village"
@@ -113,5 +114,14 @@ feature {ANY}
 
 	door: GAME_SURFACE
 	-- la porte du dungeon
+
+	set_door_open(bool:BOOLEAN)
+	-- change le boolean door_open
+		do
+			door_open := bool
+		end
+
+	door_open: BOOLEAN assign set_door_open
+	-- si la porte est ouverte
 
 end

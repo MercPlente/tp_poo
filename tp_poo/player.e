@@ -14,7 +14,7 @@ inherit
 create
 	new_player
 
-feature {NONE} -- Initialization
+feature {ANY}
 
 	new_player
 			-- Initialization of `Current'
@@ -23,12 +23,14 @@ feature {NONE} -- Initialization
 			l_image2:IMG_IMAGE_FILE
 			l_image3:IMG_IMAGE_FILE
 			l_image4:IMG_IMAGE_FILE
+			l_image_barre:IMG_IMAGE_FILE
 		do
 			has_error := False
 			create l_image.make ("kenny.png")
 			create l_image2.make ("kenny_rotated.png")
 			create l_image3.make ("kenny_diag_hautdroite.png")
 			create l_image4.make ("kenny_diag_basdroite.png")
+			create l_image_barre.make ("barre.png")
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
@@ -98,7 +100,23 @@ feature {NONE} -- Initialization
 
 			surface := surface_up
 			initialize_animation_coordinate
+
+			if l_image_barre.is_openable then
+				l_image_barre.open
+				if l_image_barre.is_open then
+					create barre.make_from_image (l_image_barre)
+				else
+					has_error := False
+					create barre.make(1,1)
+				end
+			else
+				has_error := False
+				create barre.make(1,1)
+			end
 		end
+
+	barre: GAME_SURFACE
+	-- Bar en bas qui montre ce qui est selectionné ainsi que la vie du joueur
 
 
 

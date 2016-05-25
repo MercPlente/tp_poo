@@ -22,15 +22,19 @@ feature {NONE} -- Initialization
 		do
 			sound := a_sound
 			sound.play_music ("tristram")
+			create font.make ("DIABLO_L.TTF", 27)
+			if font.is_openable then
+				font.open
+			end
 			create background.make_background(a_window)
 			create player.new_player
 			create {LINKED_LIST[ENNEMY]} ennemies.make
 			create village.new_village
 			create dungeon.new_dungeon
 			create deckard_cain.new_cain(980, 230)
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,250,500))
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,300,650))
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,100,1000))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png",5,250,500))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png",5,300,650))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png",5,100,1000))
 			ecran := a_window
 			has_error := background.has_error
 		end
@@ -55,7 +59,6 @@ feature -- Access
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
 			-- a_window.mouse_motion_actions.extend (agent on_mouse_motion(?, ?, ?, ?) ) -- When a mouse moves on screen
 			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
-			game_library.iteration_actions.extend (agent deplacement_ennemies(?) )
 			game_library.launch
 		end
 
@@ -84,6 +87,9 @@ feature -- Access
 	deckard_cain: DECKARD_CAIN
 	-- deckard cain (npc)
 
+	font: TEXT_FONT
+	-- Used to draw text
+
 
 feature {NONE} -- Implementation
 
@@ -91,6 +97,8 @@ feature {NONE} -- Implementation
 			-- Event that is launch at each iteration.
 		local
 			i:INTEGER
+			l_text: TEXT_SURFACE_BLENDED
+			l_hp_string: STRING_32
 		do
 			player.update (a_timestamp)	-- Update Player animation and coordinate
 
@@ -116,7 +124,16 @@ feature {NONE} -- Implementation
 				a_window.surface.draw_surface (background.filtre_village, 0, 0)
 
 			elseif background.current_map.is_equal ("dungeon") then
+				if not background.door_open then
+					a_window.surface.draw_surface(background.door,
+									(a_window.surface.width - player.sub_image_width) // 2 - (player.x - 521),
+									(a_window.surface.height - player.sub_image_height) // 2 - (player.y - 382)
+								)
+				end
+
 				if not ennemies.is_empty then
+				deplacement_ennemies(a_timestamp)
+
 				from
 					i := 1
 				until
@@ -137,48 +154,17 @@ feature {NONE} -- Implementation
 
 			end
 
+			a_window.surface.draw_surface (player.barre, 0, 0)
+			if font.is_open then
+				l_hp_string := player.hp.out
+				create l_text.make (l_hp_string, font, create {GAME_COLOR}.make_rgb (255, 255, 255))
+				if not l_text.has_error then
+					a_window.surface.draw_surface (l_text, 17, 406)
+				end
+			end
 
 			-- Update modification in the screen
 			a_window.update
-		end
-
-	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
-			--  Fait deplacer le player
-
-		do
-			if player.x + (a_mouse_state.x - a_window.surface.width // 2) >= 0 then
-				player.next_x := player.x + (a_mouse_state.x - a_window.surface.width // 2)
-			else
-				player.next_x := 0
-			end
-			if player.y + (a_mouse_state.y - a_window.surface.height // 2) >= 0 then
-				player.next_y := player.y + (a_mouse_state.y - a_window.surface.height // 2)
-			else
-				player.next_y := 0
-			end
-
-			if ((player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2)) > (player.x + player.sub_image_width // 2) then
-				player.stop_left
-				player.go_right (a_timestamp)
-			elseif ((player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2)) < (player.x + player.sub_image_width // 2) then
-				player.stop_right
-				player.go_left (a_timestamp)
-			end
-
-			if ((player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2)) > (player.y + player.sub_image_height // 2) then
-				player.stop_up
-				player.go_down (a_timestamp)
-			elseif ((player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2)) < (player.y + player.sub_image_height // 2) then
-				player.stop_down
-				player.go_up (a_timestamp)
-			end
-
---			print("%NNEXT POSITION: ")
---			print(player.next_x)
---			print(" : ")
---			print(player.next_y)
---			print("%N")
-
 		end
 
 
@@ -205,24 +191,28 @@ feature {NONE} -- Implementation
 						if ennemies[i].x - player.x >= 30 and ennemies[i].x >= player.x  then
 							if list.has (0) or list.has (4) or list.has (5) then
 								ennemies[i].x := ennemies[i].x - 1
+								ennemies[i].turn_left
 							end
 						end
 
 						if ennemies[i].x - player.x <= -30 and ennemies[i].x <= player.x  then
 							if list.has (0) or list.has (4) or list.has (6)  then
 								ennemies[i].x := ennemies[i].x + 1
+								ennemies[i].turn_right
 							end
 						end
 
 						if ennemies[i].y - player.y >= 30 and ennemies[i].y >= player.y  then
 							if list.has (0) or list.has (1) or list.has (2)  then
 								ennemies[i].y := ennemies[i].y - 1
+								ennemies[i].turn_down
 							end
 						end
 
 						if ennemies[i].y - player.y <= -30 and ennemies[i].y <= player.y  then
 							if list.has (0) or list.has (1) or list.has (3)  then
 								ennemies[i].y := ennemies[i].y + 1
+								ennemies[i].turn_up
 							end
 						end
 					end
@@ -321,54 +311,6 @@ feature {NONE} -- Implementation
 
 			Result := chemin
 
-		end
-
-
-	on_key_down(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
-		-- Sert seulement à vérifier la position actuel du personnage en appuyant sur la touche "k"
-		-- Ou changer de carte en appuyant sur "m"
-		local
-			i: INTEGER
-		do
-			if not a_key_state.is_repeat then
-				if a_key_state.is_k then
-					print("Les coordonnees du joueur sont: (")
-					print(player.x)
-					print(", ")
-					print(player.y)
-					print(")%N%N")
-
-					print("Les coordonnees de Deckard Cain sont: (")
-					print(deckard_cain.x)
-					print(", ")
-					print(deckard_cain.y)
-					print(")%N%N")
-
-					if not ennemies.is_empty then
-						from
-							i := 1
-						until
-							i > ennemies.count
-						loop
-							print("Les coordonnees de l'ennemi sont: (")
-							print(ennemies[i].x)
-							print(", ")
-							print(ennemies[i].y)
-							print(")%N%N")
-							i := i + 1
-						end
-
-					end
-
-				end
-				if a_key_state.is_m then -- sert à tester le changement de cartes
-					if background.current_map.is_equal("village") then
-						changer_carte("dungeon", a_timestamp)
-					elseif background.current_map.is_equal("dungeon") then
-						changer_carte("village", a_timestamp)
-					end
-				end
-			end
 		end
 
 	pivoter_cain
@@ -514,6 +456,50 @@ feature {NONE} -- Implementation
 					player.y := 2000 - player.sub_image_height
 					player.stop_down
 				end
+
+				collision_bibliotheque(329, 444, 1090, 1441)
+				collision_bibliotheque(694, 803, 1090, 1441)
+				collision_bibliotheque(395, 747, 794, 903)
+			end
+		end
+
+	collision_bibliotheque(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER)
+		local
+			plus_petite_difference_x: INTEGER
+			plus_petite_difference_y: INTEGER
+		do
+			if player.x >= x_min and player.x <= x_max and player.y >= y_min and player.y <= y_max then -- collision une bibliothèque
+				if x_max - player.x <= player.x - x_min then
+					plus_petite_difference_x := x_max - player.x
+				else
+					plus_petite_difference_x := player.x - x_min
+				end
+				if y_max - player.y <= player.y - y_min then
+					plus_petite_difference_y := y_max - player.y
+				else
+					plus_petite_difference_y := player.y - y_min
+				end
+				if plus_petite_difference_y <= plus_petite_difference_x then
+					if y_max - player.y <= player.y - y_min then
+						player.y := y_max + 1
+						player.next_y := y_max + 1
+						player.stop_up
+					else
+						player.y := y_min - 1
+						player.next_y := y_min - 1
+						player.stop_down
+					end
+				else
+					if x_max - player.x <= player.x - x_min then
+						player.x := x_max + 1
+						player.next_x := x_max + 1
+						player.stop_left
+					else
+						player.x := x_min - 1
+						player.next_x := x_min - 1
+						player.stop_right
+					end
+				end
 			end
 		end
 
@@ -548,6 +534,89 @@ feature {NONE} -- Implementation
 				end
 				player.go_up (a_timestamp)
 			end
+		end
+
+
+	on_key_down(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
+		-- Sert seulement à vérifier la position actuel du personnage en appuyant sur la touche "k"
+		-- Ou changer de carte en appuyant sur "m"
+		local
+			i: INTEGER
+		do
+			if not a_key_state.is_repeat then
+				if a_key_state.is_k then
+					background.door_open := True
+
+					print("Les coordonnees du joueur sont: (")
+					print(player.x)
+					print(", ")
+					print(player.y)
+					print(")%N%N")
+
+					print("Les coordonnees de Deckard Cain sont: (")
+					print(deckard_cain.x)
+					print(", ")
+					print(deckard_cain.y)
+					print(")%N%N")
+
+					if not ennemies.is_empty then
+						from
+							i := 1
+						until
+							i > ennemies.count
+						loop
+							print("Les coordonnees de l'ennemi sont: (")
+							print(ennemies[i].x)
+							print(", ")
+							print(ennemies[i].y)
+							print(")%N%N")
+							i := i + 1
+						end
+
+					end
+
+				end
+				if a_key_state.is_m then -- sert à tester le changement de cartes
+					if background.current_map.is_equal("village") then
+						changer_carte("dungeon", a_timestamp)
+					elseif background.current_map.is_equal("dungeon") then
+						changer_carte("village", a_timestamp)
+					end
+				end
+			end
+		end
+
+	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
+			--  Fait deplacer le player
+
+		do
+			if player.x + (a_mouse_state.x - a_window.surface.width // 2) >= 0 then
+				player.next_x := player.x + (a_mouse_state.x - a_window.surface.width // 2)
+			else
+				player.next_x := 0
+			end
+			if player.y + (a_mouse_state.y - a_window.surface.height // 2) >= 0 then
+				player.next_y := player.y + (a_mouse_state.y - a_window.surface.height // 2)
+			else
+				player.next_y := 0
+			end
+
+			if ((player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2)) > (player.x + player.sub_image_width // 2) then
+				player.stop_left
+				player.go_right (a_timestamp)
+			elseif ((player.x + player.sub_image_width // 2) + (a_mouse_state.x - a_window.surface.width // 2)) < (player.x + player.sub_image_width // 2) then
+				player.stop_right
+				player.go_left (a_timestamp)
+			end
+
+			if ((player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2)) > (player.y + player.sub_image_height // 2) then
+				player.stop_up
+				player.go_down (a_timestamp)
+			elseif ((player.y + player.sub_image_height // 2) + (a_mouse_state.y - a_window.surface.height // 2)) < (player.y + player.sub_image_height // 2) then
+				player.stop_down
+				player.go_up (a_timestamp)
+			end
+
 		end
 
 	on_mouse_motion (a_timestamp: NATURAL_32; mouse_state:GAME_MOUSE_MOTION_STATE; int1: INTEGER; int2: INTEGER)

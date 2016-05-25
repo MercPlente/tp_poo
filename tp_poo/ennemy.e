@@ -29,13 +29,13 @@ feature {NONE} -- Initialization
 				l_image.open
 				if l_image.is_open then
 					create surface_up.make_from_image (l_image)
-					surface_down := surface_up
-					surface_right := surface_up
-					surface_left := surface_up
-					surface_up_right := surface_up
-					surface_up_left := surface_up
-					surface_down_right := surface_up
-					surface_down_left := surface_up
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down.make_rotate(surface_up, 180, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_right.make_rotate(surface_up, 90, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_left.make_rotate(surface_up, 270, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_right.make_rotate(surface_up, 135, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_left.make_rotate(surface_up, 225, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_right.make_rotate(surface_up, 45, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_left.make_rotate(surface_up, 315, True)
 
 					sub_image_width := surface_up.width
 					sub_image_height := surface_up.height

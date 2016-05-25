@@ -8,9 +8,10 @@ class
 	APPLICATION
 
 inherit
-	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
-	AUDIO_LIBRARY_SHARED	-- Pour Utilliser `audio_library'
-	IMG_LIBRARY_SHARED		-- Pour Utilliser `image_file_library'
+	GAME_LIBRARY_SHARED		-- Pour Utiliser `game_library'
+	TEXT_LIBRARY_SHARED		-- Pour Utiliser `text_library'
+	AUDIO_LIBRARY_SHARED	-- Pour Utiliser `audio_library'
+	IMG_LIBRARY_SHARED		-- Pour Utiliser `image_file_library'
 	EXCEPTIONS
 
 create
@@ -24,6 +25,7 @@ feature {NONE} -- Initialisation
 			l_menu:detachable MENU_DEPART
 		do
 			game_library.enable_video -- Active les fonctionnalitees video
+			text_library.enable_text	-- Make it possible to draw text
 			image_file_library.enable_image (true, false, false)
 			audio_library.enable_sound
 			create l_menu.make
