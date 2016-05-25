@@ -9,7 +9,7 @@ class
 
 inherit
 	ENTITY
-
+	SELECTABLE
 
 create
 	new_cain
@@ -24,8 +24,8 @@ feature {ANY}
 		do
 			set_x(a_x)
 			set_y(a_y)
+			make_selection
 			has_error := False
-			is_selected := False
 			create l_image.make ("deckard_cain.png")
 			if l_image.is_openable then
 				l_image.open
@@ -175,14 +175,7 @@ feature {ANY}
 	surface_down_left_s: GAME_SURFACE
 	-- La surface selectionnée de l'entite qui regarde vers la gauche
 
-	is_selected: BOOLEAN assign set_is_selected
-	-- Vérifie si cain est selectionné
 
-	set_is_selected(bool:BOOLEAN)
-	-- Change is_selected
-	do
-		is_selected := bool
-	end
 
 	initialize_animation_coordinate
 			-- Create the `animation_coordinates'
