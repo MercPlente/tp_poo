@@ -17,7 +17,6 @@ feature {ANY} -- Initialization
 		local
 			l_socket: NETWORK_DATAGRAM_SOCKET
 			l_port:INTEGER
-			l_taille_message:INTEGER
 			l_message:STRING
 		do
 			l_port:=1337
@@ -30,7 +29,7 @@ feature {ANY} -- Initialization
 			l_socket.close
 		end
 
-	
+
 
 	attendre_reponse
 	--boucle pour attendre la reponse du serveur et changer le highscore

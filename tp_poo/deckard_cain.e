@@ -14,16 +14,18 @@ inherit
 create
 	new_cain
 
-feature {NONE} -- Initialization
+feature {ANY}
 
 	new_cain(a_x:INTEGER;a_y:INTEGER)
 			-- Initialization of `Current'
 		local
 			l_image:IMG_IMAGE_FILE
+			l_image_s:IMG_IMAGE_FILE
 		do
 			set_x(a_x)
 			set_y(a_y)
 			has_error := False
+			is_selected := False
 			create l_image.make ("deckard_cain.png")
 			if l_image.is_openable then
 				l_image.open
@@ -62,11 +64,125 @@ feature {NONE} -- Initialization
 				surface_down_left := surface_up
 			end
 
+			create l_image_s.make ("deckard_cain_s.png")
+			if l_image_s.is_openable then
+				l_image_s.open
+				if l_image_s.is_open then
+					create surface_up_s.make_from_image (l_image_s)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_right_s.make_rotate(surface_up_s, 315, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_right_s.make_rotate(surface_up_s, 270, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_right_s.make_rotate(surface_up_s, 225, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_s.make_rotate(surface_up_s, 180, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_left_s.make_rotate(surface_up_s, 135, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_left_s.make_rotate(surface_up_s, 90, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_left_s.make_rotate(surface_up_s, 45, True)
+				else
+					has_error := False
+					create surface_up_s.make(1,1)
+					surface_down_s := surface_up_s
+					surface_right_s := surface_up_s
+					surface_left_s := surface_up_s
+					surface_up_right_s := surface_up_s
+					surface_up_left_s := surface_up_s
+					surface_down_right_s := surface_up_s
+					surface_down_left_s := surface_up_s
+				end
+			else
+				has_error := False
+				create surface_up_s.make(1,1)
+				surface_down_s := surface_up_s
+				surface_right_s := surface_up_s
+				surface_left_s := surface_up_s
+				surface_up_right_s := surface_up_s
+				surface_up_left_s := surface_up_s
+				surface_down_right_s := surface_up_s
+				surface_down_left_s := surface_up_s
+			end
+
 			surface := surface_up
 			initialize_animation_coordinate
 		end
 
+	turn_up_s
+	-- la surface lorsqu'on va vers le haut
+		do
+			surface := surface_up_s
+		end
 
+	turn_down_s
+	-- la surface lorsqu'on va vers le bas
+		do
+			surface := surface_down_s
+		end
+
+	turn_left_s
+	-- la surface lorsqu'on va vers la gauche
+		do
+			surface := surface_left_s
+		end
+
+	turn_right_s
+	-- la surface lorsqu'on va vers la droite
+		do
+			surface := surface_right_s
+		end
+
+	turn_up_right_s
+	-- la surface lorsqu'on va vers la diagonale haut-droite
+		do
+			surface := surface_up_right_s
+		end
+
+	turn_down_right_s
+	-- la surface lorsqu'on va vers la diagonale bas-droite
+		do
+			surface := surface_down_right_s
+		end
+
+	turn_up_left_s
+	-- la surface lorsqu'on va vers la diagonale haut-gauche
+		do
+			surface := surface_up_left_s
+		end
+
+	turn_down_left_s
+	-- la surface lorsqu'on va vers la diagonale bas-gauche
+		do
+			surface := surface_down_left_s
+		end
+
+	surface_up_s:GAME_SURFACE
+	-- La surface selectionnée de l'entite qui regarde vers le haut
+
+	surface_down_s:GAME_SURFACE
+	-- La surface selectionnée de l'entite qui regarde vers le bas
+
+	surface_right_s: GAME_SURFACE
+	-- La surface selectionnée de l'entite qui regarde vers la droite
+
+	surface_left_s: GAME_SURFACE
+	-- La surface selectionnée de l'entite qui regarde vers la gauche
+
+	surface_up_right_s:GAME_SURFACE
+	-- La surface selectionnée de l'entite qui regarde vers le haut
+
+	surface_down_right_s:GAME_SURFACE
+	-- La surface selectionnée de l'entite qui regarde vers le bas
+
+	surface_up_left_s: GAME_SURFACE
+	-- La surface selectionnée de l'entite qui regarde vers la droite
+
+	surface_down_left_s: GAME_SURFACE
+	-- La surface selectionnée de l'entite qui regarde vers la gauche
+
+	is_selected: BOOLEAN assign set_is_selected
+	-- Vérifie si cain est selectionné
+
+	set_is_selected(bool:BOOLEAN)
+	-- Change is_selected
+	do
+		is_selected := bool
+	end
 
 	initialize_animation_coordinate
 			-- Create the `animation_coordinates'

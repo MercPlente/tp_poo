@@ -316,31 +316,60 @@ feature {NONE} -- Implementation
 	pivoter_cain
 		-- fait pivoter deckard_cain selon la position du player
 		do
-			if player.x - deckard_cain.x < 20 and player.x - deckard_cain.x > -20 then
-				if deckard_cain.y >= player.y then
-					deckard_cain.turn_up
-				else
-					deckard_cain.turn_down
+			if not deckard_cain.is_selected then
+				if player.x - deckard_cain.x < 20 and player.x - deckard_cain.x > -20 then
+					if deckard_cain.y >= player.y then
+						deckard_cain.turn_up
+					else
+						deckard_cain.turn_down
+					end
+				elseif player.y - deckard_cain.y < 20 and player.y - deckard_cain.y > -20 then
+					if deckard_cain.x >= player.x then
+						deckard_cain.turn_left
+					else
+						deckard_cain.turn_right
+					end
+				elseif deckard_cain.x > player.x then
+					if deckard_cain.y > player.y then
+						deckard_cain.turn_up_left
+					else
+						deckard_cain.turn_down_left
+					end
+				elseif deckard_cain.x < player.x then
+					if deckard_cain.y > player.y then
+						deckard_cain.turn_up_right
+					else
+						deckard_cain.turn_down_right
+					end
 				end
-			elseif player.y - deckard_cain.y < 20 and player.y - deckard_cain.y > -20 then
-				if deckard_cain.x >= player.x then
-					deckard_cain.turn_left
-				else
-					deckard_cain.turn_right
-				end
-			elseif deckard_cain.x > player.x then
-				if deckard_cain.y > player.y then
-					deckard_cain.turn_up_left
-				else
-					deckard_cain.turn_down_left
-				end
-			elseif deckard_cain.x < player.x then
-				if deckard_cain.y > player.y then
-					deckard_cain.turn_up_right
-				else
-					deckard_cain.turn_down_right
+			elseif deckard_cain.is_selected then
+				if player.x - deckard_cain.x < 20 and player.x - deckard_cain.x > -20 then
+					if deckard_cain.y >= player.y then
+						deckard_cain.turn_up_s
+					else
+						deckard_cain.turn_down_s
+					end
+				elseif player.y - deckard_cain.y < 20 and player.y - deckard_cain.y > -20 then
+					if deckard_cain.x >= player.x then
+						deckard_cain.turn_left_s
+					else
+						deckard_cain.turn_right_s
+					end
+				elseif deckard_cain.x > player.x then
+					if deckard_cain.y > player.y then
+						deckard_cain.turn_up_left_s
+					else
+						deckard_cain.turn_down_left_s
+					end
+				elseif deckard_cain.x < player.x then
+					if deckard_cain.y > player.y then
+						deckard_cain.turn_up_right_s
+					else
+						deckard_cain.turn_down_right_s
+					end
 				end
 			end
+
 		end
 
 	collisions_village(a_timestamp: NATURAL_32)
@@ -459,15 +488,15 @@ feature {NONE} -- Implementation
 					player.stop_down
 				end
 
-				collision_entity_objet(329, 444, 1090, 1441, player, "player")
-				collision_entity_objet(694, 803, 1090, 1441, player, "player")
-				collision_entity_objet(395, 747, 794, 903, player, "player")
-				collision_entity_objet(456, 516, 1679, 2000, player, "player")
-				collision_entity_objet(617, 677, 1679, 2000, player, "player")
-				collision_entity_objet(0, 520, 327, 402, player, "player")
-				collision_entity_objet(616, 1150, 327, 402, player, "player")
+				collision_entity_objet(329, 444, 1090, 1441, player, "player") -- collision bibli
+				collision_entity_objet(694, 803, 1090, 1441, player, "player") -- collision bibli
+				collision_entity_objet(395, 747, 794, 903, player, "player") -- collision bibli
+				collision_entity_objet(456, 516, 1679, 2000, player, "player")	-- collision mur
+				collision_entity_objet(617, 677, 1679, 2000, player, "player")	-- collision mur
+				collision_entity_objet(0, 520, 327, 402, player, "player")	-- collision mur
+				collision_entity_objet(616, 1150, 327, 402, player, "player")	-- collision mur
 				if not background.door_open then
-					collision_entity_objet(520, 616, 327, 402, player, "player")
+					collision_entity_objet(520, 616, 327, 402, player, "player")	-- collision porte
 				end
 
 				if not ennemies.is_empty then
@@ -587,6 +616,7 @@ feature {NONE} -- Implementation
 			if not a_key_state.is_repeat then
 				if a_key_state.is_k then
 					background.door_open := True
+					deckard_cain.is_selected := True
 
 					print("Les coordonnees du joueur sont: (")
 					print(player.x)
