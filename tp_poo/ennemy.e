@@ -36,8 +36,8 @@ feature {NONE} -- Initialization
 					surface_up_left := surface_up
 					surface_down_right := surface_up
 					surface_down_left := surface_up
-					
-					sub_image_width := surface_up.width // 3
+
+					sub_image_width := surface_up.width
 					sub_image_height := surface_up.height
 				else
 					has_error := False
