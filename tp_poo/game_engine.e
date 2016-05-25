@@ -459,9 +459,16 @@ feature {NONE} -- Implementation
 					player.stop_down
 				end
 
-				collision_bibliotheque(329, 444, 1090, 1441, player, "player")
-				collision_bibliotheque(694, 803, 1090, 1441, player, "player")
-				collision_bibliotheque(395, 747, 794, 903, player, "player")
+				collision_entity_objet(329, 444, 1090, 1441, player, "player")
+				collision_entity_objet(694, 803, 1090, 1441, player, "player")
+				collision_entity_objet(395, 747, 794, 903, player, "player")
+				collision_entity_objet(456, 516, 1679, 2000, player, "player")
+				collision_entity_objet(617, 677, 1679, 2000, player, "player")
+				collision_entity_objet(0, 520, 327, 402, player, "player")
+				collision_entity_objet(616, 1150, 327, 402, player, "player")
+				if not background.door_open then
+					collision_entity_objet(520, 616, 327, 402, player, "player")
+				end
 
 				if not ennemies.is_empty then
 					from
@@ -469,16 +476,24 @@ feature {NONE} -- Implementation
 					until
 						i > ennemies.count
 					loop
-						collision_bibliotheque(339, 454, 1080, 1431, ennemies[i], "ennemi")
-						collision_bibliotheque(704, 813, 1080, 1431, ennemies[i], "ennemi")
-						collision_bibliotheque(405, 757, 784, 893, ennemies[i], "ennemi")
+						collision_entity_objet(339, 454, 1080, 1431, ennemies[i], "ennemi")
+						collision_entity_objet(704, 813, 1080, 1431, ennemies[i], "ennemi")
+						collision_entity_objet(405, 757, 784, 893, ennemies[i], "ennemi")
+						collision_entity_objet(466, 506, 1689, 1990, ennemies[i], "ennemi")
+						collision_entity_objet(627, 667, 1689, 1990, ennemies[i], "ennemi")
+						collision_entity_objet(0, 510, 337, 392, ennemies[i], "ennemi")
+						collision_entity_objet(626, 1150, 337, 392, ennemies[i], "ennemi")
+						if not background.door_open then
+							collision_entity_objet(520, 616, 327, 402, ennemies[i], "ennemi")
+						end
+
 						i := i + 1
 					end
 				end
 			end
 		end
 
-	collision_bibliotheque(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER; entity: ENTITY; type: STRING)
+	collision_entity_objet(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER; entity: ENTITY; type: STRING)
 		local
 			plus_petite_difference_x: INTEGER
 			plus_petite_difference_y: INTEGER
