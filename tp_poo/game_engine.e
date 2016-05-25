@@ -28,9 +28,9 @@ feature {NONE} -- Initialization
 			create village.new_village
 			create dungeon.new_dungeon
 			create deckard_cain.new_cain(980, 230)
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,100,600))
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,600,600))
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,700,500))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,250,500))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,300,650))
+			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,100,1000))
 			ecran := a_window
 			has_error := background.has_error
 		end
@@ -44,9 +44,9 @@ feature -- Access
 			-- Create ressources and launch the game
 		do
 
-			player.y := 375
+			player.y := 400
 			player.x := 200
-			player.next_y := 375
+			player.next_y := 400
 			player.next_x := 200
 			player.hp := 50
 			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
@@ -186,62 +186,43 @@ feature {NONE} -- Implementation
 	-- Fait déplacer les ennemies selon l'emplacement du joueur
 		local
 			i : INTEGER
-			bool : BOOLEAN
+			list : LIST [INTEGER]
 		do
+			create {LINKED_LIST[INTEGER]} list.make
 			if not ennemies.is_empty then
 				from
 					i := 1
 				until
 					i > ennemies.count
 				loop
-					bool := false
-					bool := collisions_ennemies(i)
-					if ennemies[i].x - player.x < 30 and ennemies[i].x - player.x > -30 and ennemies[i].y - player.y < 30 and ennemies[i].y - player.y > 30  then
+					list := collisions_ennemies(i)
+
+
+					if ennemies[i].x - player.x <= 30 and ennemies[i].x - player.x >= -30 and ennemies[i].y - player.y <= 30 and ennemies[i].y - player.y >= 30  then
 
 					else
-						if bool = false  then
 
-							if ennemies[i].x - player.x > 30 and ennemies[i].x >= player.x  then
+						if ennemies[i].x - player.x >= 30 and ennemies[i].x >= player.x  then
+							if list.has (0) or list.has (4) or list.has (5) then
 								ennemies[i].x := ennemies[i].x - 1
-
-							elseif ennemies[i].x >= player.x then
-								if ennemies[i].x - player.x = 30 then
-
-								else
-									ennemies[i].x := ennemies[i].x
-								end
 							end
+						end
 
-							if ennemies[i].x - player.x < -30 and ennemies[i].x <= player.x  then
+						if ennemies[i].x - player.x <= -30 and ennemies[i].x <= player.x  then
+							if list.has (0) or list.has (4) or list.has (6)  then
 								ennemies[i].x := ennemies[i].x + 1
-							elseif ennemies[i].x <= player.x  then
-								if ennemies[i].x - player.x = -30  then
-
-								else
-									ennemies[i].x := ennemies[i].x
-								end
 							end
+						end
 
-							if ennemies[i].y - player.y > 30 and ennemies[i].y >= player.y  then
+						if ennemies[i].y - player.y >= 30 and ennemies[i].y >= player.y  then
+							if list.has (0) or list.has (1) or list.has (2)  then
 								ennemies[i].y := ennemies[i].y - 1
-
-							elseif ennemies[i].y >= player.y then
-								if ennemies[i].y - player.y = 30  then
-
-								else
-									ennemies[i].y := ennemies[i].y
-								end
 							end
+						end
 
-							if ennemies[i].y - player.y < -30 and ennemies[i].y <= player.y  then
+						if ennemies[i].y - player.y <= -30 and ennemies[i].y <= player.y  then
+							if list.has (0) or list.has (1) or list.has (3)  then
 								ennemies[i].y := ennemies[i].y + 1
-
-							elseif ennemies[i].y <= player.y  then
-								if ennemies[i].y - player.y = -30  then
-
-								else
-									ennemies[i].y := ennemies[i].y
-								end
 							end
 						end
 					end
@@ -251,83 +232,95 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	collisions_ennemies(a_i : INTEGER) : BOOLEAN
+	collisions_ennemies(a_i : INTEGER) : LIST [INTEGER]
 		local
 			direction_x : INTEGER
 			direction_y : INTEGER
 			i : INTEGER
-			collision_x : BOOLEAN
-			collision_y : BOOLEAN
-			collision : BOOLEAN
+			collision_x_gauche : BOOLEAN
+			collision_y_haut : BOOLEAN
+			collision_x_droite : BOOLEAN
+			collision_y_bas : BOOLEAN
+			collision : LIST [INTEGER]
 		do
+			create {LINKED_LIST[INTEGER]} collision.make
 			direction_x := 0
 			direction_y := 0
-			collision := false
+			collision_x_gauche := false
+			collision_y_haut := false
+			collision_x_droite := false
+			collision_y_bas := false
 			if ennemies[a_i].x >= player.x  then
 					direction_x := 1
 				end
 
 			if ennemies[a_i].y >= player.y then
 					direction_y := 1
-				end
+			end
 
 			from
 				i := 1
 			until
 				i > ennemies.count
 			loop
-				collision_x := false
-				collision_y := false
 				if not (i = a_i) then
 					if direction_x = 1 then
 
-						if ennemies[a_i].x - ennemies[i].x <= 50 and ennemies[a_i].x >= ennemies[i].x  then
-							collision_x := true
+						if ennemies[a_i].x - ennemies[i].x <= 20 and ennemies[a_i].x >= ennemies[i].x and ennemies[a_i].y - ennemies[i].y <= 20 and ennemies[a_i].y - ennemies[i].y >= -20 then
+							collision_x_gauche := true
 						end
 					else
-						if ennemies[i].x - ennemies[a_i].x <= 50 and ennemies[a_i].x <= ennemies[i].x  then
-							collision_x := true
+						if ennemies[i].x - ennemies[a_i].x <= 20 and ennemies[a_i].x <= ennemies[i].x and ennemies[a_i].y - ennemies[i].y <= 20 and ennemies[a_i].y - ennemies[i].y >= -20  then
+							collision_x_droite := true
 						end
 					end
 
 
 					if direction_y =1 then
-						if ennemies[a_i].y - ennemies[i].y <= 50 and ennemies[a_i].y >= ennemies[i].y  then
-							collision_y := true
+						if ennemies[a_i].y - ennemies[i].y <= 20 and ennemies[a_i].y >= ennemies[i].y and ennemies[a_i].x - ennemies[i].x <= 20 and ennemies[a_i].x - ennemies[i].x >= -20  then
+							collision_y_haut := true
 						end
 					else
-						if ennemies[i].y - ennemies[a_i].y <= 50 and ennemies[a_i].y <= ennemies[i].y then
-							collision_y := true
+						if ennemies[i].y - ennemies[a_i].y <= 20 and ennemies[a_i].y <= ennemies[i].y and ennemies[a_i].x - ennemies[i].x <= 20 and ennemies[a_i].x - ennemies[i].x >= -20 then
+							collision_y_bas := true
 						end
 					end
-				end
-
-				if collision_x = true and collision_y = true  then
-					collision := true
 
 				end
-
---				if collision = true and direction_x = 0 then
---					ennemies[i + 1].x := ennemies[i + 1].x + 25
---				end
-
---				if collision = true and direction_x = 1 then
---					ennemies[i + 1].x := ennemies[i + 1].x - 25
---				end
-
-----				if collision = true and direction_y = 1 then
---					ennemies[i + 1].y := ennemies[i + 1].y - 25
---				end
-
---				if collision = true and direction_y = 0 then
---					ennemies[i + 1].y := ennemies[i + 1].y + 25
---				end
-
 				i := i + 1
 			end
-
-
+			if collision_x_gauche = true or collision_x_droite = true or collision_y_haut = true or collision_y_bas = true  then
+				collision := collision_retour(collision_x_gauche,collision_x_droite,collision_y_haut,collision_y_bas)
+			else
+				collision.extend (0)
+			end
 			Result := collision
+		end
+
+	collision_retour(x_gauche, x_droite, y_haut, y_bas: BOOLEAN) : LIST [INTEGER]
+		local
+			chemin: LIST [INTEGER]
+		do
+			create {LINKED_LIST[INTEGER]} chemin.make
+				if y_haut = false and y_bas = false then
+					chemin.extend (1)
+				elseif y_haut = false then
+					chemin.extend (2)
+				elseif y_bas = false then
+					chemin.extend (3)
+				end
+
+				if x_gauche = false and x_droite = false then
+					chemin.extend (4)
+				elseif x_gauche = false then
+					chemin.extend (5)
+				elseif x_droite = false then
+					chemin.extend (6)
+				end
+
+
+			Result := chemin
+
 		end
 
 
