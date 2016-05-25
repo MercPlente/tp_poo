@@ -434,6 +434,8 @@ feature {NONE} -- Implementation
 
 	collisions_dungeon(a_timestamp: NATURAL_32)
 		-- vérifie si le personnage est en collision avec un obstacle sur la carte "dungeon"
+		local
+			i: INTEGER
 		do
 			if background.current_map.is_equal ("dungeon") then
 
@@ -457,47 +459,68 @@ feature {NONE} -- Implementation
 					player.stop_down
 				end
 
-				collision_bibliotheque(329, 444, 1090, 1441)
-				collision_bibliotheque(694, 803, 1090, 1441)
-				collision_bibliotheque(395, 747, 794, 903)
+				collision_bibliotheque(329, 444, 1090, 1441, player, "player")
+				collision_bibliotheque(694, 803, 1090, 1441, player, "player")
+				collision_bibliotheque(395, 747, 794, 903, player, "player")
+
+				if not ennemies.is_empty then
+					from
+						i := 1
+					until
+						i > ennemies.count
+					loop
+						collision_bibliotheque(339, 454, 1080, 1431, ennemies[i], "ennemi")
+						collision_bibliotheque(704, 813, 1080, 1431, ennemies[i], "ennemi")
+						collision_bibliotheque(405, 757, 784, 893, ennemies[i], "ennemi")
+						i := i + 1
+					end
+				end
 			end
 		end
 
-	collision_bibliotheque(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER)
+	collision_bibliotheque(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER; entity: ENTITY; type: STRING)
 		local
 			plus_petite_difference_x: INTEGER
 			plus_petite_difference_y: INTEGER
 		do
-			if player.x >= x_min and player.x <= x_max and player.y >= y_min and player.y <= y_max then -- collision une bibliothèque
-				if x_max - player.x <= player.x - x_min then
-					plus_petite_difference_x := x_max - player.x
+			if entity.x >= x_min and entity.x <= x_max and entity.y >= y_min and entity.y <= y_max then -- collision une bibliothèque
+				if x_max - entity.x <= entity.x - x_min then
+					plus_petite_difference_x := x_max - entity.x
 				else
-					plus_petite_difference_x := player.x - x_min
+					plus_petite_difference_x := entity.x - x_min
 				end
-				if y_max - player.y <= player.y - y_min then
-					plus_petite_difference_y := y_max - player.y
+				if y_max - entity.y <= player.y - y_min then
+					plus_petite_difference_y := y_max - entity.y
 				else
-					plus_petite_difference_y := player.y - y_min
+					plus_petite_difference_y := entity.y - y_min
 				end
 				if plus_petite_difference_y <= plus_petite_difference_x then
-					if y_max - player.y <= player.y - y_min then
-						player.y := y_max + 1
-						player.next_y := y_max + 1
-						player.stop_up
+					if y_max - entity.y <= entity.y - y_min then
+						entity.y := y_max + 1
+						if type.is_equal ("player") then
+							entity.next_y := y_max + 1
+							entity.stop_up
+						end
 					else
-						player.y := y_min - 1
-						player.next_y := y_min - 1
-						player.stop_down
+						entity.y := y_min - 1
+						if type.is_equal ("player") then
+							entity.next_y := y_min - 1
+							entity.stop_down
+						end
 					end
 				else
-					if x_max - player.x <= player.x - x_min then
-						player.x := x_max + 1
-						player.next_x := x_max + 1
-						player.stop_left
+					if x_max - entity.x <= entity.x - x_min then
+						entity.x := x_max + 1
+						if type.is_equal ("player") then
+							entity.next_x := x_max + 1
+							entity.stop_left
+						end
 					else
-						player.x := x_min - 1
-						player.next_x := x_min - 1
-						player.stop_right
+						entity.x := x_min - 1
+						if type.is_equal ("player") then
+							entity.next_x := x_min - 1
+							entity.stop_right
+						end
 					end
 				end
 			end
