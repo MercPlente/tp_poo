@@ -42,15 +42,19 @@ feature {NONE} -- Initialization
 				l_highscore_file: PLAIN_TEXT_FILE
 				l_score: NATURAL_32
 				l_highscore: NATURAL_32
+				int : INTEGER
+				string : STRING
 			do
 				l_score := message.to_natural_32
+
+				int = 1
 
 				create l_highscore_file.make_open_read_write ("highscore.txt")
 				l_highscore_file.read_stream (l_highscore_file.count)
 				l_highscore := l_highscore_file.last_string.twin.to_natural_32
 				l_highscore_file.close
 
-				if l_score > l_highscore then
+				if l_score < l_highscore then
 					l_highscore_file.make_open_write ("highscore.txt")
 					l_highscore_file.put_string (message)
 					l_highscore_file.close

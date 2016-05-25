@@ -30,6 +30,8 @@ feature {ANY} -- Initialization
 			l_socket.close
 		end
 
+	
+
 	attendre_reponse
 	--boucle pour attendre la reponse du serveur et changer le highscore
 		local
@@ -49,22 +51,7 @@ feature {ANY} -- Initialization
 		end
 
 
---	serveur
---			-- Exécution du programme client
---		local
---			l_socket: NETWORK_DATAGRAM_SOCKET
---			l_port:INTEGER
---			l_host:STRING
---			l_message:STRING
---		do
---			l_port:=1337
---			l_host:="localhost"
---			l_message:="Bonjour serveur!%N"
---			create l_socket.make_targeted (l_host, l_port)
---			l_socket.put_integer (l_message.count)
---			l_socket.put_string (l_message)
---			l_socket.close
---		end
+
 
 
 	high_score : STRING
