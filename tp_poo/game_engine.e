@@ -28,9 +28,9 @@ feature {NONE} -- Initialization
 			create village.new_village
 			create dungeon.new_dungeon
 			create deckard_cain.new_cain(980, 230)
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,250,500))
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,300,650))
-			ennemies.extend(create {ENNEMY}.new_ennemy("kenny.png",5,100,1000))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png",5,250,500))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png",5,300,650))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png",5,100,1000))
 			ecran := a_window
 			has_error := background.has_error
 		end

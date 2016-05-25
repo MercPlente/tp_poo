@@ -62,7 +62,17 @@ feature {NONE} -- Initialization
 				surface_down_left := surface_up
 			end
 			surface := surface_up
-			create {ARRAYED_LIST[TUPLE[x,y:INTEGER]]} animation_coordinates.make(0)
+			initialize_animation_coordinate
+		end
+
+	initialize_animation_coordinate
+			-- Create the `animation_coordinates'
+		do
+			create {ARRAYED_LIST[TUPLE[x,y:INTEGER]]} animation_coordinates.make(4)
+			animation_coordinates.extend ([surface.width // 3, 0])	-- Be sure to place the image standing still first
+			animation_coordinates.extend ([0, 0])
+			animation_coordinates.extend ([(surface.width // 3) * 2, 0])
+			animation_coordinates.extend ([0, 0])
 		end
 
 end
