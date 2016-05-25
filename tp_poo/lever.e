@@ -20,7 +20,7 @@ create
 
 feature
 
-	make_levier(a_window:GAME_WINDOW_SURFACED)
+	make_levier(a_x:INTEGER;a_y:INTEGER)
 	-- make pour creer les nouveaux leviers
 
 	local
@@ -29,6 +29,8 @@ feature
 		levier_ouvert_img_s : IMG_IMAGE_FILE
 		levier_fermer_img_s : IMG_IMAGE_FILE
 	do
+		set_x(x)
+		set_y(y)
 		levier_ouvert := false
 		has_error := false
 		make_selection

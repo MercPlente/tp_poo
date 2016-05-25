@@ -29,9 +29,14 @@ feature {NONE} -- Initialization
 			create background.make_background(a_window)
 			create player.new_player
 			create {LINKED_LIST[ENNEMY]} ennemies.make
+			create {LINKED_LIST[LEVER]} levier.make
 			create village.new_village
 			create dungeon.new_dungeon
 			create deckard_cain.new_cain(980, 230)
+			levier.extend(create {LEVER}.make_levier(50,50))
+			levier.extend(create {LEVER}.make_levier(50,100))
+			levier.extend(create {LEVER}.make_levier(50,200))
+			levier.extend(create {LEVER}.make_levier(50,300))
 			ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png",5,250,500))
 			ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png",5,300,650))
 			ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png",5,100,1000))
@@ -40,9 +45,6 @@ feature {NONE} -- Initialization
 		end
 
 feature -- Access
-
-	ennemies: LIST[ENNEMY]
-			-- List of ennemies
 
 	run (a_window:GAME_WINDOW_SURFACED)
 			-- Create ressources and launch the game
@@ -62,6 +64,10 @@ feature -- Access
 			game_library.launch
 		end
 
+	ennemies: LIST[ENNEMY]
+			-- List of ennemies
+
+	levier: LIST[LEVER]
 
 	player:PLAYER
 			-- The main character of the game
