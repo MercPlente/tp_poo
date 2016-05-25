@@ -476,6 +476,9 @@ feature {NONE} -- Implementation
 					until
 						i > ennemies.count
 					loop
+						collision_entity_objet(ennemies[i].x - player.sub_image_width // 2, ennemies[i].x + ennemies[i].sub_image_width - player.sub_image_width // 2,
+											ennemies[i].y - player.sub_image_height // 2, ennemies[i].y + ennemies[i].sub_image_height - player.sub_image_height // 2, player, "player")
+
 						collision_entity_objet(339, 454, 1080, 1431, ennemies[i], "ennemi")
 						collision_entity_objet(704, 813, 1080, 1431, ennemies[i], "ennemi")
 						collision_entity_objet(405, 757, 784, 893, ennemies[i], "ennemi")
