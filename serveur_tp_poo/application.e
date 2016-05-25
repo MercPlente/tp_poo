@@ -50,7 +50,7 @@ feature {NONE} -- Initialization
 				l_highscore := l_highscore_file.last_string.twin.to_natural_32
 				l_highscore_file.close
 
-				if l_score > l_highscore then
+				if l_score < l_highscore then
 					l_highscore_file.make_open_write ("highscore.txt")
 					l_highscore_file.put_string (message)
 					l_highscore_file.close
