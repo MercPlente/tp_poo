@@ -74,7 +74,7 @@ feature {NONE}
 		end
 
 	retour_precedant
-	-- Creee les images et son du menu precedent pour revenir en arriere
+	-- Crée les images et son du menu précédent pour revenir en arrière
 		do
 			create image.make("single_player.png")
 			image.change_background("single_player.png",window)
@@ -83,7 +83,7 @@ feature {NONE}
 FEATURE {ANY}
 
 	menu_action
-	-- Faire afficher et gerer les events du menu
+	-- Faire afficher et gérer les events du menu
 		local
 			l_village: VILLAGE
 		do

@@ -83,7 +83,7 @@ feature {NONE} -- Initialization
 
 
 	retour_precedant
-		-- Creee les images et son du menu precedent pour revenir en arriere.
+		-- Crée les images et son du menu précédent pour revenir en arrière.
 		do
 			sound.play_music ("beginning")
 			create image.make("background_resized.jpg")
@@ -95,7 +95,7 @@ feature {NONE} -- Initialization
 feature {ANY}
 
 	menu_action
-	-- Faire afficher et gerer les events du menu
+	-- Faire afficher et gérer les events du menu
 		local
 			l_menu_single_player: MENU_SINGLE_PLAYER
 		do
@@ -116,7 +116,7 @@ feature {ANY}
 		end
 
 	entrer_menu_single_player
-	-- Met le entrer_menu_single_player a True pour entrer dans le menu single player en retournant dans la boucle et arreter les events.
+	-- Met le entrer_menu_single_player à True pour entrer dans le menu single player en retournant dans la boucle et arrêter les events.
 		do
 			menu_single_player_selectioner := True
 			game_library.stop

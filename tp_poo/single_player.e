@@ -38,7 +38,7 @@ feature {NONE}
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_surface:GAME_SURFACE)
 			-- Fonction envoyant l'utilisateur dans la section "New Game", "Continuer"
-			--ou "back" selon l'endroit ou il clique
+			--ou "back" selon l'endroit où il clique
 		require else
 			Souris_Appuyer_Correctement: a_mouse_state.is_left_button_pressed
 			Nombre_Click: a_nb_clicks >= 1
@@ -67,7 +67,7 @@ feature {NONE}
 		end
 
 	retour_precedant
-	-- Creee les images et son du menu precedent pour revenir en arriere
+	-- Crée les images et son du menu precedent pour revenir en arrière
 		do
 			create image.make("menu_resized.jpg")
 			image.change_background("menu_resized.jpg",window)
@@ -76,7 +76,7 @@ feature {NONE}
 feature {ANY}
 
 	menu_action
-	-- Faire afficher et gerer les events du menu
+	-- Faire afficher et gérer les events du menu
 		local
 			l_menu_new_game: NEW_GAME
 		do

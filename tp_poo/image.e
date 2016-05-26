@@ -1,6 +1,6 @@
 note
-	description: "Classe gerant les images du programmes."
-	author: "Marc Plante"
+	description: "Classe gérant les images du programmes."
+	author: "Marc Plante, Jérémie Daem"
 	date: "$2016-04-25$"
 	revision: "$Revision$"
 
@@ -19,7 +19,7 @@ create
 feature {NONE} -- Initialisation
 
 	make (background:STRING)
-	-- Fonction modifiant le fond d'ecran.
+	-- Fonction modifiant le fond d'écran.
 		local
 			l_imageBackground: IMG_IMAGE_FILE
 		do
@@ -42,7 +42,7 @@ feature {NONE} -- Initialisation
 feature {ANY}
 
 	change_background(background:STRING;l_window:GAME_WINDOW_SURFACED)
-	-- Utilisse "IMAGE" pour modifier le background
+	-- Utilise "IMAGE" pour modifier le background
 		local
 			l_image:IMAGE
 		do
@@ -56,7 +56,7 @@ feature {ANY}
 			end
 
 	on_iteration_background(a_timestamp:NATURAL_32; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED)
-			-- Evenement qui modifie le fond d'ecran a chaque iteration.
+			-- Événement qui modifie le fond d'écran à chaque itération.
 		do
 			l_window.surface.draw_surface (a_image, 0, 0)
 			l_window.update

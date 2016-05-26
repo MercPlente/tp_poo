@@ -1,6 +1,6 @@
 note
 	description: "Identifie si un object est selectionné."
-	author: ""
+	author: "Marc Plante, Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 

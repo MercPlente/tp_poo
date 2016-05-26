@@ -1,6 +1,6 @@
 note
 	description: "Classe qui gère la région 'village'."
-	author: ""
+	author: "Marc Plante, Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 

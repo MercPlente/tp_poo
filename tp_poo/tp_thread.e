@@ -1,6 +1,6 @@
 note
 	description: "Classe contenant les threads utilisable par le programme ."
-	author: "Marc Plante"
+	author: "Marc Plante, Jérémie Daem"
 	date: "$2016-04-22$"
 	revision: "$Revision$"
 
@@ -17,7 +17,7 @@ create
 	make
 feature {NONE}
 	make
-	-- Constructeur du thread et le demmare
+	-- Constructeur du thread et le démarre
 		do
 			make_thread
 			must_stop:= false
@@ -27,7 +27,7 @@ feature {NONE}
 
 feature
 	stop_thread
-	-- Arreter le thread
+	-- Arrêter le thread
 		do
 			must_stop := true
 		end
@@ -36,7 +36,7 @@ feature
 	-- String contenant le highscore
 
 	recu : BOOLEAN
-	-- Bool pour savoir si le client a recu une reponse du serveur
+	-- Bool pour savoir si le client a reçu une réponse du serveur
 
 feature {NONE}
 	execute
@@ -60,7 +60,7 @@ feature {NONE}
 
 feature {NONE}
 	must_stop: BOOLEAN
-	-- Bool pour faire arreter le thread
+	-- Bool pour faire arrêter le thread
 
 
 end

@@ -1,6 +1,6 @@
 note
 	description: "Classe permettant de gerer le personnage du joueur dans l'application. Grandement inspirée de la classe 'Maryo' de Louis"
-	author: ""
+	author: "Marc Plante, Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -116,12 +116,12 @@ feature {ANY}
 		end
 
 	barre: GAME_SURFACE
-	-- Bar en bas qui montre ce qui est selectionné ainsi que la vie du joueur
+	-- Barre en bas qui montre ce qui est selectionné ainsi que la vie du joueur
 
 
 
 	initialize_animation_coordinate
-			-- Create the `animation_coordinates'
+			-- Make de `animation_coordinates'
 		do
 			create {ARRAYED_LIST[TUPLE[x,y:INTEGER]]} animation_coordinates.make(4)
 			animation_coordinates.extend ([surface.width // 3, 0])	-- Be sure to place the image standing still first

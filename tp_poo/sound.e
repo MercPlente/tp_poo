@@ -1,6 +1,6 @@
 note
 	description: "Classe gerant les sons de l'application."
-	author: "Marc Plante"
+	author: "Marc Plante, Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -20,7 +20,7 @@ feature {ANY}
 
 
 	set_sound
-	-- Fonction creant les sources et les audio sound file / ouvre les pistes a jouer
+	-- Fonction créant les sources et les audio sound files / ouvre les pistes à jouer
 
 		do
 			create sound.make ("swing.wav")
@@ -62,7 +62,7 @@ feature {ANY}
 feature
 
 	play_music (song_name:STRING)
-	--Change la musique en loop selon le menu
+	--Change la musique en boucle selon le menu
 		do
 			if music_intro.is_open and music_loop.is_open then
 				music_source.stop
@@ -80,13 +80,14 @@ feature
 		end
 
 	on_iteration_sound(a_time: NATURAL)
-			-- Evenement qui met a jour la librairie de son a chaque iteration
+			-- Événement qui met à jour la librairie de son à chaque iteration
 		do
 			audio_library.update
 		end
 
 	son_epee
-	-- Fonction qui vide le buffer, met un son au debut de la source et la fait jouer.
+	-- Fonction qui vide le buffer, met un son au début de la source et la fait jouer.
+	-- Son de coup d'épée.
 		do
 			sound_source.stop
 			sound.restart
@@ -97,6 +98,8 @@ feature
 		end
 
 	son_levier
+	-- Fonction qui vide le buffer, met un son au début de la source et la fait jouer.
+	-- Son de levier qui s'ouvre.
 		do
 			lever_source.stop
 			lever_sound.restart

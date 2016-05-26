@@ -1,6 +1,6 @@
 note
 	description: "Classe du coter client du serveur"
-	author: "Marc Plante"
+	author: "Marc Plante, Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -32,7 +32,7 @@ feature {ANY} -- Initialization
 
 
 	attendre_reponse
-	--boucle pour attendre la reponse du serveur et changer le highscore
+	--boucle pour attendre la réponse du serveur et changer le highscore
 		local
 			l_socket: NETWORK_DATAGRAM_SOCKET
 			l_port:INTEGER

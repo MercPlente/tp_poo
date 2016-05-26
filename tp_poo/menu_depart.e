@@ -1,6 +1,6 @@
 note
-	description: "Summary description for {MENU_DEPART}."
-	author: "Marc Plante"
+	description: "Classe gérant le menu de départ."
+	author: "Marc Plante, Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -26,7 +26,7 @@ create
 feature {NONE}
 
 	make
-		-- Construit la fenetre et le menu principal : image et son
+		-- Construit la fenêtre et le menu principal : image et son
 		local
 			l_window:GAME_WINDOW_SURFACED
 			l_image:IMAGE
@@ -42,7 +42,7 @@ feature {NONE}
 		end
 
 	create_window:GAME_WINDOW_SURFACED
-			-- Creee la fenetre affichee a l'ecran. La fenetre contient un titre et un icone
+			-- Crée la fenêtre affiche à l'écran. La fenêtre contient un titre et un icone
 		local
 			l_icon_image:GAME_IMAGE_BMP_FILE
 			l_icon:GAME_SURFACE
@@ -72,7 +72,7 @@ feature {NONE}
 feature
 
 	menu_action
-		-- Faire afficher et gerer les events du menu
+		-- Faire afficher et gérer les events du menu
 		local
 			l_menu_principal:MENU_PRINCIPAL
 		do
@@ -94,7 +94,7 @@ feature
 		end
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_image:GAME_SURFACE)
-		-- Fonction qui entre dans la fonction entrer_menu_principal lorsqu'un clique est fait dans la fenetre.
+		-- Fonction qui entre dans la fonction entrer_menu_principal lorsqu'un clique est fait dans la fenêtre.
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				entrer_menu_principal
@@ -102,7 +102,7 @@ feature
 		end
 
 	entrer_menu_principal
-		-- Met le menu_principal_selectionne a True pour entrer dans le menu principal en retournant dans la boucle et arreter les events.
+		-- Met le menu_principal_selectionne à True pour entrer dans le menu principal en retournant dans la boucle et arrêter les events.
 		do
 			menu_principal_selectionne := True
 			game_library.stop

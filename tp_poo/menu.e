@@ -1,6 +1,6 @@
 note
 	description: "Contient les methodes de tous les 'menu'."
-	author: "Marc Plante"
+	author: "Marc Plante, Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -28,12 +28,12 @@ feature {NONE} -- Initialisation
 feature
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_image:GAME_SURFACE)
-		-- methode qui gere les actions de la souris dans le menu
+		-- méthode qui gère les actions de la souris dans le menu
 		deferred
 		end
 
 	menu_action
-	-- methode gerant les iterations du menu
+	-- méthode gérant les itérations du menu
 		do
 			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
 			game_library.iteration_actions.extend (agent image.on_iteration_background(?, image,window))
@@ -54,7 +54,7 @@ feature {ANY}
 	-- Attribut pour utiliser la classe IMAGE
 
 	window : GAME_WINDOW_SURFACED
-	-- Attribut pour utiliser et modifier la fenetre dans un menu
+	-- Attribut pour utiliser et modifier la fenêtre dans un menu
 
 	return_depart : BOOLEAN
 	-- Bool pour sortir de la boucle de menu

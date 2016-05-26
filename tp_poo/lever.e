@@ -1,6 +1,6 @@
 note
 	description: "Classe de creation des leviers."
-	author: "Marc Plante"
+	author: "Marc Plante, Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -21,7 +21,7 @@ create
 feature
 
 	make_levier(a_x:INTEGER;a_y:INTEGER)
-	-- make pour creer les nouveaux leviers
+	-- make pour créer les nouveaux leviers
 
 	local
 		levier_ouvert_img : IMG_IMAGE_FILE
@@ -95,7 +95,7 @@ feature
 
 
 	set_x(a_x:INTEGER)
-			-- Assign the value of `x' with `a_x'
+			-- Assigne la valeur de `x' avec `a_x'
 		require
 			correct : a_x >= 0
 		do
@@ -106,7 +106,7 @@ feature
 		end
 
 	set_y(a_y:INTEGER)
-			-- Assign the value of `y' with `a_y'
+			-- Assigne la valeur de `y' avec `a_y'
 		require
 			correct : a_y >= 0
 		do
@@ -117,13 +117,13 @@ feature
 		end
 
 	x:INTEGER assign set_x
-			-- Vertical position of `Current'
+			-- Position horizontale de `Current'
 
 	y:INTEGER assign set_y
-			-- Horizontal position of `Current'
+			-- Position verticale de `Current'
 
 	has_error : BOOLEAN
-	-- Bool pour eviter les erreurs
+	-- Bool pour éviter les erreurs
 
 	levier_ouvert : BOOLEAN assign set_levier_ouvert
 	-- Boolean pour savoir si le levier est ouvert ou non
