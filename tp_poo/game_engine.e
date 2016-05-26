@@ -342,6 +342,8 @@ feature {NONE} -- Implémentation
 
 	collisions_ennemies(a_i : INTEGER) : LIST [INTEGER]
 		-- Vérifie s'il y une collision avec un ennemi
+		require
+			a_i_plus_petit_que_zero : a_i > 0
 		local
 			direction_x : INTEGER
 			direction_y : INTEGER
@@ -408,6 +410,11 @@ feature {NONE} -- Implémentation
 
 	collision_retour(x_gauche, x_droite, y_haut, y_bas: BOOLEAN) : LIST [INTEGER]
 		-- Retourne quel chemin l'ennemi peut prendre
+		require
+			x_gauche_correct : x_gauche = true or x_gauche = false
+			x_droite_correct : x_droite = true or x_droite = false
+			y_haut_correct : y_haut = true or y_haut = false
+			y_bas_correct: y_bas = true or y_bas = false
 		local
 			chemin: LIST [INTEGER]
 		do
@@ -986,8 +993,6 @@ feature {NONE} -- Implémentation
 			game_library.stop
 			sound.play_music ("beginning")
 		end
-
-feature {ANY}
 
 
 end
