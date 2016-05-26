@@ -70,7 +70,8 @@ feature {NONE} -- Initialization
 						loop
 						end
 						highscore := l_thread.highscore
-						print(highscore)
+						print("Meilleur temps: " + highscore + "%N")
+
 					end
 					if a_mouse_state.y>=456 and a_mouse_state.y<=500 then
 						quitter := True

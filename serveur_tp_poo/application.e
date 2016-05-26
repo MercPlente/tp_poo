@@ -18,20 +18,30 @@ feature {NONE} -- Initialization
 			l_port:INTEGER
 			l_taille_message:INTEGER
 			l_message:STRING
+			continuer : BOOLEAN
 		do
+			continuer := true
 			l_port:=1337
 			create l_socket.make_bound (l_port)
-			l_socket.read_integer
-			l_taille_message:=l_socket.last_integer
-			l_socket.read_stream (l_taille_message)
-			l_message:=l_socket.last_string
-			io.put_string (l_message)
-			io.put_new_line
-			if l_message ~ "requete" then
-				renvoyer_highscore
-			else
-				highscore(l_message)
+			from
+			until
+				continuer = false
+			loop
+				l_socket.read_integer
+				l_taille_message:=l_socket.last_integer
+				l_socket.read_stream (l_taille_message)
+				l_message:=l_socket.last_string
+				io.put_string (l_message)
+				io.put_new_line
+
+				if l_message ~ "requete" then
+					renvoyer_highscore
+				else
+					highscore(l_message)
+				end
 			end
+
+
 			l_socket.close
 		end
 
@@ -42,8 +52,12 @@ feature {NONE} -- Initialization
 				l_highscore_file: PLAIN_TEXT_FILE
 				l_score: NATURAL_32
 				l_highscore: NATURAL_32
+
 			do
+				print("bonne place")
+				print(message)
 				l_score := message.to_natural_32
+
 
 				create l_highscore_file.make_open_read_write ("highscore.txt")
 				l_highscore_file.read_stream (l_highscore_file.count)
@@ -74,25 +88,6 @@ feature {NONE} -- Initialization
 				l_socket.put_integer (l_highscore.count)
 				l_socket.put_string (l_highscore)
 			end
-
-
-
---	client
---			-- Exécution du programme client
---		local
---			l_socket: NETWORK_DATAGRAM_SOCKET
---			l_port:INTEGER
---			l_host:STRING
---			l_message:STRING
---		do
---			l_port:=1337
---			l_host:="localhost"
---			l_message:="Bonjour serveur!%N"
---			create l_socket.make_targeted (l_host, l_port)
---			l_socket.put_integer (l_message.count)
---			l_socket.put_string (l_message)
---			l_socket.close
---		end
 
 
 end

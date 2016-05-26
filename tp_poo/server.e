@@ -47,6 +47,7 @@ feature {ANY} -- Initialization
 			l_message:=l_socket.last_string
 			high_score := l_message
 			reponse_recu := TRUE
+			l_socket.close
 		end
 
 
@@ -56,7 +57,15 @@ feature {ANY} -- Initialization
 	high_score : STRING
 	-- String contenant le highscore
 
-	reponse_recu : BOOLEAN
+	set_reponse_recu(bool:BOOLEAN)
+	--change reponse_recu
+	require
+			is_bool_ok : bool = true or bool = false
+	do
+		reponse_recu := bool
+	end
+
+	reponse_recu : BOOLEAN assign set_reponse_recu
 	-- Boolean pour savoir quand le serveur a répondu
 
 end

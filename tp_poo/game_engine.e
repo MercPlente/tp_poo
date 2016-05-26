@@ -834,6 +834,7 @@ feature {NONE} -- Implementation
 			if not a_key_state.is_repeat then
 				if a_key_state.is_h then
 					player.hp := 50
+					terminer_jeu(a_timestamp)
 				end
 
 				if a_key_state.is_m then -- sert à tester le changement de cartes
@@ -972,8 +973,17 @@ feature {NONE} -- Implementation
 		end
 
 	terminer_jeu(a_timestamp: NATURAL_32)
+	-- Fonction lorsque Diablo meurt
+	-- envoie le temps au serveur
+		local
+			reseau: SERVER_POO
+			temps: NATURAL_32
+			temps_string: STRING
 		do
-			print("fini")
+			temps:= game_library.time_since_create // 1000
+			temps_string:= temps.out
+			print(temps_string)
+			create reseau.client (temps_string)
 			on_quit(a_timestamp)
 		end
 

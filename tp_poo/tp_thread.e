@@ -43,12 +43,9 @@ feature {NONE}
 	-- l'execution du thread
 		local
 			serveur: SERVER_POO
-			--temps: NATURAL_32
-			--temps_string: STRING
 		do
-			--temps:= game_library.time_since_create
-			--temps_string:= temps.out
 			create serveur.client("requete")
+			serveur.reponse_recu := false
 			from
 			until
 				serveur.reponse_recu = true
