@@ -39,7 +39,7 @@ feature {ANY}
 					create {GAME_SURFACE_ROTATE_ZOOM} surface_left.make_rotate(surface_up, 90, True)
 					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_left.make_rotate(surface_up, 45, True)
 
-					sub_image_width := surface_up.width // 3
+					sub_image_width := surface_up.width
 					sub_image_height := surface_up.height
 				else
 					has_error := False

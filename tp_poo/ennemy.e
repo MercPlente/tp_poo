@@ -14,9 +14,9 @@ inherit
 create
 	new_ennemy
 
-feature {NONE} -- Initialization
+feature {ANY} -- Initialization
 
-	new_ennemy(image:STRING;a_hp:INTEGER;a_x:INTEGER;a_y:INTEGER)
+	new_ennemy(image:STRING; image_s: STRING;a_hp:INTEGER;a_x:INTEGER;a_y:INTEGER)
 	-- Constructeur de la classe ENNEMY pour creer un nouvel ennemie
 		local
 			l_image:IMG_IMAGE_FILE
@@ -67,18 +67,18 @@ feature {NONE} -- Initialization
 			surface := surface_up
 			initialize_animation_coordinate
 
-		create l_image_s.make ("deckard_cain_s.png")
+		create l_image_s.make (image_s)
 			if l_image_s.is_openable then
 				l_image_s.open
 				if l_image_s.is_open then
 					create surface_up_s.make_from_image (l_image_s)
-					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_right_s.make_rotate(surface_up_s, 315, True)
-					create {GAME_SURFACE_ROTATE_ZOOM} surface_right_s.make_rotate(surface_up_s, 270, True)
-					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_right_s.make_rotate(surface_up_s, 225, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_right_s.make_rotate(surface_up_s, 135, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_right_s.make_rotate(surface_up_s, 90, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_right_s.make_rotate(surface_up_s, 45, True)
 					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_s.make_rotate(surface_up_s, 180, True)
-					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_left_s.make_rotate(surface_up_s, 135, True)
-					create {GAME_SURFACE_ROTATE_ZOOM} surface_left_s.make_rotate(surface_up_s, 90, True)
-					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_left_s.make_rotate(surface_up_s, 45, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_down_left_s.make_rotate(surface_up_s, 225, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_left_s.make_rotate(surface_up_s, 270, True)
+					create {GAME_SURFACE_ROTATE_ZOOM} surface_up_left_s.make_rotate(surface_up_s, 315, True)
 				else
 					has_error := False
 					create surface_up_s.make(1,1)

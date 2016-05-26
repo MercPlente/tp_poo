@@ -33,13 +33,13 @@ feature {NONE} -- Initialization
 			create village.new_village
 			create dungeon.new_dungeon
 			create deckard_cain.new_cain(980, 230)
-			levier.extend(create {LEVER}.make_levier(50,50))
-			levier.extend(create {LEVER}.make_levier(50,100))
-			levier.extend(create {LEVER}.make_levier(50,200))
-			levier.extend(create {LEVER}.make_levier(50,300))
-			ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png",5,250,500))
-			ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png",5,300,650))
-			ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png",5,100,1000))
+			levier.extend(create {LEVER}.make_levier(100,485))
+			levier.extend(create {LEVER}.make_levier(100,1860))
+			levier.extend(create {LEVER}.make_levier(1060,485))
+			levier.extend(create {LEVER}.make_levier(1060,1860))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,250,500))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,300,650))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png","monstre3_s.png",5,100,1000))
 			ecran := a_window
 			has_error := background.has_error
 		end
@@ -59,7 +59,7 @@ feature -- Access
 			game_library.quit_signal_actions.extend (agent on_quit)
 			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
-			-- a_window.mouse_motion_actions.extend (agent on_mouse_motion(?, ?, ?, ?) ) -- When a mouse moves on screen
+			a_window.mouse_motion_actions.extend (agent on_mouse_motion(?, ?, ?, ?) ) -- When a mouse moves on screen
 			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
 			game_library.launch
 		end
@@ -108,7 +108,6 @@ feature {NONE} -- Implementation
 		do
 			player.update (a_timestamp)	-- Update Player animation and coordinate
 
-
 			-- Draw the scene
 			a_window.surface.draw_sub_surface (background.game_running_surface, (player.x + player.sub_image_width // 2), (player.y + player.sub_image_height // 2), 800, 600, 0, 0)
 			a_window.surface.draw_sub_surface (
@@ -154,6 +153,22 @@ feature {NONE} -- Implementation
 					i := i + 1
 				end
 
+				if not levier.is_empty then
+
+					from
+						i := 1
+					until
+						i > levier.count
+					loop
+						a_window.surface.draw_surface (
+												levier[i].lever_running_surface,
+										(a_window.surface.width - player.sub_image_width) // 2 - (player.x - levier[i].x),
+										(a_window.surface.height - player.sub_image_height) // 2 - (player.y - levier[i].y)
+											)
+						i := i + 1
+					end
+				end
+
 			end
 				collisions_dungeon(a_timestamp)
 				a_window.surface.draw_surface (background.filtre_dungeon, 0, 0)
@@ -189,36 +204,64 @@ feature {NONE} -- Implementation
 				loop
 					list := collisions_ennemies(i)
 
+					if ennemies[i].x - player.x > 20 and ennemies[i].x >= player.x  then
+						if not ennemies[i].is_selected then
+							ennemies[i].turn_left
+						else
+							ennemies[i].turn_left_s
+						end
+					end
+					if ennemies[i].x - player.x < -20 and ennemies[i].x <= player.x  then
+						if not ennemies[i].is_selected then
+							ennemies[i].turn_right
+						else
+							ennemies[i].turn_right_s
+						end
+					end
+					if ennemies[i].y - player.y > 20 and ennemies[i].y >= player.y  then
+						if not ennemies[i].is_selected then
+							ennemies[i].turn_down
+						else
+							ennemies[i].turn_down_s
+						end
+					end
+					if ennemies[i].y - player.y < -20 and ennemies[i].y <= player.y  then
+						if not ennemies[i].is_selected then
+							ennemies[i].turn_up
+						else
+							ennemies[i].turn_up_s
+						end
+					end
 
 					if ennemies[i].x - player.x <= 30 and ennemies[i].x - player.x >= -30 and ennemies[i].y - player.y <= 30 and ennemies[i].y - player.y >= 30  then
+
 
 					else
 
 						if ennemies[i].x - player.x >= 30 and ennemies[i].x >= player.x  then
 							if list.has (0) or list.has (4) or list.has (5) then
 								ennemies[i].x := ennemies[i].x - 1
-								ennemies[i].turn_left
 							end
 						end
 
 						if ennemies[i].x - player.x <= -30 and ennemies[i].x <= player.x  then
 							if list.has (0) or list.has (4) or list.has (6)  then
 								ennemies[i].x := ennemies[i].x + 1
-								ennemies[i].turn_right
+
 							end
 						end
 
 						if ennemies[i].y - player.y >= 30 and ennemies[i].y >= player.y  then
 							if list.has (0) or list.has (1) or list.has (2)  then
 								ennemies[i].y := ennemies[i].y - 1
-								ennemies[i].turn_down
+
 							end
 						end
 
 						if ennemies[i].y - player.y <= -30 and ennemies[i].y <= player.y  then
 							if list.has (0) or list.has (1) or list.has (3)  then
 								ennemies[i].y := ennemies[i].y + 1
-								ennemies[i].turn_up
+
 							end
 						end
 					end
@@ -511,8 +554,8 @@ feature {NONE} -- Implementation
 					until
 						i > ennemies.count
 					loop
-						collision_entity_objet(ennemies[i].x - player.sub_image_width // 2, ennemies[i].x + ennemies[i].sub_image_width - player.sub_image_width // 2,
-											ennemies[i].y - player.sub_image_height // 2, ennemies[i].y + ennemies[i].sub_image_height - player.sub_image_height // 2, player, "player")
+						collision_entity_objet(ennemies[i].x - player.sub_image_width // 2 - 18, ennemies[i].x + ennemies[i].sub_image_width - player.sub_image_width // 2 + 18,
+											ennemies[i].y - player.sub_image_height // 2 - 18, ennemies[i].y + ennemies[i].sub_image_height - player.sub_image_height // 2 + 18, player, "player")
 
 						collision_entity_objet(339, 454, 1080, 1431, ennemies[i], "ennemi")
 						collision_entity_objet(704, 813, 1080, 1431, ennemies[i], "ennemi")
@@ -620,9 +663,12 @@ feature {NONE} -- Implementation
 			i: INTEGER
 		do
 			if not a_key_state.is_repeat then
+				if a_key_state.is_h then
+					player.hp := player.hp - 1
+				end
+
 				if a_key_state.is_k then
 					background.door_open := True
-					deckard_cain.is_selected := True
 
 					print("Les coordonnees du joueur sont: (")
 					print(player.x)
@@ -696,9 +742,41 @@ feature {NONE} -- Implementation
 
 		end
 
-	on_mouse_motion (a_timestamp: NATURAL_32; mouse_state:GAME_MOUSE_MOTION_STATE; int1: INTEGER; int2: INTEGER)
+	on_mouse_motion (a_timestamp: NATURAL_32; a_mouse_state:GAME_MOUSE_MOTION_STATE; int1: INTEGER; int2: INTEGER)
+		local
+			x_carte: INTEGER
+			y_carte: INTEGER
+			selection: BOOLEAN
+			i: INTEGER
 		do
+			x_carte := (player.x + player.sub_image_width // 2) + (a_mouse_state.x - ecran.surface.width // 2)
+			y_carte := (player.y + player.sub_image_height // 2) + (a_mouse_state.y - ecran.surface.height // 2)
+			selection := False
+			if background.current_map.is_equal ("village") then
+				deckard_cain.is_selected := False
 
+				if x_carte >= deckard_cain.x and x_carte <= deckard_cain.x + deckard_cain.sub_image_width and y_carte >= deckard_cain.y and y_carte <= deckard_cain.y + deckard_cain.sub_image_height then
+					deckard_cain.is_selected := True
+				end
+
+
+			elseif background.current_map.is_equal ("dungeon") then
+				if not ennemies.is_empty then
+					from
+						i := 1
+					until
+						i > ennemies.count
+					loop
+						ennemies[i].is_selected := False
+						if x_carte >= ennemies[i].x and x_carte <= ennemies[i].x + ennemies[i].sub_image_width and y_carte >= ennemies[i].y and y_carte <= ennemies[i].y + ennemies[i].sub_image_height and not selection then
+							ennemies[i].is_selected := True
+							selection := True
+						end
+						i := i + 1
+					end
+
+				end
+			end
 		end
 
 	on_quit(a_timestamp: NATURAL_32)

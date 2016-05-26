@@ -29,68 +29,68 @@ feature
 		levier_ouvert_img_s : IMG_IMAGE_FILE
 		levier_fermer_img_s : IMG_IMAGE_FILE
 	do
-		set_x(x)
-		set_y(y)
+		set_x(a_x)
+		set_y(a_y)
 		levier_ouvert := false
 		has_error := false
 		make_selection
 		create levier_ouvert_img.make ("levier_ouvert.png")
 		if levier_ouvert_img.is_openable then
-				levier_ouvert_img.open
-				if levier_ouvert_img.is_open then
-					create surface_levier_ouvert.make_from_image (levier_ouvert_img)
-				else
-					create surface_levier_ouvert.make(1,1)
-					has_error := True
-				end
+			levier_ouvert_img.open
+			if levier_ouvert_img.is_open then
+				create surface_levier_ouvert.make_from_image (levier_ouvert_img)
 			else
 				create surface_levier_ouvert.make(1,1)
 				has_error := True
 			end
+		else
+			create surface_levier_ouvert.make(1,1)
+			has_error := True
+		end
 
-			create levier_fermer_img.make ("levier_fermer.png")
-				if levier_fermer_img.is_openable then
-					levier_fermer_img.open
-					if levier_fermer_img.is_open then
-						create surface_levier_fermer.make_from_image (levier_fermer_img)
-					else
-						has_error := True
-						create surface_levier_fermer.make(1,1)
-					end
-				else
-					has_error := True
-					create surface_levier_fermer.make(1,1)
-				end
-			set_lever_running_surface(surface_levier_fermer)
+		create levier_fermer_img.make ("levier_fermer.png")
+		if levier_fermer_img.is_openable then
+			levier_fermer_img.open
+			if levier_fermer_img.is_open then
+				create surface_levier_fermer.make_from_image (levier_fermer_img)
+			else
+				has_error := True
+				create surface_levier_fermer.make(1,1)
+			end
+		else
+			has_error := True
+			create surface_levier_fermer.make(1,1)
+		end
 
-			create levier_ouvert_img_s.make ("levier_ouvert.png")
-				if levier_ouvert_img_s.is_openable then
-						levier_ouvert_img_s.open
-						if levier_ouvert_img_s.is_open then
-							create surface_levier_selectioner_ouvert.make_from_image (levier_ouvert_img)
-						else
-							create surface_levier_selectioner_ouvert.make(1,1)
-							has_error := True
-						end
-					else
-						create surface_levier_selectioner_ouvert.make(1,1)
-						has_error := True
-					end
+		create levier_ouvert_img_s.make ("levier_ouvert_s.png")
+		if levier_ouvert_img_s.is_openable then
+			levier_ouvert_img_s.open
+			if levier_ouvert_img_s.is_open then
+				create surface_levier_selectioner_ouvert.make_from_image (levier_ouvert_img)
+			else
+				create surface_levier_selectioner_ouvert.make(1,1)
+				has_error := True
+			end
+		else
+			create surface_levier_selectioner_ouvert.make(1,1)
+			has_error := True
+		end
 
-					create levier_fermer_img_s.make ("levier_fermer.png")
-						if levier_fermer_img_s.is_openable then
-							levier_fermer_img_s.open
-							if levier_fermer_img_s.is_open then
-								create surface_levier_selectioner_fermer.make_from_image (levier_fermer_img_s)
-							else
-								has_error := True
-								create surface_levier_selectioner_fermer.make(1,1)
-							end
-						else
-							has_error := True
-							create surface_levier_selectioner_fermer.make(1,1)
-						end
-					set_lever_running_surface(surface_levier_fermer)
+		create levier_fermer_img_s.make ("levier_fermer_s.png")
+		if levier_fermer_img_s.is_openable then
+			levier_fermer_img_s.open
+			if levier_fermer_img_s.is_open then
+				create surface_levier_selectioner_fermer.make_from_image (levier_fermer_img_s)
+			else
+				has_error := True
+				create surface_levier_selectioner_fermer.make(1,1)
+			end
+		else
+			has_error := True
+			create surface_levier_selectioner_fermer.make(1,1)
+		end
+
+		lever_running_surface := surface_levier_fermer
 	end
 
 
