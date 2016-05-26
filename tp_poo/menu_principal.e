@@ -70,8 +70,6 @@ feature {NONE} -- Initialization
 						loop
 						end
 						a_highscore := l_thread.highscore
-						print("Meilleur temps: " + a_highscore + "%N")
-
 						entrer_highscore
 
 					end

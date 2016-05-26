@@ -33,7 +33,7 @@ feature {NONE}
 			a_highscore := string_highscore
 			window := a_window
 
-			create font.make ("DIABLO_L.TTF", 27)
+			create font.make ("DIABLO_L.TTF", 32)
 			if font.is_openable then
 				font.open
 			end
@@ -91,6 +91,7 @@ feature {ANY}
 				game_library.clear_all_events
 				Precursor
 				game_library.iteration_actions.extend (agent on_iteration(?, window))
+				window.update
 				game_library.launch
 			end
 		end
@@ -103,9 +104,10 @@ feature {ANY}
 			if font.is_open then
 				create l_text.make (a_highscore, font, create {GAME_COLOR}.make_rgb (255, 255, 255))
 				if not l_text.has_error then
-					a_window.surface.draw_surface (l_text, 50, 50)
+					a_window.surface.draw_surface (l_text, 370, 230)
 				end
 			end
+			a_window.update
 		end
 
 	font: TEXT_FONT

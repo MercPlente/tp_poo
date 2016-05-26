@@ -31,8 +31,6 @@ feature {NONE} -- Initialization
 				l_taille_message:=l_socket.last_integer
 				l_socket.read_stream (l_taille_message)
 				l_message:=l_socket.last_string
-				io.put_string (l_message)
-				io.put_new_line
 
 				if l_message ~ "requete" then
 					renvoyer_highscore
