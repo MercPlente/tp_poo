@@ -66,13 +66,13 @@ feature
 		if levier_ouvert_img_s.is_openable then
 			levier_ouvert_img_s.open
 			if levier_ouvert_img_s.is_open then
-				create surface_levier_selectioner_ouvert.make_from_image (levier_ouvert_img)
+				create surface_levier_selectionner_ouvert.make_from_image (levier_ouvert_img)
 			else
-				create surface_levier_selectioner_ouvert.make(1,1)
+				create surface_levier_selectionner_ouvert.make(1,1)
 				has_error := True
 			end
 		else
-			create surface_levier_selectioner_ouvert.make(1,1)
+			create surface_levier_selectionner_ouvert.make(1,1)
 			has_error := True
 		end
 
@@ -80,14 +80,14 @@ feature
 		if levier_fermer_img_s.is_openable then
 			levier_fermer_img_s.open
 			if levier_fermer_img_s.is_open then
-				create surface_levier_selectioner_fermer.make_from_image (levier_fermer_img_s)
+				create surface_levier_selectionner_fermer.make_from_image (levier_fermer_img_s)
 			else
 				has_error := True
-				create surface_levier_selectioner_fermer.make(1,1)
+				create surface_levier_selectionner_fermer.make(1,1)
 			end
 		else
 			has_error := True
-			create surface_levier_selectioner_fermer.make(1,1)
+			create surface_levier_selectionner_fermer.make(1,1)
 		end
 
 		lever_running_surface := surface_levier_fermer
@@ -134,10 +134,10 @@ feature
 	surface_levier_fermer : GAME_SURFACE
 	--surface du levier fermer
 
-	surface_levier_selectioner_ouvert : GAME_SURFACE
+	surface_levier_selectionner_ouvert : GAME_SURFACE
 	--surface du levier ouvert
 
-	surface_levier_selectioner_fermer : GAME_SURFACE
+	surface_levier_selectionner_fermer : GAME_SURFACE
 	--surface du levier fermer
 
 

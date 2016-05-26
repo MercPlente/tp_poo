@@ -20,11 +20,16 @@ feature {NONE} -- Initialization
 	make_run (a_window:GAME_WINDOW_SURFACED;a_sound:SOUND)
 			-- Initialization of `Current'
 		do
+			clicked := ""
 			sound := a_sound
 			sound.play_music ("tristram")
 			create font.make ("DIABLO_L.TTF", 27)
 			if font.is_openable then
 				font.open
+			end
+			create font_smaller.make ("DIABLO_L.TTF", 22)
+			if font_smaller.is_openable then
+				font_smaller.open
 			end
 			create background.make_background(a_window)
 			create player.new_player
@@ -39,7 +44,7 @@ feature {NONE} -- Initialization
 			levier.extend(create {LEVER}.make_levier(1060,1860))
 			ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,250,500))
 			ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,300,650))
-			ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png","monstre3_s.png",5,100,1000))
+			ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png","monstre3_s.png",10,100,1000))
 			ecran := a_window
 			has_error := background.has_error
 		end
@@ -96,6 +101,12 @@ feature -- Access
 	font: TEXT_FONT
 	-- Used to draw text
 
+	font_smaller: TEXT_FONT
+	-- Used to draw text
+
+	clicked: STRING
+	-- Objet cliqué
+
 
 feature {NONE} -- Implementation
 
@@ -104,12 +115,32 @@ feature {NONE} -- Implementation
 		local
 			i:INTEGER
 			l_text: TEXT_SURFACE_BLENDED
-			l_hp_string: STRING_32
+			l_selection: INTEGER
+			l_text2: TEXT_SURFACE_BLENDED
+			l_text3: TEXT_SURFACE_BLENDED
+			l_text_cain: TEXT_SURFACE_BLENDED
+			l_text_levier: TEXT_SURFACE_BLENDED
+			l_text_levier2: TEXT_SURFACE_BLENDED
 		do
+			l_selection := 0
 			player.update (a_timestamp)	-- Update Player animation and coordinate
 
 			-- Draw the scene
 			a_window.surface.draw_sub_surface (background.game_running_surface, (player.x + player.sub_image_width // 2), (player.y + player.sub_image_height // 2), 800, 600, 0, 0)
+
+			if not levier.is_empty and background.current_map.is_equal ("dungeon") then
+
+				from
+					i := 1
+				until
+					i > levier.count
+				loop
+					a_window.surface.draw_surface (levier[i].lever_running_surface,(a_window.surface.width - player.sub_image_width) // 2 - (player.x - levier[i].x),(a_window.surface.height - player.sub_image_height) // 2 - (player.y - levier[i].y))
+
+					i := i + 1
+				end
+			end
+
 			a_window.surface.draw_sub_surface (
 									player.surface, player.sub_image_x, player.sub_image_y,
 									player.sub_image_width, player.sub_image_height,
@@ -144,6 +175,10 @@ feature {NONE} -- Implementation
 				until
 					i > ennemies.count
 				loop
+					if ennemies[i].is_selected then
+						l_selection := i
+					end
+
 					a_window.surface.draw_sub_surface (
 											ennemies[i].surface,ennemies[i].sub_image_x, ennemies[i].sub_image_y,
 											ennemies[i].sub_image_width, ennemies[i].sub_image_height,
@@ -153,21 +188,7 @@ feature {NONE} -- Implementation
 					i := i + 1
 				end
 
-				if not levier.is_empty then
 
-					from
-						i := 1
-					until
-						i > levier.count
-					loop
-						a_window.surface.draw_surface (
-												levier[i].lever_running_surface,
-										(a_window.surface.width - player.sub_image_width) // 2 - (player.x - levier[i].x),
-										(a_window.surface.height - player.sub_image_height) // 2 - (player.y - levier[i].y)
-											)
-						i := i + 1
-					end
-				end
 
 			end
 				collisions_dungeon(a_timestamp)
@@ -177,10 +198,60 @@ feature {NONE} -- Implementation
 
 			a_window.surface.draw_surface (player.barre, 0, 0)
 			if font.is_open then
-				l_hp_string := player.hp.out
-				create l_text.make (l_hp_string, font, create {GAME_COLOR}.make_rgb (255, 255, 255))
+				create l_text.make (player.hp.out, font, create {GAME_COLOR}.make_rgb (255, 255, 255))
 				if not l_text.has_error then
 					a_window.surface.draw_surface (l_text, 17, 406)
+				end
+			end
+
+			if not (l_selection = 0) then
+				if font.is_open then
+					create l_text2.make ("HP: "+ennemies[l_selection].hp.out, font_smaller, create {GAME_COLOR}.make_rgb (255, 255, 255))
+					if not l_text2.has_error then
+						a_window.surface.draw_surface (l_text2, 370, 550)
+					end
+					create l_text3.make ("Ennemy", font, create {GAME_COLOR}.make_rgb (255, 255, 255))
+					if not l_text3.has_error then
+						a_window.surface.draw_surface (l_text3, 340, 520)
+					end
+				end
+			end
+
+			if deckard_cain.is_selected and background.current_map.is_equal ("village") then
+				if font.is_open then
+					create l_text_cain.make ("Deckard Cain", font_smaller, create {GAME_COLOR}.make_rgb (255, 255, 255))
+					if not l_text_cain.has_error then
+						a_window.surface.draw_surface (l_text_cain, 315, 540)
+					end
+				end
+			end
+
+			if not levier.is_empty then
+
+				from
+					i := 1
+				until
+					i > levier.count
+				loop
+					if levier[i].is_selected then
+						create l_text_levier.make ("Lever", font, create {GAME_COLOR}.make_rgb (255, 255, 255))
+						if not l_text_levier.has_error then
+							a_window.surface.draw_surface (l_text_levier, 350, 520)
+						end
+						if levier[i].levier_ouvert then
+							create l_text_levier2.make ("Opened", font_smaller, create {GAME_COLOR}.make_rgb (255, 255, 255))
+							if not l_text_levier2.has_error then
+								a_window.surface.draw_surface (l_text_levier2, 350, 550)
+							end
+						else
+							create l_text_levier2.make ("Closed", font_smaller, create {GAME_COLOR}.make_rgb (255, 255, 255))
+							if not l_text_levier2.has_error then
+								a_window.surface.draw_surface (l_text_levier2, 350, 550)
+							end
+						end
+					end
+
+					i := i + 1
 				end
 			end
 
@@ -421,6 +492,12 @@ feature {NONE} -- Implementation
 
 		end
 
+	action_cain
+		do
+			player.hp := 50
+			print("Action cain!%N")
+		end
+
 	collisions_village(a_timestamp: NATURAL_32)
 		-- vérifie si le personnage est en collision avec un obstacle sur la carte "village"
 		local
@@ -474,39 +551,10 @@ feature {NONE} -- Implementation
 					changer_carte("dungeon", a_timestamp)
 				end
 
-				if player.x >= 545 and player.x <= 935 and player.y >= 385 and player.y <= 635 then -- collision avec la fontaine
-					if 935 - player.x <= player.x - 545 then
-						plus_petite_difference_x := 935 - player.x
-					else
-						plus_petite_difference_x := player.x - 545
-					end
-					if 635 - player.y <= player.y - 385 then
-						plus_petite_difference_y := 635 - player.y
-					else
-						plus_petite_difference_y := player.y - 385
-					end
-					if plus_petite_difference_y <= plus_petite_difference_x then
-						if 635 - player.y <= player.y - 385 then
-							player.y := 636
-							player.next_y := 636
-							player.stop_up
-						else
-							player.y := 384
-							player.next_y := 384
-							player.stop_down
-						end
-					else
-						if 935 - player.x <= player.x - 545 then
-							player.x := 936
-							player.next_x := 936
-							player.stop_left
-						else
-							player.x := 544
-							player.next_x := 544
-							player.stop_right
-						end
-					end
-				end
+				collision_entity_objet(545, 935, 385, 635, player, "player", "") -- collision fontaine
+				collision_entity_objet(deckard_cain.x - player.sub_image_width // 2, deckard_cain.x + deckard_cain.sub_image_width - player.sub_image_width // 2,
+											deckard_cain.y - player.sub_image_height // 2, deckard_cain.y + deckard_cain.sub_image_height - player.sub_image_height // 2, player, "player", "cain") -- collision deckard_cain
+
 			end
 		end
 
@@ -537,15 +585,15 @@ feature {NONE} -- Implementation
 					player.stop_down
 				end
 
-				collision_entity_objet(329, 444, 1090, 1441, player, "player") -- collision bibli
-				collision_entity_objet(694, 803, 1090, 1441, player, "player") -- collision bibli
-				collision_entity_objet(395, 747, 794, 903, player, "player") -- collision bibli
-				collision_entity_objet(456, 516, 1679, 2000, player, "player")	-- collision mur
-				collision_entity_objet(617, 677, 1679, 2000, player, "player")	-- collision mur
-				collision_entity_objet(0, 520, 327, 402, player, "player")	-- collision mur
-				collision_entity_objet(616, 1150, 327, 402, player, "player")	-- collision mur
+				collision_entity_objet(329, 444, 1090, 1441, player, "player", "b") -- collision bibli
+				collision_entity_objet(694, 803, 1090, 1441, player, "player", "b") -- collision bibli
+				collision_entity_objet(395, 747, 794, 903, player, "player", "b") -- collision bibli
+				collision_entity_objet(456, 516, 1679, 2000, player, "player", "m")	-- collision mur
+				collision_entity_objet(617, 677, 1679, 2000, player, "player", "m")	-- collision mur
+				collision_entity_objet(0, 520, 327, 402, player, "player", "m")	-- collision mur
+				collision_entity_objet(616, 1150, 327, 402, player, "player", "m")	-- collision mur
 				if not background.door_open then
-					collision_entity_objet(520, 616, 327, 402, player, "player")	-- collision porte
+					collision_entity_objet(520, 616, 327, 402, player, "player", "p")	-- collision porte
 				end
 
 				if not ennemies.is_empty then
@@ -554,18 +602,18 @@ feature {NONE} -- Implementation
 					until
 						i > ennemies.count
 					loop
-						collision_entity_objet(ennemies[i].x - player.sub_image_width // 2 - 18, ennemies[i].x + ennemies[i].sub_image_width - player.sub_image_width // 2 + 18,
-											ennemies[i].y - player.sub_image_height // 2 - 18, ennemies[i].y + ennemies[i].sub_image_height - player.sub_image_height // 2 + 18, player, "player")
+						collision_entity_objet(ennemies[i].x - player.sub_image_width // 2 - 15, ennemies[i].x + ennemies[i].sub_image_width - player.sub_image_width // 2 + 15,
+											ennemies[i].y - player.sub_image_height // 2 - 15, ennemies[i].y + ennemies[i].sub_image_height - player.sub_image_height // 2 + 15, player, "player", "ennemi" + i.out)
 
-						collision_entity_objet(339, 454, 1080, 1431, ennemies[i], "ennemi")
-						collision_entity_objet(704, 813, 1080, 1431, ennemies[i], "ennemi")
-						collision_entity_objet(405, 757, 784, 893, ennemies[i], "ennemi")
-						collision_entity_objet(466, 506, 1689, 1990, ennemies[i], "ennemi")
-						collision_entity_objet(627, 667, 1689, 1990, ennemies[i], "ennemi")
-						collision_entity_objet(0, 510, 337, 392, ennemies[i], "ennemi")
-						collision_entity_objet(626, 1150, 337, 392, ennemies[i], "ennemi")
+						collision_entity_objet(339, 454, 1080, 1431, ennemies[i], "ennemi", "")
+						collision_entity_objet(704, 813, 1080, 1431, ennemies[i], "ennemi", "")
+						collision_entity_objet(405, 757, 784, 893, ennemies[i], "ennemi", "")
+						collision_entity_objet(466, 506, 1689, 1990, ennemies[i], "ennemi", "")
+						collision_entity_objet(627, 667, 1689, 1990, ennemies[i], "ennemi", "")
+						collision_entity_objet(0, 510, 337, 392, ennemies[i], "ennemi", "")
+						collision_entity_objet(626, 1150, 337, 392, ennemies[i], "ennemi", "")
 						if not background.door_open then
-							collision_entity_objet(520, 616, 327, 402, ennemies[i], "ennemi")
+							collision_entity_objet(520, 616, 327, 402, ennemies[i], "ennemi", "")
 						end
 
 						i := i + 1
@@ -574,7 +622,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	collision_entity_objet(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER; entity: ENTITY; type: STRING)
+	collision_entity_objet(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER; entity: ENTITY; type: STRING; type2: STRING)
 		local
 			plus_petite_difference_x: INTEGER
 			plus_petite_difference_y: INTEGER
@@ -596,12 +644,26 @@ feature {NONE} -- Implementation
 						if type.is_equal ("player") then
 							entity.next_y := y_max + 1
 							entity.stop_up
+							if type2.is_equal ("cain") and clicked.is_equal ("deckard_cain") then
+								action_cain
+								clicked := ""
+							elseif type2.is_equal (clicked) and type2.item(1).is_equal('e') then
+								attaquer_ennemi(type2.item(7).out)
+								clicked := ""
+							end
 						end
 					else
 						entity.y := y_min - 1
 						if type.is_equal ("player") then
 							entity.next_y := y_min - 1
 							entity.stop_down
+							if type2.is_equal ("cain") and clicked.is_equal ("deckard_cain") then
+								action_cain
+								clicked := ""
+							elseif type2.is_equal (clicked) and type2.item(1).is_equal('e') then
+								attaquer_ennemi(type2.item(7).out)
+								clicked := ""
+							end
 						end
 					end
 				else
@@ -610,18 +672,56 @@ feature {NONE} -- Implementation
 						if type.is_equal ("player") then
 							entity.next_x := x_max + 1
 							entity.stop_left
+							if type2.is_equal ("cain") and clicked.is_equal ("deckard_cain") then
+								action_cain
+								clicked := ""
+							elseif type2.is_equal (clicked) and type2.item(1).is_equal('e') then
+								attaquer_ennemi(type2.item(7).out)
+								clicked := ""
+							end
 						end
 					else
 						entity.x := x_min - 1
 						if type.is_equal ("player") then
 							entity.next_x := x_min - 1
 							entity.stop_right
+							if type2.is_equal ("cain") and clicked.is_equal ("deckard_cain") then
+								action_cain
+								clicked := ""
+							elseif type2.is_equal (clicked) and type2.item(1).is_equal('e') then
+								attaquer_ennemi(type2.item(7).out)
+								clicked := ""
+							end
 						end
 					end
 				end
 			end
 		end
 
+	attaquer_ennemi(a_i: STRING)
+		local
+			i: INTEGER
+		do
+			i := a_i.to_integer
+			print("I = ")
+			print(i)
+			print("%N")
+			print("Count = ")
+			print(ennemies.count)
+			print("%N")
+
+			if ennemies[i].hp > 3 then
+				ennemies[i].hp := ennemies[i].hp - 3
+			else
+				if i = ennemies.count then
+					print("oui")
+				end
+				ennemies.go_i_th (i)
+				ennemies.remove
+
+			end
+
+		end
 
 	changer_carte(nouvelle_carte: STRING; a_timestamp: NATURAL_32)
 		-- change la carte
@@ -659,8 +759,6 @@ feature {NONE} -- Implementation
 	on_key_down(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
 		-- Sert seulement à vérifier la position actuel du personnage en appuyant sur la touche "k"
 		-- Ou changer de carte en appuyant sur "m"
-		local
-			i: INTEGER
 		do
 			if not a_key_state.is_repeat then
 				if a_key_state.is_h then
@@ -669,34 +767,6 @@ feature {NONE} -- Implementation
 
 				if a_key_state.is_k then
 					background.door_open := True
-
-					print("Les coordonnees du joueur sont: (")
-					print(player.x)
-					print(", ")
-					print(player.y)
-					print(")%N%N")
-
-					print("Les coordonnees de Deckard Cain sont: (")
-					print(deckard_cain.x)
-					print(", ")
-					print(deckard_cain.y)
-					print(")%N%N")
-
-					if not ennemies.is_empty then
-						from
-							i := 1
-						until
-							i > ennemies.count
-						loop
-							print("Les coordonnees de l'ennemi sont: (")
-							print(ennemies[i].x)
-							print(", ")
-							print(ennemies[i].y)
-							print(")%N%N")
-							i := i + 1
-						end
-
-					end
 
 				end
 				if a_key_state.is_m then -- sert à tester le changement de cartes
@@ -711,8 +781,37 @@ feature {NONE} -- Implementation
 
 	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
 			--  Fait deplacer le player
-
+		local
+			i: INTEGER
 		do
+			clicked := ""
+
+			from
+				i := 1
+			until
+				i > ennemies.count
+			loop
+				if ennemies[i].is_selected then
+					clicked := "ennemi" + i.out
+				end
+				i := i + 1
+			end
+
+			from
+				i := 1
+			until
+				i > levier.count
+			loop
+				if levier[i].is_selected then
+					clicked := "levier" + i.out
+				end
+				i := i + 1
+			end
+
+			if deckard_cain.is_selected then
+				clicked := "deckard_cain"
+			end
+
 			if player.x + (a_mouse_state.x - a_window.surface.width // 2) >= 0 then
 				player.next_x := player.x + (a_mouse_state.x - a_window.surface.width // 2)
 			else
@@ -775,6 +874,32 @@ feature {NONE} -- Implementation
 						i := i + 1
 					end
 
+				end
+
+				if not levier.is_empty then
+					from
+						i:= 1
+					until
+						i > levier.count
+					loop
+						levier[i].is_selected := False
+						if x_carte >= levier[i].x and x_carte <= levier[i].x + levier[i].lever_running_surface.width and y_carte >= levier[i].y and y_carte <= levier[i].y + levier[i].lever_running_surface.height and not selection then
+							levier[i].is_selected := True
+							selection := True
+							if not levier[i].levier_ouvert then
+								levier[i].lever_running_surface := levier[i].surface_levier_selectionner_fermer
+							else
+								levier[i].lever_running_surface := levier[i].surface_levier_selectionner_ouvert
+							end
+						else
+							if not levier[i].levier_ouvert then
+								levier[i].lever_running_surface := levier[i].surface_levier_fermer
+							else
+								levier[i].lever_running_surface := levier[i].surface_levier_ouvert
+							end
+						end
+						i := i + 1
+					end
 				end
 			end
 		end
