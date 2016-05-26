@@ -71,5 +71,8 @@ feature {ANY}
 	return_load_village : BOOLEAN
 	-- Bool pour revenir au menu de new game
 
+	return_highscore : BOOLEAN
+	-- Bool pour revenir au menu principal
+
 
 end

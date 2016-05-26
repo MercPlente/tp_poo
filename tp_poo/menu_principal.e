@@ -29,6 +29,7 @@ feature {NONE} -- Initialization
 		local
 			l_image:IMAGE
 		do
+			a_highscore := ""
 			create l_image.make("menu_resized.jpg")
 			l_image.change_background("menu_resized.jpg",a_window)
 			make_menu (a_window, a_sound, l_image)
@@ -47,7 +48,6 @@ feature {NONE} -- Initialization
 		local
 			l_menu_single_player:MENU_SINGLE_PLAYER
 			l_thread:TP_THREAD
-			highscore : STRING
 		do
 			if a_nb_clicks = 1 and a_mouse_state.is_left_button_pressed then
 				if a_mouse_state.x>=244 and a_mouse_state.x<=548 then
@@ -69,8 +69,10 @@ feature {NONE} -- Initialization
 							l_thread.recu = true
 						loop
 						end
-						highscore := l_thread.highscore
-						print("Meilleur temps: " + highscore + "%N")
+						a_highscore := l_thread.highscore
+						print("Meilleur temps: " + a_highscore + "%N")
+
+						entrer_highscore
 
 					end
 					if a_mouse_state.y>=456 and a_mouse_state.y<=500 then
@@ -98,6 +100,7 @@ feature {ANY}
 	-- Faire afficher et gérer les events du menu
 		local
 			l_menu_single_player: MENU_SINGLE_PLAYER
+			l_highscore: HIGHSCORE
 		do
 			from
 				return_principal := False
@@ -111,18 +114,34 @@ feature {ANY}
 				if menu_single_player_selectioner then
 					create l_menu_single_player.make (window,sound)
 					return_single_player := True
+				elseif highscore then
+					create l_highscore.make (window,sound,a_highscore)
+					return_highscore := True
 				end
 			end
 		end
 
+	a_highscore: STRING
+	-- Le meilleur temps
+
 	entrer_menu_single_player
-	-- Met le entrer_menu_single_player à True pour entrer dans le menu single player en retournant dans la boucle et arrêter les events.
+	-- Met le menu_single_player à True pour entrer dans le menu single player en retournant dans la boucle et arrêter les events.
 		do
 			menu_single_player_selectioner := True
 			game_library.stop
 		end
 
+	entrer_highscore
+	-- Met le highscore à True pour entrer dans le menu highscore en retournant dans la boucle et arrêter les events.
+		do
+			highscore := True
+			game_library.stop
+		end
+
 	menu_single_player_selectioner: BOOLEAN
+	-- Bool pour savoir si on entre dans le prochain menu
+
+	highscore: BOOLEAN
 	-- Bool pour savoir si on entre dans le prochain menu
 
 
