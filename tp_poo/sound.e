@@ -23,7 +23,7 @@ feature {ANY}
 	-- Fonction creant les sources et les audio sound file / ouvre les pistes a jouer
 
 		do
-			create sound.make ("ding.ogg")
+			create sound.make ("swing.wav")
 			create music_intro.make ("intro.ogg")
 			create music_loop.make ("tristram.ogg")
 			create second_music_loop.make ("cath.ogg")
@@ -79,7 +79,7 @@ feature
 			audio_library.update
 		end
 
-	on_space_key
+	son_epee
 	-- Fonction qui vide le buffer, met un son au debut de la source et la fait jouer.
 		do
 			sound_source.stop

@@ -54,8 +54,6 @@ feature {NONE} -- Initialization
 				l_highscore: NATURAL_32
 
 			do
-				print("bonne place")
-				print(message)
 				l_score := message.to_natural_32
 
 

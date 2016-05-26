@@ -740,6 +740,7 @@ feature {NONE} -- Implementation
 			i := a_i.to_integer
 
 			if ennemies[i].hp > 3 then
+				sound.son_epee
 				ennemies[i].hp := ennemies[i].hp - 3
 			else
 				if ennemies[i].is_diablo then
@@ -834,7 +835,6 @@ feature {NONE} -- Implementation
 			if not a_key_state.is_repeat then
 				if a_key_state.is_h then
 					player.hp := 50
-					terminer_jeu(a_timestamp)
 				end
 
 				if a_key_state.is_m then -- sert à tester le changement de cartes
@@ -982,7 +982,6 @@ feature {NONE} -- Implementation
 		do
 			temps:= game_library.time_since_create // 1000
 			temps_string:= temps.out
-			print(temps_string)
 			create reseau.client (temps_string)
 			on_quit(a_timestamp)
 		end
