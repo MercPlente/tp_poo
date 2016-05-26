@@ -760,6 +760,7 @@ feature {NONE} -- Implementation
 			i := a_i.to_integer
 			if not levier[i].levier_ouvert then
 				levier[i].levier_ouvert := True
+				sound.son_levier
 				if i = 1 then
 					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,120,450))
 					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,200,380))
