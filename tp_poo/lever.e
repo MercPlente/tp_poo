@@ -125,8 +125,14 @@ feature
 	has_error : BOOLEAN
 	-- Bool pour eviter les erreurs
 
-	levier_ouvert : BOOLEAN
+	levier_ouvert : BOOLEAN assign set_levier_ouvert
 	-- Boolean pour savoir si le levier est ouvert ou non
+
+	set_levier_ouvert(bool: BOOLEAN)
+	-- changer levier_ouvert
+	do
+		levier_ouvert := bool
+	end
 
 	surface_levier_ouvert : GAME_SURFACE
 	--surface du levier ouvert

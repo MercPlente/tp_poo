@@ -22,6 +22,13 @@ feature {ANY} -- Initialization
 			l_image:IMG_IMAGE_FILE
 			l_image_s:IMG_IMAGE_FILE
 		do
+			if image.is_equal ("diablo.png") then
+				is_diablo := true
+			else
+				is_diablo := False
+			end
+
+			set_last_hit(0)
 			set_hp(a_hp)
 			set_x(a_x)
 			set_y(a_y)
@@ -179,6 +186,17 @@ feature {ANY} -- Initialization
 	surface_down_left_s: GAME_SURFACE
 	-- La surface selectionnée de l'entite qui regarde vers la gauche
 
+	last_hit: INTEGER assign set_last_hit
+	-- Temps du dernier coup de l'ennemi
+
+	set_last_hit(int: INTEGER)
+	-- changer last_hit
+	do
+		last_hit := int
+	end
+
+	is_diablo: BOOLEAN
+	-- Si l'ennemi est diablo
 
 	initialize_animation_coordinate
 			-- Create the `animation_coordinates'
