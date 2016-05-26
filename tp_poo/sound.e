@@ -27,6 +27,7 @@ feature {ANY}
 			create music_intro.make ("intro.ogg")
 			create music_loop.make ("tristram.ogg")
 			create second_music_loop.make ("cath.ogg")
+			create lever_sound.make ("lever.wav")
 
 
 			audio_library.sources_add
@@ -35,12 +36,16 @@ feature {ANY}
 			sound_source:=audio_library.last_source_added
 			audio_library.sources_add
 			second_music_source:=audio_library.last_source_added
+			audio_library.sources_add
+			lever_source :=audio_library.last_source_added
+
 
 			if sound.is_openable and music_intro.is_openable and music_loop.is_openable and second_music_loop.is_openable then
 				sound.open
 				music_intro.open
 				music_loop.open
 				second_music_loop.open
+				lever_sound.open
 
 			else
 				print("Sound files not valid.")
@@ -50,6 +55,7 @@ feature {ANY}
 			Music_Ouvert:music_intro.is_open
 			Music_Loop_Ouvert:music_loop.is_open
 			Second_Musique_Loop_Ouvert:second_music_loop.is_open
+			lever_sound.is_open
 
 		end
 
@@ -90,14 +96,12 @@ feature
 			Source_Ouvert:sound_source.is_playing
 		end
 
-	on_a_key
-		-- Arrete la source de musique principal et demarre la deuxieme
+	son_levier
 		do
-			music_source.stop
-			second_music_source.queue_sound_infinite_loop (second_music_loop)
-			second_music_source.play
-		ensure
-			Source_Ouvert:second_music_source.is_playing
+			lever_source.stop
+			lever_sound.restart
+			lever_source.queue_sound (lever_sound)
+			lever_source.play
 		end
 
 
@@ -105,10 +109,12 @@ sound:AUDIO_SOUND_FILE
 music_intro:AUDIO_SOUND_FILE
 music_loop:AUDIO_SOUND_FILE
 second_music_loop:AUDIO_SOUND_FILE
+lever_sound : AUDIO_SOUND_FILE
 
 sound_source:AUDIO_SOURCE
 music_source:AUDIO_SOURCE
 second_music_source:AUDIO_SOURCE
+lever_source : AUDIO_SOURCE
 
 end
 
