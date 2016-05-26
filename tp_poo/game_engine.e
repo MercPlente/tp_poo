@@ -558,7 +558,7 @@ feature {NONE} -- Implémentation
 					changer_carte("dungeon", a_timestamp)
 				end
 
-				collision_entity_objet(545, 935, 385, 635, player, "player", "", a_timestamp) -- collision fontaine
+				collision_entity_objet(545, 935, 385, 635, player, "player", "f", a_timestamp) -- collision fontaine
 				collision_entity_objet(deckard_cain.x - player.sub_image_width // 2, deckard_cain.x + deckard_cain.sub_image_width - player.sub_image_width // 2,
 											deckard_cain.y - player.sub_image_height // 2, deckard_cain.y + deckard_cain.sub_image_height - player.sub_image_height // 2, player, "player", "cain", a_timestamp) -- collision deckard_cain
 
