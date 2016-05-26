@@ -29,24 +29,19 @@ feature {NONE}
 		-- Construit le menu : image et continue la musique
 		local
 			l_image:IMAGE
-			l_text: TEXT_SURFACE_BLENDED
 		do
 			a_highscore := string_highscore
+			window := a_window
 
 			create font.make ("DIABLO_L.TTF", 27)
 			if font.is_openable then
 				font.open
 			end
 			create l_image.make("highscore.png")
-			l_image.change_background("highscore.png",a_window)
+			l_image.change_background("highscore.png",window)
 			make_menu (a_window, a_sound, l_image)
 			menu_action
-			if font.is_open then
-				create l_text.make (a_highscore, font, create {GAME_COLOR}.make_rgb (255, 255, 255))
-				if not l_text.has_error then
-					a_window.surface.draw_surface (l_text, 50, 50)
-				end
-			end
+
 		end
 
 	on_mouse_pressed(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_surface:GAME_SURFACE)
@@ -84,8 +79,6 @@ feature {ANY}
 
 	menu_action
 	-- Faire afficher et gérer les events du menu
-		local
-			l_menu_new_game: NEW_GAME
 		do
 
 
@@ -94,9 +87,24 @@ feature {ANY}
 			until
 				return_highscore
 			loop
+				return_highscore := False
 				game_library.clear_all_events
 				Precursor
+				game_library.iteration_actions.extend (agent on_iteration(?, window))
 				game_library.launch
+			end
+		end
+
+	on_iteration(a_timestamp:NATURAL_32; a_window:GAME_WINDOW_SURFACED)
+			-- Évenement produites à chaque itération
+		local
+			l_text: TEXT_SURFACE_BLENDED
+		do
+			if font.is_open then
+				create l_text.make (a_highscore, font, create {GAME_COLOR}.make_rgb (255, 255, 255))
+				if not l_text.has_error then
+					a_window.surface.draw_surface (l_text, 50, 50)
+				end
 			end
 		end
 

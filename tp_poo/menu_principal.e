@@ -108,6 +108,7 @@ feature {ANY}
 				return_principal or quitter
 			loop
 				menu_single_player_selectioner := False
+				highscore := False
 				game_library.clear_all_events
 				Precursor
 				game_library.launch
