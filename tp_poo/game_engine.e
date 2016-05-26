@@ -204,7 +204,7 @@ feature {NONE} -- Implementation
 				end
 			end
 
-			if not (l_selection = 0) then
+			if ennemies.valid_index (l_selection) then
 				if font.is_open then
 					create l_text2.make ("HP: "+ennemies[l_selection].hp.out, font_smaller, create {GAME_COLOR}.make_rgb (255, 255, 255))
 					if not l_text2.has_error then
@@ -595,28 +595,19 @@ feature {NONE} -- Implementation
 				if not background.door_open then
 					collision_entity_objet(520, 616, 327, 402, player, "player", "p")	-- collision porte
 				end
+				across ennemies as la_ennemy loop
+					collision_entity_objet(la_ennemy.item.x - player.sub_image_width // 2 - 15, la_ennemy.item.x + la_ennemy.item.sub_image_width - player.sub_image_width // 2 + 15,
+										la_ennemy.item.y - player.sub_image_height // 2 - 15, la_ennemy.item.y + la_ennemy.item.sub_image_height - player.sub_image_height // 2 + 15, player, "player", "ennemi" + la_ennemy.cursor_index.out)
 
-				if not ennemies.is_empty then
-					from
-						i := 1
-					until
-						i > ennemies.count
-					loop
-						collision_entity_objet(ennemies[i].x - player.sub_image_width // 2 - 15, ennemies[i].x + ennemies[i].sub_image_width - player.sub_image_width // 2 + 15,
-											ennemies[i].y - player.sub_image_height // 2 - 15, ennemies[i].y + ennemies[i].sub_image_height - player.sub_image_height // 2 + 15, player, "player", "ennemi" + i.out)
-
-						collision_entity_objet(339, 454, 1080, 1431, ennemies[i], "ennemi", "")
-						collision_entity_objet(704, 813, 1080, 1431, ennemies[i], "ennemi", "")
-						collision_entity_objet(405, 757, 784, 893, ennemies[i], "ennemi", "")
-						collision_entity_objet(466, 506, 1689, 1990, ennemies[i], "ennemi", "")
-						collision_entity_objet(627, 667, 1689, 1990, ennemies[i], "ennemi", "")
-						collision_entity_objet(0, 510, 337, 392, ennemies[i], "ennemi", "")
-						collision_entity_objet(626, 1150, 337, 392, ennemies[i], "ennemi", "")
-						if not background.door_open then
-							collision_entity_objet(520, 616, 327, 402, ennemies[i], "ennemi", "")
-						end
-
-						i := i + 1
+					collision_entity_objet(339, 454, 1080, 1431, la_ennemy.item, "ennemi", "")
+					collision_entity_objet(704, 813, 1080, 1431, la_ennemy.item, "ennemi", "")
+					collision_entity_objet(405, 757, 784, 893, la_ennemy.item, "ennemi", "")
+					collision_entity_objet(466, 506, 1689, 1990, la_ennemy.item, "ennemi", "")
+					collision_entity_objet(627, 667, 1689, 1990, la_ennemy.item, "ennemi", "")
+					collision_entity_objet(0, 510, 337, 392, la_ennemy.item, "ennemi", "")
+					collision_entity_objet(626, 1150, 337, 392, la_ennemy.item, "ennemi", "")
+					if not background.door_open then
+						collision_entity_objet(520, 616, 327, 402, la_ennemy.item, "ennemi", "")
 					end
 				end
 			end
@@ -710,15 +701,17 @@ feature {NONE} -- Implementation
 			print(ennemies.count)
 			print("%N")
 
+			if i = ennemies.count then
+				print("Egal!%N")
+			end
+
 			if ennemies[i].hp > 3 then
 				ennemies[i].hp := ennemies[i].hp - 3
 			else
-				if i = ennemies.count then
-					print("oui")
+				if not ennemies.is_empty then
+					ennemies.go_i_th (i)
+					ennemies.remove
 				end
-				ennemies.go_i_th (i)
-				ennemies.remove
-
 			end
 
 		end
