@@ -1,6 +1,6 @@
 note
 	description: "Classe contenant l'information que n'importe quel personnage possede ."
-	author: ""
+	author: "Marc Plante,Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -13,7 +13,7 @@ inherit
 feature {ANY}
 
 	surface:GAME_SURFACE
-			-- The surface to use when drawing `Current'
+			-- La surface lorsque l'on dessine l'entité
 
 	turn_up
 	-- la surface lorsqu'on va vers le haut
@@ -67,28 +67,28 @@ feature {ANY}
 feature {NONE} -- constants
 
 	surface_up:GAME_SURFACE
-	-- La surface de l'entite qui regarde vers le haut
+	-- La surface de l'entité qui regarde vers le haut
 
 	surface_down:GAME_SURFACE
-	-- La surface de l'entite qui regarde vers le bas
+	-- La surface de l'entité qui regarde vers le bas
 
 	surface_right: GAME_SURFACE
-	-- -- La surface de l'entite qui regarde vers la droite
+	-- -- La surface de l'entité qui regarde vers la droite
 
 	surface_left: GAME_SURFACE
-	-- -- La surface de l'entite qui regarde vers la gauche
+	-- -- La surface de l'entité qui regarde vers la gauche
 
 	surface_up_right:GAME_SURFACE
-	-- La surface de l'entite qui regarde vers le haut
+	-- La surface de l'entité qui regarde vers le haut
 
 	surface_down_right:GAME_SURFACE
-	-- La surface de l'entite qui regarde vers le bas
+	-- La surface de l'entité qui regarde vers le bas
 
 	surface_up_left: GAME_SURFACE
-	-- -- La surface de l'entite qui regarde vers la droite
+	-- -- La surface de l'entité qui regarde vers la droite
 
 	surface_down_left: GAME_SURFACE
-	-- -- La surface de l'entite qui regarde vers la gauche
+	-- -- La surface de l'entité qui regarde vers la gauche
 
 	surface_width:INTEGER
 	-- La largeur de la surface

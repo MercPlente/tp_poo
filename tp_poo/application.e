@@ -25,7 +25,7 @@ feature {NONE} -- Initialisation
 			l_menu:detachable MENU_DEPART
 		do
 			game_library.enable_video -- Active les fonctionnalitees video
-			text_library.enable_text	-- Make it possible to draw text
+			text_library.enable_text	-- Pour écrire du texte
 			image_file_library.enable_image (true, false, false)
 			audio_library.enable_sound
 			create l_menu.make

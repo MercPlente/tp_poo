@@ -1,6 +1,6 @@
 note
 	description: "Classe pour aider le contrôle de la camera."
-	author: "Marc Plante"
+	author: "Marc Plante,Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -8,7 +8,7 @@ class
 	BACKGROUND
 
 	inherit
-	GAME_LIBRARY_SHARED		-- To use `game_library'
+	GAME_LIBRARY_SHARED		-- Pour Utilliser `game_library'
 	IMG_LIBRARY_SHARED		-- Pour Utilliser `image_file_library'
 	EXCEPTIONS
 
@@ -18,7 +18,7 @@ create
 feature {ANY}
 
 	make_background(a_window:GAME_WINDOW_SURFACED)
-	-- make pour creer une nouvelle camera avec la surface du jeu
+	-- constructeur pour creer les fonds d'écran du jeu
 		local
 			l_image: IMG_IMAGE_FILE
 			l_image2: IMG_IMAGE_FILE
@@ -86,7 +86,7 @@ feature {ANY}
 		end
 
 	has_error : BOOLEAN
-	-- Bool pour eviter les erreurs
+	-- Bool pour éviter les erreurs
 
 	current_map: STRING assign set_map_string
 	-- Le nom de la carte actuelle

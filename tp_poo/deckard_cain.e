@@ -1,6 +1,6 @@
 note
 	description: "Classe permettant de creer et gerer deckard_cain"
-	author: ""
+	author: "Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -17,7 +17,7 @@ create
 feature {ANY}
 
 	new_cain(a_x:INTEGER;a_y:INTEGER)
-			-- Initialization of `Current'
+			-- constructeur de Deckard Cain
 		local
 			l_image:IMG_IMAGE_FILE
 			l_image_s:IMG_IMAGE_FILE
@@ -152,36 +152,36 @@ feature {ANY}
 		end
 
 	surface_up_s:GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers le haut
+	-- La surface selectionnée de l'entité qui regarde vers le haut
 
 	surface_down_s:GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers le bas
+	-- La surface selectionnée de l'entité qui regarde vers le bas
 
 	surface_right_s: GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers la droite
+	-- La surface selectionnée de l'entité qui regarde vers la droite
 
 	surface_left_s: GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers la gauche
+	-- La surface selectionnée de l'entité qui regarde vers la gauche
 
 	surface_up_right_s:GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers le haut
+	-- La surface selectionnée de l'entité qui regarde vers le haut
 
 	surface_down_right_s:GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers le bas
+	-- La surface selectionnée de l'entité qui regarde vers le bas
 
 	surface_up_left_s: GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers la droite
+	-- La surface selectionnée de l'entité qui regarde vers la droite
 
 	surface_down_left_s: GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers la gauche
+	-- La surface selectionnée de l'entité qui regarde vers la gauche
 
 
 
 	initialize_animation_coordinate
-			-- Create the `animation_coordinates'
+			-- creation de la liste `animation_coordinates'
 		do
 			create {ARRAYED_LIST[TUPLE[x,y:INTEGER]]} animation_coordinates.make(4)
-			animation_coordinates.extend ([surface.width // 3, 0])	-- Be sure to place the image standing still first
+			animation_coordinates.extend ([surface.width // 3, 0])
 			animation_coordinates.extend ([0, 0])
 			animation_coordinates.extend ([(surface.width // 3) * 2, 0])
 			animation_coordinates.extend ([0, 0])

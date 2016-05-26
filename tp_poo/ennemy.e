@@ -1,6 +1,6 @@
 note
 	description: "Classe permettant de creer et gerer les ennemies dans l'application."
-	author: "Marc Plante"
+	author: "Marc Plante,Jérémie Daem"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -163,28 +163,28 @@ feature {ANY} -- Initialization
 		end
 
 	surface_up_s:GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers le haut
+	-- La surface selectionnée de l'entité qui regarde vers le haut
 
 	surface_down_s:GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers le bas
+	-- La surface selectionnée de l'entité qui regarde vers le bas
 
 	surface_right_s: GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers la droite
+	-- La surface selectionnée de l'entité qui regarde vers la droite
 
 	surface_left_s: GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers la gauche
+	-- La surface selectionnée de l'entité qui regarde vers la gauche
 
 	surface_up_right_s:GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers le haut
+	-- La surface selectionnée de l'entité qui regarde vers le haut
 
 	surface_down_right_s:GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers le bas
+	-- La surface selectionnée de l'entité qui regarde vers le bas
 
 	surface_up_left_s: GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers la droite
+	-- La surface selectionnée de l'entité qui regarde vers la droite
 
 	surface_down_left_s: GAME_SURFACE
-	-- La surface selectionnée de l'entite qui regarde vers la gauche
+	-- La surface selectionnée de l'entité qui regarde vers la gauche
 
 	last_hit: INTEGER assign set_last_hit
 	-- Temps du dernier coup de l'ennemi
@@ -199,7 +199,7 @@ feature {ANY} -- Initialization
 	-- Si l'ennemi est diablo
 
 	initialize_animation_coordinate
-			-- Create the `animation_coordinates'
+			-- Création de la liste `animation_coordinates'
 		do
 			create {ARRAYED_LIST[TUPLE[x,y:INTEGER]]} animation_coordinates.make(4)
 			animation_coordinates.extend ([surface.width // 3, 0])	-- Be sure to place the image standing still first

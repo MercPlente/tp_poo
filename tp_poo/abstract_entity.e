@@ -1,5 +1,5 @@
 note
-	description: "Classe abstraite contenant les attribues / setter / iteration des entitées."
+	description: "Classe abstraite contenant les attributs / setter / iteration des entitées."
 	author: "Marc Plante"
 	date: "$Date$"
 	revision: "$Revision$"
@@ -10,8 +10,8 @@ deferred class
 feature {ANY}
 
 	update(a_timestamp:NATURAL_32)
-			-- Update the surface depending on the present `a_timestamp'.
-			-- Each 100 ms, the image change; each 10ms `Current' is moving
+		-- Rafraîchie la surface selon le `a_timestamp'
+		-- Chaque 100 ms , l'image change; chaque 10 ms l'entité bouge (s'il y a déplacement)
 		local
 			l_coordinate:TUPLE[x,y:INTEGER]
 			l_delta_time:NATURAL_32
@@ -120,25 +120,25 @@ feature {ANY}
 		end
 
 	going_left:BOOLEAN
-			-- Is `Current' moving left
+			-- L'entité bouge a gauche
 
 	going_right:BOOLEAN
-			-- Is `Current' moving right
+			-- L'entité bouge a droite
 
 	going_up:BOOLEAN
-			-- Is `Current' moving up
+			-- L'entité bouge vers le haut
 
 	going_down:BOOLEAN
-			-- Is `Current' moving down
+			-- L'entité bouge vers le bas
 
 	next_x:INTEGER assign set_next_x
-			-- Where Player is going (x)
+			-- L'endroit où le joueur s'en va '(x)'
 
 	next_y:INTEGER assign set_next_y
-			-- Where Player is going (y)
+			-- L'endroit où le joueur s'en va '(y)'
 
 	set_next_x(a_x:INTEGER)
-			-- Assign the value of `next_x' with `a_x'
+		-- Assigne la valeur de `next_x' avec `a_x'
 		require
 			Is_x_ok: a_x >= 0
 		do
@@ -148,7 +148,7 @@ feature {ANY}
 		end
 
 	set_next_y(a_y:INTEGER)
-			-- Assign the value of `next_y' with `a_y'
+			-- Assigne la valeur de`next_y' avec `a_y'
 		require
 			Is_y_ok: a_y >= 0
 		do
@@ -160,16 +160,16 @@ feature {ANY}
 
 
 	hp:INTEGER assign set_hp
-		-- hit point de l'entite
+		-- points de vie de l'entité
 
 	x:INTEGER assign set_x
-			-- Vertical position of `Current'
+			-- Position horizontale de l'entité
 
 	y:INTEGER assign set_y
-			-- Horizontal position of `Current'
+			-- Position verticale de l'entité
 
 	set_hp(a_hp:INTEGER)
-			-- Assign the value of `hp' with `a_hp'
+			-- Assigne la valeur de `hp' avec `a_hp'
 		require
 			correct : a_hp >= 0
 		do
@@ -180,7 +180,7 @@ feature {ANY}
 		end
 
 	set_x(a_x:INTEGER)
-			-- Assign the value of `x' with `a_x'
+			-- Assigne la valeur de `x' avec `a_x'
 		require
 			correct : a_x >= 0
 		do
@@ -191,7 +191,7 @@ feature {ANY}
 		end
 
 	set_y(a_y:INTEGER)
-			-- Assign the value of `y' with `a_y'
+			-- Assigne la valeur de `y' avec `a_y'
 		require
 			correct : a_y >= 0
 		do
@@ -202,93 +202,93 @@ feature {ANY}
 		end
 
 	sub_image_x, sub_image_y:INTEGER
-			-- Position of the portion of image to show inside `surface'
+			-- Position de la portion de l'image visible de `surface'
 
 	sub_image_width, sub_image_height:INTEGER
-			-- Dimension of the portion of image to show inside `surface'
+			--Dimension de la portion de l'image visible de `surface'
 
 	has_error:BOOLEAN
-			-- Is an error happen when initializing the `surface'
+			-- S'il y a une erreur lors de la création de `surface'
 
 	go_left(a_timestamp:NATURAL_32)
-			-- Make `Current' starting to move left
+			-- Fait déplacer l'entité vers la gauche
 		do
 			old_timestamp := a_timestamp
 			going_left := True
 		end
 
 	go_right(a_timestamp:NATURAL_32)
-			-- Make `Current' starting to move right
+			-- Fait déplacer l'entité vers la droite
 		do
 			old_timestamp := a_timestamp
 			going_right := True
 		end
 
 	stop_left
-			-- Make `Current' stop moving to the left
+			-- Arrête le déplacement vers la gauche de l'entité
 		do
 			going_left := False
 			if not going_right then
-				sub_image_x := animation_coordinates.first.x	-- Place the image standing still
-				sub_image_y := animation_coordinates.first.y	-- Place the image standing still
+				sub_image_x := animation_coordinates.first.x
+				sub_image_y := animation_coordinates.first.y
 			end
 		end
 
 	stop_right
-			-- Make `Current' stop moving to the right
+			-- Arrête le déplacement vers la droite de l'entité
 		do
 			going_right := False
 			if not going_left then
-				sub_image_x := animation_coordinates.first.x	-- Place the image standing still
-				sub_image_y := animation_coordinates.first.y	-- Place the image standing still
+				sub_image_x := animation_coordinates.first.x
+				sub_image_y := animation_coordinates.first.y
 			end
 		end
 
 	go_up(a_timestamp:NATURAL_32)
-			-- Make `Current' starting to move left
+			-- Fait déplacer l'entité vers le haut
 		do
 			old_timestamp := a_timestamp
 			going_up := True
 		end
 
 	go_down(a_timestamp:NATURAL_32)
-			-- Make `Current' starting to move right
+			-- Arrête le déplacement vers le bas de l'entité
 		do
 			old_timestamp := a_timestamp
 			going_down := True
 		end
 
 	stop_up
-			-- Make `Current' stop moving to the left
+			-- Arrête le déplacement vers le haut de l'entité
 		do
 			going_up := False
 			if not going_right then
-				sub_image_x := animation_coordinates.first.x	-- Place the image standing still
-				sub_image_y := animation_coordinates.first.y	-- Place the image standing still
+				sub_image_x := animation_coordinates.first.x
+				sub_image_y := animation_coordinates.first.y
 			end
 		end
 
 	stop_down
-			-- Make `Current' stop moving to the right
+			-- Arrête le déplacement vers la droite de l'entité
 		do
 			going_down := False
 			if not going_left then
-				sub_image_x := animation_coordinates.first.x	-- Place the image standing still
-				sub_image_y := animation_coordinates.first.y	-- Place the image standing still
+				sub_image_x := animation_coordinates.first.x
+				sub_image_y := animation_coordinates.first.y
 			end
 		end
 
 	animation_coordinates:LIST[TUPLE[x,y:INTEGER]]
-			-- Every coordinate of portion of images in `surface'
+			-- Liste de toutes les parties de `surface'
 
 	old_timestamp:NATURAL_32
-			-- When appen the last movement (considering `movement_delta')
+			-- Le moment du dernier mouvement (considérant `movement_delta')
 
-feature {NONE} -- constants
+feature {NONE} -- Constante
 
 	movement_delta:NATURAL_32 = 10
-			-- The delta time between each movement of `Current'
+			-- Le temps delta de l'entité entre chaque mouvement
 
 	animation_delta:NATURAL_32 = 100
-			-- The delta time between each animation of `Current'
+			-- Le temps delta de l'entité entre chaque animation
 end

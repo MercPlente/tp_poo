@@ -18,7 +18,7 @@ create
 feature {NONE} -- Initialization
 
 	make_run (a_window:GAME_WINDOW_SURFACED;a_sound:SOUND)
-			-- Initialization of `Current'
+			-- Constructeur du game_engine
 		do
 			clicked := ""
 			sound := a_sound
@@ -49,10 +49,10 @@ feature {NONE} -- Initialization
 			has_error := background.has_error
 		end
 
-feature -- Access
+feature
 
 	run (a_window:GAME_WINDOW_SURFACED)
-			-- Create ressources and launch the game
+			-- Creation des ressources du jeu
 		do
 
 			player.y := 400
@@ -63,7 +63,6 @@ feature -- Access
 			game_library.iteration_actions.extend (agent on_death)
 			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
 			game_library.quit_signal_actions.extend (agent on_quit)
-			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
 			a_window.mouse_button_pressed_actions.extend (agent on_mouse_down(?, ?, ?, a_window))	-- When a mouse button is pressed
 			a_window.mouse_motion_actions.extend (agent on_mouse_motion(?, ?, ?, ?) ) -- When a mouse moves on screen
 			game_library.iteration_actions.extend (agent on_iteration(?, a_window))
@@ -71,18 +70,18 @@ feature -- Access
 		end
 
 	ennemies: LIST[ENNEMY]
-			-- List of ennemies
+			-- Liste des ennemies
 
 	levier: LIST[LEVER]
 
 	player:PLAYER
-			-- The main character of the game
+			-- Le joueur
 
 	has_error : BOOLEAN
-		-- Verifie s'il n'y a pas d'erreur avant de commencer le jeu
+		-- Vérifie s'il n'y a pas d'erreur avant de commencer le jeu
 
 	background:BACKGROUND
-		-- La classe background pour utiliser la camera
+		-- La classe background pour modifier le fond d'écran
 
 	ecran:GAME_WINDOW_SURFACED
 	-- La surface en cours
@@ -100,19 +99,19 @@ feature -- Access
 	-- deckard cain (npc)
 
 	font: TEXT_FONT
-	-- Used to draw text
+	-- Pour écrire du texte
 
 	font_smaller: TEXT_FONT
-	-- Used to draw text
+	-- Pour écrire du texte
 
 	clicked: STRING
 	-- Objet cliqué
 
 
-feature {NONE} -- Implementation
+feature {NONE} -- Implémentation
 
 	on_iteration(a_timestamp:NATURAL_32; a_window:GAME_WINDOW_SURFACED)
-			-- Event that is launch at each iteration.
+			-- Évenements produites à chaque itération
 		local
 			i:INTEGER
 			l_text: TEXT_SURFACE_BLENDED
@@ -124,9 +123,8 @@ feature {NONE} -- Implementation
 			l_text_levier2: TEXT_SURFACE_BLENDED
 		do
 			l_selection := 0
-			player.update (a_timestamp)	-- Update Player animation and coordinate
+			player.update (a_timestamp)
 
-			-- Draw the scene
 			a_window.surface.draw_sub_surface (background.game_running_surface, (player.x + player.sub_image_width // 2), (player.y + player.sub_image_height // 2), 800, 600, 0, 0)
 
 			if not levier.is_empty and background.current_map.is_equal ("dungeon") then
@@ -256,7 +254,6 @@ feature {NONE} -- Implementation
 				end
 			end
 
-			-- Update modification in the screen
 			a_window.update
 		end
 
@@ -344,6 +341,7 @@ feature {NONE} -- Implementation
 		end
 
 	collisions_ennemies(a_i : INTEGER) : LIST [INTEGER]
+		-- Vérifie s'il y une collision avec un ennemi
 		local
 			direction_x : INTEGER
 			direction_y : INTEGER
@@ -409,6 +407,7 @@ feature {NONE} -- Implementation
 		end
 
 	collision_retour(x_gauche, x_droite, y_haut, y_bas: BOOLEAN) : LIST [INTEGER]
+		-- Retourne quel chemin l'ennemi peut prendre
 		local
 			chemin: LIST [INTEGER]
 		do
@@ -494,6 +493,7 @@ feature {NONE} -- Implementation
 		end
 
 	action_cain
+	-- Met la vie du joueur au maximum
 		do
 			player.hp := 50
 		end
@@ -621,6 +621,7 @@ feature {NONE} -- Implementation
 		end
 
 	collision_entity_objet(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER; entity: ENTITY; type: STRING; type2: STRING; a_timestamp:NATURAL_32)
+		-- Vérifie les collisions de deux objets et agit en conséquence
 		local
 			plus_petite_difference_x: INTEGER
 			plus_petite_difference_y: INTEGER
@@ -721,6 +722,7 @@ feature {NONE} -- Implementation
 		end
 
 	attaquer_joueur(a_i: STRING; a_timestamp: NATURAL_32)
+		-- Un ennemi qui attaque le joueur
 		local
 			i: INTEGER
 			int_timestamp: INTEGER
@@ -734,6 +736,7 @@ feature {NONE} -- Implementation
 		end
 
 	attaquer_ennemi(a_i: STRING; a_timestamp: NATURAL_32)
+		-- le joueur attaque l'ennemi
 		local
 			i: INTEGER
 		do
@@ -754,6 +757,7 @@ feature {NONE} -- Implementation
 		end
 
 	action_levier(a_i: STRING)
+	 -- Action lorsque le levier est activé
 		local
 			i: INTEGER
 		do
@@ -828,26 +832,6 @@ feature {NONE} -- Implementation
 			end
 		end
 
-
-	on_key_down(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE)
-		-- Sert seulement à vérifier la position actuel du personnage en appuyant sur la touche "k"
-		-- Ou changer de carte en appuyant sur "m"
-		do
-			if not a_key_state.is_repeat then
-				if a_key_state.is_h then
-					player.hp := 50
-				end
-
-				if a_key_state.is_m then -- sert à tester le changement de cartes
-					if background.current_map.is_equal("village") then
-						changer_carte("dungeon", a_timestamp)
-					elseif background.current_map.is_equal("dungeon") then
-						changer_carte("village", a_timestamp)
-					end
-				end
-			end
-		end
-
 	on_mouse_down(a_timestamp: NATURAL_32; a_mouse_state: GAME_MOUSE_BUTTON_PRESSED_STATE; a_nb_clicks: NATURAL_8; a_window:GAME_WINDOW_SURFACED)
 			--  Fait deplacer le player
 		local
@@ -911,6 +895,7 @@ feature {NONE} -- Implementation
 		end
 
 	on_mouse_motion (a_timestamp: NATURAL_32; a_mouse_state:GAME_MOUSE_MOTION_STATE; int1: INTEGER; int2: INTEGER)
+		-- Événements lorsque la souris bouge dans l'écran
 		local
 			x_carte: INTEGER
 			y_carte: INTEGER
@@ -988,6 +973,7 @@ feature {NONE} -- Implementation
 		end
 
 	on_death(a_timestamp: NATURAL_32)
+		-- Si le joueur meurt
 		do
 			if player.hp = 0 then
 				on_quit(a_timestamp)
@@ -995,9 +981,9 @@ feature {NONE} -- Implementation
 		end
 
 	on_quit(a_timestamp: NATURAL_32)
-			-- This method is called when the quit signal is send to the application (ex: window X button pressed).
+			-- Cette méthode sert à retourner au menu lorsque le x de la fenêtre est appuyé
 		do
-			game_library.stop  -- Stop the controller loop (allow game_library.launch to return)
+			game_library.stop
 			sound.play_music ("beginning")
 		end
 
