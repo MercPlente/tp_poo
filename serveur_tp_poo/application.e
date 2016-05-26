@@ -47,7 +47,7 @@ feature {NONE} -- Initialization
 			do
 				l_score := message.to_natural_32
 
-				int = 1
+				int := 1
 
 				create l_highscore_file.make_open_read_write ("highscore.txt")
 				l_highscore_file.read_stream (l_highscore_file.count)

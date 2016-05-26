@@ -60,6 +60,7 @@ feature -- Access
 			player.next_y := 400
 			player.next_x := 200
 			player.hp := 50
+			game_library.iteration_actions.extend (agent on_death)
 			game_library.iteration_actions.extend (agent sound.on_iteration_sound)
 			game_library.quit_signal_actions.extend (agent on_quit)
 			a_window.key_pressed_actions.extend (agent on_key_down(?, ?))
@@ -495,7 +496,6 @@ feature {NONE} -- Implementation
 	action_cain
 		do
 			player.hp := 50
-			print("Action cain!%N")
 		end
 
 	collisions_village(a_timestamp: NATURAL_32)
@@ -551,17 +551,15 @@ feature {NONE} -- Implementation
 					changer_carte("dungeon", a_timestamp)
 				end
 
-				collision_entity_objet(545, 935, 385, 635, player, "player", "") -- collision fontaine
+				collision_entity_objet(545, 935, 385, 635, player, "player", "", a_timestamp) -- collision fontaine
 				collision_entity_objet(deckard_cain.x - player.sub_image_width // 2, deckard_cain.x + deckard_cain.sub_image_width - player.sub_image_width // 2,
-											deckard_cain.y - player.sub_image_height // 2, deckard_cain.y + deckard_cain.sub_image_height - player.sub_image_height // 2, player, "player", "cain") -- collision deckard_cain
+											deckard_cain.y - player.sub_image_height // 2, deckard_cain.y + deckard_cain.sub_image_height - player.sub_image_height // 2, player, "player", "cain", a_timestamp) -- collision deckard_cain
 
 			end
 		end
 
 	collisions_dungeon(a_timestamp: NATURAL_32)
 		-- vérifie si le personnage est en collision avec un obstacle sur la carte "dungeon"
-		local
-			i: INTEGER
 		do
 			if background.current_map.is_equal ("dungeon") then
 
@@ -585,35 +583,44 @@ feature {NONE} -- Implementation
 					player.stop_down
 				end
 
-				collision_entity_objet(329, 444, 1090, 1441, player, "player", "b") -- collision bibli
-				collision_entity_objet(694, 803, 1090, 1441, player, "player", "b") -- collision bibli
-				collision_entity_objet(395, 747, 794, 903, player, "player", "b") -- collision bibli
-				collision_entity_objet(456, 516, 1679, 2000, player, "player", "m")	-- collision mur
-				collision_entity_objet(617, 677, 1679, 2000, player, "player", "m")	-- collision mur
-				collision_entity_objet(0, 520, 327, 402, player, "player", "m")	-- collision mur
-				collision_entity_objet(616, 1150, 327, 402, player, "player", "m")	-- collision mur
+				collision_entity_objet(329, 444, 1090, 1441, player, "player", "b", a_timestamp) -- collision bibli
+				collision_entity_objet(694, 803, 1090, 1441, player, "player", "b", a_timestamp) -- collision bibli
+				collision_entity_objet(395, 747, 794, 903, player, "player", "b", a_timestamp) -- collision bibli
+				collision_entity_objet(456, 516, 1679, 2000, player, "player", "m", a_timestamp)	-- collision mur
+				collision_entity_objet(617, 677, 1679, 2000, player, "player", "m", a_timestamp)	-- collision mur
+				collision_entity_objet(0, 520, 327, 402, player, "player", "m", a_timestamp)	-- collision mur
+				collision_entity_objet(616, 1150, 327, 402, player, "player", "m", a_timestamp)	-- collision mur
 				if not background.door_open then
-					collision_entity_objet(520, 616, 327, 402, player, "player", "p")	-- collision porte
+					collision_entity_objet(520, 616, 327, 402, player, "player", "p", a_timestamp)	-- collision porte
 				end
+
+				across levier as la_levier loop
+					collision_entity_objet(la_levier.item.x - player.sub_image_width // 2 - 10, la_levier.item.x + la_levier.item.lever_running_surface.width - player.sub_image_width // 2 + 10,
+										la_levier.item.y - player.sub_image_height // 2 - 10, la_levier.item.y + la_levier.item.lever_running_surface.height - player.sub_image_height // 2 + 10,
+										player, "player", "levier" + la_levier.cursor_index.out, a_timestamp)	-- collision levier
+
+				end
+
 				across ennemies as la_ennemy loop
 					collision_entity_objet(la_ennemy.item.x - player.sub_image_width // 2 - 15, la_ennemy.item.x + la_ennemy.item.sub_image_width - player.sub_image_width // 2 + 15,
-										la_ennemy.item.y - player.sub_image_height // 2 - 15, la_ennemy.item.y + la_ennemy.item.sub_image_height - player.sub_image_height // 2 + 15, player, "player", "ennemi" + la_ennemy.cursor_index.out)
+										la_ennemy.item.y - player.sub_image_height // 2 - 15, la_ennemy.item.y + la_ennemy.item.sub_image_height - player.sub_image_height // 2 + 15,
+										player, "player", "ennemi" + la_ennemy.cursor_index.out, a_timestamp) -- collision ennemi
 
-					collision_entity_objet(339, 454, 1080, 1431, la_ennemy.item, "ennemi", "")
-					collision_entity_objet(704, 813, 1080, 1431, la_ennemy.item, "ennemi", "")
-					collision_entity_objet(405, 757, 784, 893, la_ennemy.item, "ennemi", "")
-					collision_entity_objet(466, 506, 1689, 1990, la_ennemy.item, "ennemi", "")
-					collision_entity_objet(627, 667, 1689, 1990, la_ennemy.item, "ennemi", "")
-					collision_entity_objet(0, 510, 337, 392, la_ennemy.item, "ennemi", "")
-					collision_entity_objet(626, 1150, 337, 392, la_ennemy.item, "ennemi", "")
+					collision_entity_objet(339, 454, 1080, 1431, la_ennemy.item, "ennemi", "", a_timestamp)
+					collision_entity_objet(704, 813, 1080, 1431, la_ennemy.item, "ennemi", "", a_timestamp)
+					collision_entity_objet(405, 757, 784, 893, la_ennemy.item, "ennemi", "", a_timestamp)
+					collision_entity_objet(466, 506, 1689, 1990, la_ennemy.item, "ennemi", "", a_timestamp)
+					collision_entity_objet(627, 667, 1689, 1990, la_ennemy.item, "ennemi", "", a_timestamp)
+					collision_entity_objet(0, 510, 337, 392, la_ennemy.item, "ennemi", "", a_timestamp)
+					collision_entity_objet(626, 1150, 337, 392, la_ennemy.item, "ennemi", "", a_timestamp)
 					if not background.door_open then
-						collision_entity_objet(520, 616, 327, 402, la_ennemy.item, "ennemi", "")
+						collision_entity_objet(520, 616, 327, 402, la_ennemy.item, "ennemi", "", a_timestamp)
 					end
 				end
 			end
 		end
 
-	collision_entity_objet(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER; entity: ENTITY; type: STRING; type2: STRING)
+	collision_entity_objet(x_min: INTEGER; x_max: INTEGER; y_min: INTEGER; y_max: INTEGER; entity: ENTITY; type: STRING; type2: STRING; a_timestamp:NATURAL_32)
 		local
 			plus_petite_difference_x: INTEGER
 			plus_petite_difference_y: INTEGER
@@ -635,11 +642,17 @@ feature {NONE} -- Implementation
 						if type.is_equal ("player") then
 							entity.next_y := y_max + 1
 							entity.stop_up
+							if type2.item(1).is_equal('e') then
+								attaquer_joueur(type2.item(7).out, a_timestamp)
+							end
 							if type2.is_equal ("cain") and clicked.is_equal ("deckard_cain") then
 								action_cain
 								clicked := ""
 							elseif type2.is_equal (clicked) and type2.item(1).is_equal('e') then
-								attaquer_ennemi(type2.item(7).out)
+								attaquer_ennemi(type2.item(7).out, a_timestamp)
+								clicked := ""
+							elseif type2.is_equal (clicked) and type2.item(1).is_equal('l') then
+								action_levier(type2.item(7).out)
 								clicked := ""
 							end
 						end
@@ -648,11 +661,17 @@ feature {NONE} -- Implementation
 						if type.is_equal ("player") then
 							entity.next_y := y_min - 1
 							entity.stop_down
+							if type2.item(1).is_equal('e') then
+								attaquer_joueur(type2.item(7).out, a_timestamp)
+							end
 							if type2.is_equal ("cain") and clicked.is_equal ("deckard_cain") then
 								action_cain
 								clicked := ""
 							elseif type2.is_equal (clicked) and type2.item(1).is_equal('e') then
-								attaquer_ennemi(type2.item(7).out)
+								attaquer_ennemi(type2.item(7).out, a_timestamp)
+								clicked := ""
+							elseif type2.is_equal (clicked) and type2.item(1).is_equal('l') then
+								action_levier(type2.item(7).out)
 								clicked := ""
 							end
 						end
@@ -663,11 +682,17 @@ feature {NONE} -- Implementation
 						if type.is_equal ("player") then
 							entity.next_x := x_max + 1
 							entity.stop_left
+							if type2.item(1).is_equal('e') then
+								attaquer_joueur(type2.item(7).out, a_timestamp)
+							end
 							if type2.is_equal ("cain") and clicked.is_equal ("deckard_cain") then
 								action_cain
 								clicked := ""
 							elseif type2.is_equal (clicked) and type2.item(1).is_equal('e') then
-								attaquer_ennemi(type2.item(7).out)
+								attaquer_ennemi(type2.item(7).out, a_timestamp)
+								clicked := ""
+							elseif type2.is_equal (clicked) and type2.item(1).is_equal('l') then
+								action_levier(type2.item(7).out)
 								clicked := ""
 							end
 						end
@@ -676,11 +701,17 @@ feature {NONE} -- Implementation
 						if type.is_equal ("player") then
 							entity.next_x := x_min - 1
 							entity.stop_right
+							if type2.item(1).is_equal('e') then
+								attaquer_joueur(type2.item(7).out, a_timestamp)
+							end
 							if type2.is_equal ("cain") and clicked.is_equal ("deckard_cain") then
 								action_cain
 								clicked := ""
 							elseif type2.is_equal (clicked) and type2.item(1).is_equal('e') then
-								attaquer_ennemi(type2.item(7).out)
+								attaquer_ennemi(type2.item(7).out, a_timestamp)
+								clicked := ""
+							elseif type2.is_equal (clicked) and type2.item(1).is_equal('l') then
+								action_levier(type2.item(7).out)
 								clicked := ""
 							end
 						end
@@ -689,30 +720,77 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	attaquer_ennemi(a_i: STRING)
+	attaquer_joueur(a_i: STRING; a_timestamp: NATURAL_32)
+		local
+			i: INTEGER
+			int_timestamp: INTEGER
+		do
+			i := a_i.to_integer
+			int_timestamp := a_timestamp.to_integer_32
+			if (int_timestamp // 1000) - ennemies[i].last_hit > 0 then
+				ennemies[i].last_hit := int_timestamp // 1000
+				player.hp := player.hp - 1
+			end
+		end
+
+	attaquer_ennemi(a_i: STRING; a_timestamp: NATURAL_32)
 		local
 			i: INTEGER
 		do
 			i := a_i.to_integer
-			print("I = ")
-			print(i)
-			print("%N")
-			print("Count = ")
-			print(ennemies.count)
-			print("%N")
-
-			if i = ennemies.count then
-				print("Egal!%N")
-			end
 
 			if ennemies[i].hp > 3 then
 				ennemies[i].hp := ennemies[i].hp - 3
 			else
-				if not ennemies.is_empty then
+				if ennemies[i].is_diablo then
+					terminer_jeu(a_timestamp)
+				elseif not ennemies.is_empty then
 					ennemies.go_i_th (i)
 					ennemies.remove
 				end
 			end
+
+		end
+
+	action_levier(a_i: STRING)
+		local
+			i: INTEGER
+		do
+			i := a_i.to_integer
+			if not levier[i].levier_ouvert then
+				levier[i].levier_ouvert := True
+				if i = 1 then
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,120,450))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,200,380))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,150,400))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,70,550))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png","monstre3_s.png",10,80,380))
+				elseif i = 2 then
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,120,1825))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,200,1755))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,150,1775))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,70,1900))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre4.png","monstre4_s.png",10,80,1755))
+				elseif i = 3 then
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,1080,450))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,1160,380))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,1110,400))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,1030,550))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre4.png","monstre4_s.png",10,1040,380))
+				elseif i = 4 then
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,1080,1825))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,1160,1755))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre1.png","monstre1_s.png",5,1110,1775))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre2.png","monstre2_s.png",5,1030,1900))
+					ennemies.extend(create {ENNEMY}.new_ennemy("monstre3.png","monstre3_s.png",10,1040,1755))
+				end
+				if levier[1].levier_ouvert and levier[2].levier_ouvert and levier[3].levier_ouvert and levier[4].levier_ouvert then
+					background.door_open := True
+					ennemies.extend(create {ENNEMY}.new_ennemy("diablo.png","diablo_s.png",200,550,100))
+				end
+			end
+
+
 
 		end
 
@@ -755,13 +833,9 @@ feature {NONE} -- Implementation
 		do
 			if not a_key_state.is_repeat then
 				if a_key_state.is_h then
-					player.hp := player.hp - 1
+					player.hp := 50
 				end
 
-				if a_key_state.is_k then
-					background.door_open := True
-
-				end
 				if a_key_state.is_m then -- sert à tester le changement de cartes
 					if background.current_map.is_equal("village") then
 						changer_carte("dungeon", a_timestamp)
@@ -894,6 +968,19 @@ feature {NONE} -- Implementation
 						i := i + 1
 					end
 				end
+			end
+		end
+
+	terminer_jeu(a_timestamp: NATURAL_32)
+		do
+			print("fini")
+			on_quit(a_timestamp)
+		end
+
+	on_death(a_timestamp: NATURAL_32)
+		do
+			if player.hp = 0 then
+				on_quit(a_timestamp)
 			end
 		end
 
